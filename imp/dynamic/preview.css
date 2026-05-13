@@ -1,0 +1,64 @@
+/**
+ * IMP UPJV — Volet de prévisualisation
+ * ======================================
+ * #previewPane, en-tête compact, maillog, conflit .fixed DS/Horde.
+ */
+
+#previewPane { overflow: auto; }
+
+/* Neutralise la collision entre .fixed (DS UPJV = position:fixed)
+   et .fixed (Horde = font monospace sur corps du message) */
+#messageBody .fixed {
+  position: static;
+  font-family: var(--theme-font-family) !important;
+}
+
+
+/* En-tête compact du message prévisualisé */
+#msgHeadersColl { line-height: 20px; }
+#msgHeadersColl ul {
+  list-style: none;
+  overflow: hidden;
+  white-space: nowrap;
+}
+#msgHeadersColl li { float: left; }
+#msgHeadersColl .date { margin-left: 5px; }
+#msgHeadersColl div.addrgroup-div { padding: 3px 2px; }
+#msgHeadersColl .from .horde-button {
+  line-height: 16px !important;
+  margin: 0;
+}
+
+/* Maillog — statut réponse/transfert sur les lignes de messages */
+.imp-reply,
+.imp-reply_all,
+.imp-reply_list,
+.imp-forward,
+.imp-redirect {
+  display: inline-block;
+  width: 16px; height: 16px;
+  background-image: none !important;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  vertical-align: middle;
+}
+.imp-reply,
+.imp-reply_all,
+.imp-reply_list {
+  -webkit-mask-image: url("../graphics/svg/action-reply.svg");
+  mask-image: url("../graphics/svg/action-reply.svg");
+}
+.imp-forward {
+  -webkit-mask-image: url("../graphics/svg/action-forward.svg");
+  mask-image: url("../graphics/svg/action-forward.svg");
+}
+.imp-redirect {
+  -webkit-mask-image: url("../graphics/svg/maillog-redirect.svg");
+  mask-image: url("../graphics/svg/maillog-redirect.svg");
+}
+.imp-maillog-sent { color: var(--theme-text-action) !important; }

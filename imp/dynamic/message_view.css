@@ -1,0 +1,107 @@
+/**
+ * IMP UPJV — Message View
+ * ========================
+ * Styles du volet de lecture (preview + fenêtre standalone).
+ * Override du thème default : neutralise les couleurs codées en dur.
+ * Les icônes PNG sont remplacées par SVG mask-image dans icons.css.
+ */
+
+/* ── En-têtes ── */
+.msgHeaders {
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-primary);
+  border-bottom: 1px solid var(--theme-border);
+  position:sticky;
+  top:0;
+  box-shadow: var(--theme-shadow-sm);
+}
+.msgHeaders a {
+  color: var(--theme-text-primary);
+}
+#msgHeadersTable td.label {
+  color: var(--theme-text-secondary);
+  font-weight: var(--theme-font-weight-medium);
+}
+
+/* ── Log & pièces jointes ── */
+#msgloglist,
+#partlist {
+  border-top: 1px solid var(--theme-border);
+}
+
+/* ── Corps du message ── */
+.messageBody {
+  padding: var(--theme-spacing-sm);
+}
+
+/* ── Adresses (groupe) ── */
+.msgHeaders div.addrgroup-div {
+  background-color: var(--theme-bg-primary);
+}
+.largeaddrlist,
+.largeaddrlistlimit {
+  color: var(--theme-text-action);
+}
+
+/* ── Icônes actions — neutralise les PNG du default (SVG dans icons.css) ── */
+#ctx_reply_reply span.iconImg,
+#ctx_message_reply span.iconImg,
+.actionReply,
+#ctx_reply_reply_all span.iconImg,
+#ctx_reply_reply_list span.iconImg,
+#ctx_forward_attach span.iconImg,
+#ctx_preview_allparts span.iconImg,
+#msg_all_parts span.iconImg,
+.mimePartInfoAtc div,
+#ctx_message_forward span.iconImg,
+#ctx_forward_body span.iconImg,
+#ctx_forward_both span.iconImg,
+#ctx_forward_redirect span.iconImg,
+.actionForward,
+#ctx_message_source span.iconImg,
+#ctx_preview_viewsource span.iconImg,
+#msg_view_source span.iconImg,
+#ctx_preview_listinfo span.iconImg,
+#msg_listinfo span.iconImg,
+.actionCompose,
+#ctx_contacts_new span.iconImg,
+#ctx_forward_editasnew span.iconImg,
+#ctx_message_editasnew span.iconImg,
+.actionFilter,
+#ctx_contacts_addfilter span.iconImg,
+#ctx_message_addfilter span.iconImg,
+#ctx_filteropts_applyfilters span.iconImg,
+.actionSpam,
+.actionInnocent,
+.actionDelete,
+.actionResume,
+.downloadAtc,
+.saveImgAtc,
+.printAtc {
+  background-image: none;
+}
+
+/* ── MIME ── */
+.mimeStatusMessageTable {
+  background-color: var(--theme-bg-warning-light);
+  border-color: var(--theme-border-warning);
+  color: var(--theme-text-primary);
+}
+.mimePartInfo div {
+  background-color: var(--theme-bg-secondary);
+  border-color: var(--theme-border);
+}
+span.mimePartInfoSize {
+  color: var(--theme-text-secondary);
+}
+.mimePartWrap,
+.mimePartWrapValid,
+.mimePartWrapInvalid {
+  border-color: var(--theme-border);
+}
+.mimePartWrapValid {
+  border-color: var(--theme-border-success);
+}
+.mimePartWrapInvalid {
+  border-color: var(--theme-border-danger);
+}

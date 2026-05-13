@@ -1,0 +1,114 @@
+/**
+ * UPJV Theme — Utilitaires globaux
+ * ==================================
+ * Classes utilitaires, styles de texte génériques, boxes,
+ * contenu email (citations, signature), alternance de lignes.
+ */
+
+/* ── View Transitions — uniquement #horde-body, header/sub restent fixes ── */
+@view-transition {
+  navigation: auto;
+}
+
+/* Désactive l'animation sur root — header/sub ne transitent pas */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* Anime uniquement le contenu principal avec le comportement par défaut du navigateur */
+#horde-body {
+  view-transition-name: horde-body;
+}
+
+/* ── Utilitaires ── */
+.hidden     { display: none; }
+.nowrap     { white-space: nowrap; }
+.clear      { clear: both; line-height: 0; height: 0; }
+.leftAlign  { text-align: left; }
+.rightAlign { text-align: right; }
+.leftFloat  { float: left; }
+.rightFloat { float: right; }
+.pager      { text-align: center; }
+.login-app  { padding: 5px; text-align: center; }
+.gutter     { padding-right: 8px; }
+.accessKey  { text-decoration: none; }
+a.icon      { display: block; width: 100%; height: 100%; }
+.formGhost  { color: #a0a0a0 !important; font-style: italic; }
+.inProgress { font-size: 80%; padding: 2px; color: var(--theme-text-on-action); background: #f00; }
+
+/* ── Boxes / conteneurs visuels ── */
+.box {
+    padding: 3px;
+    border: 1px dashed var(--theme-border-disabled);
+    background: var(--theme-bg-white);
+    border-radius: var(--theme-radius-md);
+}
+.solidbox { border: 1px solid #000; border-radius: var(--theme-radius-md); }
+.greybox  { border: 1px solid #000; background: #e9e9e9; border-radius: var(--theme-radius-md); }
+.headerbox {
+    border: 1px solid #a6b0b1;
+    border-top-width: 0;
+    background: var(--theme-bg-white);
+    vertical-align: top;
+    border-radius: var(--theme-radius-md);
+}
+.headerbox form { padding: 2px; }
+.header {
+    text-align: left;
+    font-weight: 600;
+    font-size: var(--theme-font-size-lg);
+    padding: var(--theme-spacing-xs) var(--theme-spacing-sm);
+    min-height: 21px;
+    background: var(--theme-bg-action);
+    color: var(--theme-text-on-action);
+}
+.header a:hover, a.header:hover { color: var(--theme-text-primary); }
+.header img { vertical-align: bottom; }
+.header input, .header select { font-size: 80%; }
+.header .smallheader input, .header .smallheader select, .header .smallheader .button { font-size: 89%; }
+.header .button, .header .smallheader .button { font-size: 72%; }
+.smallheader { font-size: 100%; font-weight: bold; padding: 2px; }
+.header .smallheader { font-size: 80%; }
+.header .smallheader a.smallheader { font-size: 100%; }
+small, .small { font-size: 80%; }
+.control { color: var(--theme-text-primary); background: var(--theme-bg-primary); padding: 5px; }
+.text    { color: var(--theme-text-primary); background: var(--theme-bg-white); }
+
+/* ── Sélection / highlight ── */
+.selected      { background: var(--theme-bg-highlight); }
+.selected-over { background: #cef; }
+
+/* ── Alternance de lignes ── */
+.striped, .rowEven { background-color: var(--theme-bg-primary); }
+.rowOdd            { background-color: var(--theme-bg-secondary); }
+.striped.hover .rowEven:hover, .striped.hover .rowOdd:hover { background: var(--theme-bg-highlight); }
+
+/* ── Contenu email ── */
+.signature       { color: var(--theme-text-disabled); }
+.signature .fixed { color: var(--theme-text-disabled); }
+.citation {
+    margin: 1em 0; padding-left: 1em;
+    border-left-width: 1px; border-left-style: solid;
+    min-height: 12px;
+}
+.quoted1 { color: #606; border-color: #606; background-color: var(--theme-bg-primary); }
+.quoted2 { color: #077; border-color: #077; }
+.quoted3 { color: #900; border-color: #900; }
+.quoted4 { color: #009; border-color: #009; }
+.quoted5 { color: #b60; border-color: #b60; }
+
+/* ── Toggle quote ── */
+.toggleQuoteHide, .toggleQuoteShow { cursor: pointer; background: #ddd; }
+.toggleQuoteHide:hover, .toggleQuoteShow:hover { text-decoration: underline; }
+.toggleQuoteParent { margin-bottom: 8px; }
+
+/* ── Bloc de chargement ── */
+div.logintasks-item { margin-bottom: 1em; }
+div.logintasks-item label { font-weight: normal; font-size: 90%; }
+div.logintasks-item input { width: auto; margin-bottom: 0; }
+
+/* ── Block styles ── */
+.currentBlock { border: 2px solid red; }
+.blockIcons { padding-top: 5px; display: none; }
+.blockHeader:hover .blockIcons { display: block; }

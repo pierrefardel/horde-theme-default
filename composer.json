@@ -1,0 +1,25 @@
+{
+    "name": "horde/theme-default-test",
+    "description": "Horde Modern Theme - Autonomous design system derived from a single brand color",
+    "type": "horde-theme",
+    "homepage": "https://www.horde.org",
+    "license": "LGPL-2",
+    "authors": [
+        {
+            "name": "Pierre Fardel",
+            "email": "pierre.fardel@u-picardie.fr",
+            "role": "lead"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://horde-satis.maintaina.com/"
+        }
+    ],
+    "require": {
+        "horde/horde-installer-plugin": "dev-FRAMEWORK_6_0 || *",
+        "php": "^7 || ^8",
+        "horde/horde": "* || dev-FRAMEWORK_6_0"
+    }
+}

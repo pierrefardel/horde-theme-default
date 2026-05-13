@@ -1,0 +1,39 @@
+/**
+ * IMP UPJV — Recherche
+ * =====================
+ * Barre de recherche, erreur viewport.
+ */
+
+.qsearchMatch {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+#searchbar {
+  background-color: var(--theme-bg-secondary);
+  border-bottom: 1px solid var(--theme-border);
+  padding: 8px 10px;
+}
+#search_close, #search_error_close,
+#search_edit, #search_error_edit,
+#search_refresh, #viewport_error_refresh {
+  cursor: pointer;
+  float: right;
+  margin-top: -1px;
+}
+#searchbar #search_label { font-weight: bold; }
+#searchbar #search_time_elapsed {
+  float: right;
+  padding-right: 12px;
+}
+
+/* Erreur viewport */
+#viewport_error {
+  background-color: var(--theme-bg-danger);
+  border-left: 4px solid var(--theme-text-danger);
+  padding: 8px 10px;
+}
+#viewport_error div {
+  font-weight: bold;
+  color: var(--theme-text-danger);
+}

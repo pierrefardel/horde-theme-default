@@ -1,0 +1,255 @@
+/**
+ * UPJV Theme — Composants réutilisables
+ * =======================================
+ * Composants UI génériques utilisés dans plusieurs modules :
+ * Growler, tooltip, KeyNavList, modal forms, calendar popup,
+ * notices, quick add, tags, autocompleter.
+ */
+
+
+/* ── Notices ── */
+.notices { list-style-type: none; }
+.notices li, .notice {
+    font-weight: bold;
+    color: var(--theme-text-primary);
+    background: var(--theme-bg-warning-light);
+    border-bottom: 1px solid var(--theme-border);
+    padding: 7px 10px;
+    position: relative;
+    border-radius: var(--theme-radius-md);
+}
+.notices li:first-child, .notice { border-radius: var(--theme-radius-md); }
+.notices img, .notice img { bottom: 0; margin: auto; position: absolute; top: 0; }
+.notices div.noticetext, .notice div.noticetext { margin-left: 30px; }
+
+/* ── Tooltip ── */
+.tooltip, div.nicetitle {
+    color: var(--theme-text-primary);
+    padding: 5px;
+    z-index: 1001;
+    background: var(--theme-bg-primary);
+    border: 1px solid var(--theme-border);
+    box-shadow: var(--theme-shadow-md);
+    border-radius: var(--theme-radius-md);
+}
+div.nicetitle { position: absolute; overflow: hidden; }
+
+/* ── Growler ── */
+#Growler { width: 340px; }
+#Growler div.GrowlerNotice {
+    zoom: 1;
+    padding: 10px 10px 10px 30px;
+    margin: 5px auto;
+    text-align: left;
+    display: none;
+    min-height: 20px;
+    border-width: 1px;
+    border-style: solid;
+    background-position: 3px center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    border-radius: var(--theme-radius-md);
+}
+#Growler div.GrowlerNoticeHead { font-weight: bold; }
+.GrowlerNoticeBody { margin-right: 30px; overflow-x: hidden; }
+#Growler div.horde-error,   #GrowlerLog li.horde-error   { background-image: url("graphics/alerts/error.png"); }
+#Growler div.horde-message, #GrowlerLog li.horde-message { background-image: url("graphics/alerts/message.png"); }
+#Growler div.horde-success, #GrowlerLog li.horde-success { background-image: url("graphics/alerts/success.png"); }
+#Growler div.horde-warning, #GrowlerLog li.horde-warning { background-image: url("graphics/alerts/warning.png"); }
+#Growler div.horde-alarm,   #GrowlerLog li.horde-alarm   { background-image: url("graphics/alerts/alarm.png"); }
+#Growler div.horde-error div.GrowlerNoticeBody { padding-right: 15px; }
+#GrowlerLog {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%; max-height: 200px;
+    z-index: 10000; overflow-y: auto;
+}
+#GrowlerLog ul { overflow: auto; }
+#GrowlerLog ul li {
+    color: var(--theme-text-primary);
+    font-size: 100%;
+    list-style-type: none;
+    overflow: hidden;
+    padding: 10px 30px;
+    border-bottom: 1px dotted;
+    background-position: 3px center;
+    background-repeat: no-repeat;
+}
+#GrowlerLog ul li.horde-error { color: var(--theme-text-on-action); }
+#GrowlerLog ul li:last-child { border: 0; }
+#GrowlerLog li.GrowlerInfo, #GrowlerLog li.GrowlerNoAlerts { font-weight: bold; background: #999; }
+#GrowlerLog span.GrowlerAlertDate { font-size: 90%; font-style: italic; padding-left: 10px; }
+.GrowlerLogClear { padding-left: 10px; }
+div.GrowlerNoticeExit {
+    background: url("graphics/close.png") no-repeat;
+    cursor: pointer; float: right;
+    height: 20px; width: 20px;
+    text-indent: -10000px; overflow: hidden;
+}
+.horde-success { border-color: var(--theme-text-success); background-color: var(--theme-text-success); }
+.horde-error   { background-color: var(--theme-text-danger); border-color: var(--theme-text-danger); color: var(--theme-text-on-action); }
+.horde-warning { background-color: var(--theme-bg-warning-light); border-color: #e1c444; }
+.horde-message { background-color: var(--theme-bg-information-light); border-color: #5c8c9f; }
+.horde-alarm   { background-color: #f49e51; border-color: #d38847; }
+
+/* ── KeyNavList ── */
+.KeyNavList {
+    background: var(--theme-bg-primary);
+    border: 1px solid var(--theme-border);
+    border-bottom-width: 0;
+    box-shadow: var(--theme-shadow-md);
+    border-radius: var(--theme-radius-md);
+    overflow-x: hidden; overflow-y: auto;
+    position: absolute; z-index: 10000;
+}
+.KeyNavList ul { list-style-type: none; }
+.KeyNavList ul li {
+    cursor: pointer;
+    height: 19px;
+    border-bottom: 1px solid #919293;
+    padding: 5px 10px 0;
+    color: var(--theme-text-primary);
+    white-space: nowrap;
+}
+.KeyNavList ul li.noselect { color: #888; }
+.KeyNavList ul li.selected { background: #c2ccd0; }
+.KeyNavList ul li:hover, .KeyNavList ul li.selected:hover {
+    background: var(--theme-bg-action);
+    color: var(--theme-text-on-action);
+}
+
+/* ── Modal forms ── */
+body.modal-form { background-color: var(--theme-bg-primary); }
+div.modal-form {
+    font-size: 150%; width: 20em;
+    margin: 5em auto;
+    background-color: var(--theme-text-on-action);
+    border-radius: var(--theme-radius-md);
+    box-shadow: 0 0 2em #ccc;
+}
+.horde-form-header { margin-bottom: 1em; border-bottom: thin dashed #ccc; }
+div.modal-form .notices { padding-top: 1em; font-size: 14px; }
+div.modal-form .notices li:first-child { border-top: 1px solid #d0d0d0; }
+div.modal-form form { padding: 1em; }
+div.modal-form label { font-weight: bold; }
+div.modal-form input, div.modal-form select { width: 18em; margin-bottom: .5em; }
+div.modal-form input { padding: 0 0.25em; width: 17.5em; }
+div.modal-form .submit-button { display: block; margin: .5em auto; width: auto; }
+div.modal-form .extras { font-size: 14px; border-top: thin dashed #ccc; margin: .5em 0; }
+
+/* ── Calendar popup ── */
+.hordeCalendarPopup {
+    border: 1px solid #ccc;
+    background: var(--theme-bg-white);
+    width: 12em;
+}
+.hordeCalendarPopup thead { font-weight: bold; }
+.hordeCalendarPopup th { border-bottom: 1px solid #ccc; }
+.hordeCalendarPopup tbody { text-align: right; }
+.hordeCalendarPopup a { color: var(--theme-text-primary); display: block; padding: 2px; }
+.hordeCalendarPopup tbody a:hover { background: var(--theme-bg-warning-light); }
+.hordeCalendarPopup .hordeCalendarCurrent { font-weight: bold; background: #eef; }
+.hordeCalendarPopup .hordeCalendarToday { font-weight: bold; }
+.hordeCalendarPopup .hordeCalendarWeek { background: #bbb; font-size: 90%; font-style: italic; }
+
+/* ── Quick add ── */
+.quickAdd {
+    width: 30em; padding: 1em;
+    border: 1px solid #ccc;
+    background: var(--theme-bg-warning-light);
+    border-radius: var(--theme-radius-md);
+}
+.quickAdd textarea { width: 100%; height: 10em; margin-top: .5em; }
+.quickAdd p { margin: .5em 0; }
+.quickAdd label { font-weight: bold; }
+
+/* ── Tags & autocompleter ── */
+ul.horde-tags { display: inline; list-style-type: none; }
+.hordeACListItem, ul.horde-tags li {
+  padding: 2px 6px;
+  margin-right: 4px;
+  background-color: var(--theme-bg-white);
+  color: var(--theme-text-primary);
+  border: 1px var(--theme-border) solid;
+  font-weight: normal;
+  line-height: normal;
+  display: flex !important;
+  align-items: center;
+  width: fit-content;
+  gap: var(--theme-spacing-2xs);
+  border-radius: var(--theme-radius-full);
+}
+.header ul.horde-tags li { font-size: 72%; }
+.hordeACListItem img, ul.horde-tags li img { vertical-align: middle; }
+.hordeACBox {
+    background: white;
+    border: 1px solid var(--theme-border);
+    cursor: default; text-align: left;
+    min-height: 58px; padding: 4px;
+}
+.hordeACList { display: block; overflow: hidden; width: 100%; cursor: default; list-style-type: none; margin: 0; padding: 0; }
+.hordeACList li { display: inline-block; font-size: 90%; white-space: nowrap; }
+.hordeACTrigger, .hordeACTrigger:focus, .hordeACTrigger:disabled {
+    background: transparent; border: 0; display: inline;
+    outline: none; position: static; width: 80px; font-size: 111%;
+}
+.hordeACItemRemove:hover { cursor: pointer; }
+
+/* ── Tabs (.tabset) ── */
+.tabset {
+  width: 100%;
+  float: none;
+  background: none;
+  margin-bottom: var(--theme-spacing-md);
+}
+.tabset ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--theme-spacing-xs);
+  list-style: none;
+  padding: var(--theme-spacing-xs);
+  background-color: var(--theme-bg-primary);
+  width: fit-content;
+}
+.tabset li {
+  background: none;
+  float: none;
+  height: auto;
+  line-height: normal;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+.tabset li a {
+  display: block;
+  padding: var(--theme-spacing-xs) var(--theme-spacing-md);
+  color: var(--theme-text-primary);
+  font-weight: var(--theme-font-weight-medium);
+  text-decoration: none;
+  border-radius: var(--theme-radius-sm);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+.tabset li a:hover {
+  background-color: var(--theme-bg-secondary);
+  color: var(--theme-text-action);
+  text-decoration: none;
+}
+.tabset li.horde-active {
+  background: none;
+}
+.tabset li.horde-active a {
+  background-color: var(--theme-bg-action);
+  color: var(--theme-text-on-action);
+  font-weight: var(--theme-font-weight-bold);
+}
+.tabset img { display: none; }
+
+/* ── Mime headers ── */
+.mimeHeaders {
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    display: inline-block;
+    margin-bottom: 3px; padding: 5px;
+    border-radius: var(--theme-radius-md);
+}

@@ -1,0 +1,221 @@
+/**
+ * UPJV Theme — Sidebar
+ * =====================
+ * #horde-sidebar, .horde-new, .horde-subnavi, splitbar vertical.
+ */
+
+#horde-sidebar {
+  background-color: var(--theme-bg-primary);
+  border-right: none;
+  padding-bottom: 0;
+}
+#horde-sidebar a {
+  color: var(--theme-text-primary);
+}
+#foldersSidebar a {
+  text-decoration: none;
+}
+
+/* Bouton "Nouveau" */
+.horde-new {
+  background-image: none;
+  background-color: var(--theme-bg-action);
+  border-bottom: 1px solid var(--theme-border);
+  height: 40px;
+  overflow: visible;
+  padding: 0;
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-on-action);
+  text-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--theme-radius-full);
+  margin-bottom: var(--theme-spacing-sm);
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.horde-new:hover {
+  background-color: var(--theme-bg-action-hover);
+  color: var(--theme-text-on-action);
+  text-decoration: none;
+}
+
+.horde-new-link {
+  width: 100%;
+}
+
+.horde-new a,
+#horde-sidebar .horde-new-link a,
+.horde-new-link a {
+  background-image: none;
+  padding: var(--theme-spacing-sm) var(--theme-spacing-md);
+  margin: 0;
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--theme-text-on-action);
+}
+.horde-new-split,
+.horde-new-extra {
+  display: none;
+}
+
+/* Navigation sidebar */
+.horde-subnavi {
+  padding: 6px 8px;
+  height: auto;
+  margin: 0;
+  border-radius: 0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.horde-subnavi:hover,
+.horde-subnavi-active {
+  height: auto;
+  background-image: none !important;
+  background-color: var(--theme-bg-secondary) !important;
+  border-radius: var(--theme-radius-sm);
+  margin: 0;
+}
+.horde-subnavi-active a {
+  font-weight: var(--theme-font-weight-medium);
+}
+
+.horde-subnavi-icon {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center right;
+  display: inline-block;
+  height: 20px;
+  margin: -1px 8px 0 10px;
+  vertical-align: middle;
+  width: 20px;
+}
+.horde-subnavi-point {
+  display: inline;
+}
+.horde-subnavi-sub {
+  padding-left: 0px;
+}
+
+.horde-subnavi-sub .horde-subnavi {
+  padding-left: 16px;
+}
+
+.horde-sidebar-split {
+  border-top: 1px solid var(--theme-border);
+  height: 0;
+  margin: var(--theme-spacing-xs) var(--theme-spacing-sm);
+}
+
+#horde-sidebar h3 {
+  min-height: 12px;
+  margin: 0 10px;
+  font-size: 100%;
+  font-weight: bold;
+  cursor: default;
+}
+
+#foldersSidebar {
+  height: fit-content;
+  overflow: hidden;
+  background-color: var(--theme-bg-white);
+  border-radius: var(--theme-radius-lg);
+}
+
+/* Ressources sidebar */
+#horde-sidebar div.horde-resources {
+  margin-top: 10px;
+}
+#horde-sidebar div.horde-resources div {
+  margin: 5px 0;
+}
+.horde-resource-link {
+  overflow: hidden;
+}
+.horde-resource-on,
+.horde-resource-off,
+.horde-resource-none {
+  display: inline-block;
+  min-height: 15px;
+  padding: 3px 0 3px 36px;
+  cursor: pointer;
+  background-position: 10px 2px;
+  background-repeat: no-repeat;
+}
+.horde-resource-on:hover,
+.horde-resource-off:hover {
+  text-decoration: underline;
+}
+.horde-resource-on,
+.horde-resource-off:hover {
+  background-image: url("graphics/checkbox_on.png");
+}
+.horde-resource-off {
+  background-image: url("graphics/checkbox_off.png");
+}
+.horde-resource-on.horde-radiobox,
+.horde-resource-off.horde-radiobox:hover {
+  background-image: url("graphics/radiobox_on.png");
+}
+.horde-resource-off.horde-radiobox {
+  background-image: url("graphics/radiobox_off.png");
+}
+#horde-sidebar div.horde-resources .horde-resource-edit-000,
+#horde-sidebar div.horde-resources .horde-resource-edit-fff {
+  float: right;
+  display: block;
+  background: url("graphics/edit-sidebar-000.png") no-repeat;
+  margin: 2px 10px 0 0;
+  width: 17px;
+  height: 17px;
+  text-indent: -10000px;
+  overflow: hidden;
+  cursor: pointer;
+}
+#horde-sidebar div.horde-resources .horde-resource-edit-fff {
+  background-image: url("graphics/edit-sidebar-fff.png");
+}
+#horde-sidebar div.horde-resources div a {
+  color: inherit;
+}
+#horde-sidebar .horde-info {
+  font-style: italic;
+  padding: 10px 0 0 36px;
+}
+
+/* Collapse/expand */
+.horde-collapse,
+.horde-expand {
+  display: block;
+  padding-left: 26px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+/* Splitbar vertical (width géré par grid-template-columns dans base.css) */
+.horde-splitbar-vert {
+  background-color: var(--theme-border);
+  background-image: none;
+}
+.horde-splitbar-vert.DragElt {
+  cursor: col-resize;
+}
+.horde-splitbar-vert-handle {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: var(--theme-bg-secondary);
+  z-index: 10;
+}

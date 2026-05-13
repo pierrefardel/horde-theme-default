@@ -1,0 +1,8 @@
+/**
+ * IMP UPJV — Menus contextuels (overrides IMP uniquement)
+ * =========================================================
+ * Les règles génériques .context sont dans horde/context.css.
+ * .contextSubmenu géré dans horde/icons.css (::after mask-image).
+ */
+
+.horde-buttonbar { padding-right: 12px; }

@@ -1,0 +1,63 @@
+/**
+ * Horde Modern Theme — Reset & Base
+ * ===================================
+ * Équivalent du reset + generals du DS UPJV, sans dépendance CDN.
+ * Adapté pour Horde : pas de reset agressif sur ul/ol, img, svg
+ * qui casserait des composants existants.
+ */
+
+/* ── Box-sizing ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ── Root ── */
+:root {
+  interpolate-size: allow-keywords;
+  scroll-behavior: smooth;
+}
+
+/* ── Body ── */
+body {
+  min-height: 100vh;
+  font-family: var(--font-family-primary);
+  background-color: var(--colors-surface-page);
+  color: var(--colors-text-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeSpeed;
+}
+
+/* ── Formulaires ── */
+input, button, textarea, select {
+  font: inherit;
+}
+button {
+  background: none;
+  cursor: pointer;
+}
+
+/* ── Transitions globales (dark mode smooth) ── */
+html {
+  transition: background-color var(--transition-default),
+              color var(--transition-default),
+              border-color var(--transition-default);
+}
+
+/* ── Scrollbars ── */
+*::-webkit-scrollbar       { width: 6px; height: 6px; }
+*::-webkit-scrollbar-thumb { background-color: var(--colors-surface-action); border-radius: 3px; }
+*::-webkit-scrollbar-track { background-color: var(--colors-surface-secondary); border-radius: 3px; }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--colors-surface-action) var(--colors-surface-secondary);
+}
+
+/* ── Accessibilité : réduction des animations ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

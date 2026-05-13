@@ -1,0 +1,15 @@
+/**
+ * IMP UPJV — Message (fenêtre standalone)
+ * =========================================
+ * Styles de la vue message pleine page (.msgfullread).
+ * Override du thème default : neutralise les couleurs codées en dur.
+ */
+
+.msgfullread div.subject {
+  color: var(--theme-text-headings);
+  font-weight: var(--theme-font-weight-bold);
+}
+
+.saveAsImg {
+  background-image: none;
+}

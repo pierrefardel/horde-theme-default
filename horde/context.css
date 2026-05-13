@@ -1,0 +1,59 @@
+/**
+ * UPJV Theme — Menus contextuels
+ * ================================
+ * .context, .horde-buttonbar li div (dropdowns), .horde-dropdown.
+ */
+
+.context, .horde-buttonbar li div {
+  background: var(--theme-bg-white) !important;
+  border: 1px solid var(--theme-border) !important;
+  border-radius: var(--theme-radius-md) !important;
+  box-shadow: var(--theme-shadow-lg) !important;
+  overflow: visible !important;
+  padding: 4px 0 !important;
+  min-width: 200px;
+  position: absolute;
+  z-index: 10000;
+}
+.context { top: 0; left: 0; overflow-y: auto; }
+
+.context a, .context a:visited, .horde-buttonbar li div li a {
+  height: auto !important; min-height: 32px !important;
+  border-bottom: none !important;
+  padding: 6px 14px !important;
+  color: var(--theme-text-primary) !important;
+  font-size: var(--theme-font-size-sm) !important;
+  line-height: 1.4 !important;
+  display: flex; align-items: center !important; gap: 8px !important;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.context a:hover, .context a.contextSubmenu.contextHover,
+.horde-buttonbar li div li a:hover {
+  background-color: var(--theme-bg-secondary) !important;
+  color: var(--theme-text-headings) !important;
+  cursor: pointer;
+  text-decoration: none;
+}
+.context div.sep {
+  background: var(--theme-border) !important;
+  height: 1px !important;
+  padding: 0; margin: 4px 0 !important;
+}
+.contextSubmenu {
+  background-image: none !important;
+  padding-right: 24px !important; padding-left: 14px !important;
+  position: relative;
+}
+
+/* Flèche sous-menu dropdown navigation */
+.horde-dropdown ul li.arrow {
+  background-image: none !important;
+  position: relative;
+}
+.contextSelected {
+  background-color: var(--theme-bg-highlight) !important;
+  color: #fff !important;
+}
+a.contextSelected:hover { color: #000 !important; }
+.contextMenu .iconImg { vertical-align: top; margin: 0; }

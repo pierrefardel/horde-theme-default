@@ -1,0 +1,90 @@
+/**
+ * UPJV Theme — Point d'entrée
+ * ============================
+ * Horde charge ce fichier nativement pour le thème.
+ * Il orchestre les couches via @import dans l'ordre de cascade.
+ *
+ * Ordre de chargement :
+ *   tokens.css  — injecté avant ce fichier via hooks.php (CDN + CSS vars)
+ *   base.css    — layout structurel global (grid, topbar fixe, sidebar grid)
+ *   globals.css — reset UPJV, typographie, composants génériques
+ *   forms.css   — formulaires, tables, tabs
+ *   topbar.css  — #horde-head, #horde-sub, navigation
+ *   sidebar.css — #horde-sidebar, .horde-new, .horde-subnavi
+ *   toolbar.css — .horde-buttonbar
+ *   context.css — menus contextuels
+ *   icons.css   — toutes les icônes SVG mask-image
+ */
+
+@import "base.css";
+@import "reset.css";
+@import "globals.css";
+@import "components.css";
+@import "widgets.css";
+@import "forms.css";
+@import "topbar.css";
+@import "sidebar.css";
+@import "toolbar.css";
+@import "context.css";
+@import "icons.css";
+
+/* ── Polices locales (fallback si CDN DS UPJV indisponible) ── */
+@font-face {
+  font-family: 'Poppins';
+  src: url('fonts/poppins-300.woff2') format('woff2');
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('fonts/poppins-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('fonts/poppins-500.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('fonts/poppins-600.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('fonts/poppins-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Space Mono';
+  src: url('fonts/space-mono-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Space Mono';
+  src: url('fonts/space-mono-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+/* ── Print ── */
+@media print {
+  body, .header, .smallheader {
+    background: var(--theme-bg-white);
+    color: var(--theme-text-primary);
+  }
+  a, .signature, .signature .fixed { color: var(--theme-text-primary); }
+  #horde-head, #horde-sub, #horde-sidebar, #horde-slideleft,
+  .togglequotehide, .togglequoteshow { display: none; }
+  .horde-ajax #horde-body { top: 0; }
+  #horde-page { left: 0 !important; padding-left: 0; }
+  .headerbox { border: none; }
+  .control, .rowEven, .rowOdd {
+    background-color: var(--theme-text-on-action);
+    border-bottom: thin solid #000;
+  }
+  .selected { background: #ddd; }
+  .quoted1, .quoted2, .quoted3, .quoted4, .quoted5 {
+    color: var(--theme-text-primary);
+    border-left-color: var(--theme-text-primary);
+  }
+  #Growler, #GrowlerLog { display: none !important; }
+}

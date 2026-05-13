@@ -1,0 +1,86 @@
+/**
+ * IMP UPJV — Globals
+ * ===================
+ * Règles génériques IMP : html overflow, input, drag-drop, optionsContainer.
+ */
+
+/* Layout IMP — horde-page sert de fond, impbase = carte centrale */
+/* #horde-page:has(#impbase) {
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-primary);
+} */
+#impbase {
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-lg);
+  overflow: hidden;
+  background-color: var(--theme-bg-white);
+  height:100%;
+  box-shadow: var(--theme-shadow-sm);
+}
+
+#impbase_folder {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#impbase_folder_top {
+  flex-shrink: 0;
+}
+
+#msgSplitPane {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mode vertical (preview à droite) : liste + preview côte à côte */
+:root[style*="--imp-pane-mode: vert"] #msgSplitPane {
+  flex-direction: row;
+}
+
+/* Éléments hors-flux dans #horde-body : le JS clone leur contenu mais ne les affiche jamais */
+#messageBodyError { display: none; }
+
+html { overflow-y: hidden; }
+#htmlAllowScroll { overflow-y: scroll; }
+
+input { vertical-align: middle; }
+.nojserror { color: var(--theme-text-danger); }
+
+span.iconImg { margin-right: 0; }
+
+#button_compose { display: none; }
+
+/* Options message */
+.optionsContainer { float: right; }
+.optionsContainer div { padding-bottom: 2px; }
+.optionsContainer span { cursor: pointer; }
+.optionsContainer .iconImg { margin-right: 0; }
+.optionsContainer a,
+.optionsContainer a:visited {
+  text-decoration: none;
+  color: var(--theme-text-primary);
+}
+.optionsContainer a:hover { text-decoration: underline; }
+.optionsContainer .horde-popdown {
+  display: inline-block;
+  float: none;
+  height: 16px;
+  margin-top: -3px;
+  padding-left: 4px;
+  width: 16px;
+}
+
+/* Drag and drop */
+.drag, .dragdrop, .mboxdrag, .msgdrag {
+  background: var(--theme-bg-primary);
+  border: 1px solid var(--theme-border);
+  font-size: 12px;
+  overflow: hidden;
+  z-index: 999;
+}
+.dragdrop { color: var(--theme-text-danger); }
+.dragdrop, .mboxdrag, .msgdrag { padding: 2px; }
+.imp-sidebar-mbox.mboxdrag { height: auto !important; }

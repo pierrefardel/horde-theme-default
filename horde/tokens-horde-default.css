@@ -1,0 +1,262 @@
+/**
+ * Horde Modern Theme — Design Tokens
+ * =====================================
+ * Système de tokens autonome (sans CDN externe).
+ * Dérivé d'une seule couleur brand via CSS relative colors (oklch).
+ *
+ * Pour créer un thème alternatif : changer uniquement --brand-primary.
+ * Toutes les palettes se recalculent automatiquement.
+ *
+ * Usage : remplacer tokens.css dans hooks.php pour ce thème.
+ */
+
+/* ─────────────────────────────────────────
+   COUCHE 1 — Primitives
+   ───────────────────────────────────────── */
+
+:root {
+
+  /* ── Couleur brand ── */
+  --brand-primary: oklch(0.74 0.17 122);   /* #9CC916 — vert Horde */
+
+  /* ── Couleurs support (teintes fixes, chroma/luminosité dérivées de brand) ── */
+  --brand-neutral:     oklch(from var(--brand-primary) 0.55 clamp(0, calc(c * 0.12), 0.04) h);
+  --brand-information: oklch(from var(--brand-primary) clamp(0.48, l, 0.60) clamp(0.08, calc(c * 0.82), 0.20) 210deg);
+  --brand-success:     oklch(from var(--brand-primary) clamp(0.48, l, 0.60) clamp(0.09, calc(c * 0.85), 0.22) 145deg);
+  --brand-warning:     oklch(from var(--brand-primary) clamp(0.78, calc(l + 0.05), 0.86) clamp(0.12, calc(c * 0.85), 0.20) 75deg);
+  --brand-danger:      oklch(from var(--brand-primary) clamp(0.45, l, 0.58) clamp(0.09, calc(c * 0.88), 0.23) 25deg);
+
+  /* ── Palette primary (9 niveaux) ── */
+  --primary-50:  oklch(from var(--brand-primary) calc(l + (1 - l) * 0.95) calc(c * 0.05) h);
+  --primary-100: oklch(from var(--brand-primary) calc(l + (1 - l) * 0.88) calc(c * 0.12) h);
+  --primary-200: oklch(from var(--brand-primary) calc(l + (1 - l) * 0.76) calc(c * 0.24) h);
+  --primary-300: oklch(from var(--brand-primary) calc(l + (1 - l) * 0.56) calc(c * 0.42) h);
+  --primary-400: oklch(from var(--brand-primary) calc(l + (1 - l) * 0.30) calc(c * 0.72) h);
+  --primary-500: var(--brand-primary);
+  --primary-600: oklch(from var(--brand-primary) calc(l * 0.84) calc(c * 0.91) h);
+  --primary-700: oklch(from var(--brand-primary) calc(l * 0.68) calc(c * 0.76) h);
+  --primary-800: oklch(from var(--brand-primary) calc(l * 0.54) calc(c * 0.59) h);
+  --primary-900: oklch(from var(--brand-primary) calc(l * 0.42) calc(c * 0.44) h);
+
+  /* ── Palette neutral ── */
+  --neutral-white: oklch(1.000 0 0);
+  --neutral-50:    oklch(from var(--brand-neutral) 0.965 calc(c * 0.25) h);
+  --neutral-100:   oklch(from var(--brand-neutral) 0.920 calc(c * 0.50) h);
+  --neutral-200:   oklch(from var(--brand-neutral) 0.850 calc(c * 0.75) h);
+  --neutral-300:   oklch(from var(--brand-neutral) 0.700 calc(c * 1.00) h);
+  --neutral-400:   oklch(from var(--brand-neutral) 0.540 calc(c * 1.25) h);
+  --neutral-500:   oklch(from var(--brand-neutral) 0.400 calc(c * 1.25) h);
+  --neutral-600:   oklch(from var(--brand-neutral) 0.290 calc(c * 1.19) h);
+  --neutral-700:   oklch(from var(--brand-neutral) 0.200 calc(c * 1.06) h);
+  --neutral-800:   oklch(from var(--brand-neutral) 0.130 calc(c * 0.94) h);
+  --neutral-900:   oklch(from var(--brand-neutral) 0.080 calc(c * 0.81) h);
+  --neutral-black: oklch(0 0 0);
+
+  /* ── Palette information ── */
+  --information-50:  oklch(from var(--brand-information) calc(l + (1 - l) * 0.95) calc(c * 0.05) h);
+  --information-100: oklch(from var(--brand-information) calc(l + (1 - l) * 0.88) calc(c * 0.12) h);
+  --information-200: oklch(from var(--brand-information) calc(l + (1 - l) * 0.76) calc(c * 0.24) h);
+  --information-300: oklch(from var(--brand-information) calc(l + (1 - l) * 0.56) calc(c * 0.42) h);
+  --information-400: oklch(from var(--brand-information) calc(l + (1 - l) * 0.30) calc(c * 0.72) h);
+  --information-500: var(--brand-information);
+  --information-600: oklch(from var(--brand-information) calc(l * 0.84) calc(c * 0.90) h);
+  --information-700: oklch(from var(--brand-information) calc(l * 0.68) calc(c * 0.76) h);
+  --information-800: oklch(from var(--brand-information) calc(l * 0.54) calc(c * 0.58) h);
+  --information-900: oklch(from var(--brand-information) calc(l * 0.42) calc(c * 0.44) h);
+
+  /* ── Palette success ── */
+  --success-50:  oklch(from var(--brand-success) calc(l + (1 - l) * 0.95) calc(c * 0.05) h);
+  --success-100: oklch(from var(--brand-success) calc(l + (1 - l) * 0.88) calc(c * 0.12) h);
+  --success-200: oklch(from var(--brand-success) calc(l + (1 - l) * 0.76) calc(c * 0.24) h);
+  --success-300: oklch(from var(--brand-success) calc(l + (1 - l) * 0.56) calc(c * 0.44) h);
+  --success-400: oklch(from var(--brand-success) calc(l + (1 - l) * 0.30) calc(c * 0.72) h);
+  --success-500: var(--brand-success);
+  --success-600: oklch(from var(--brand-success) calc(l * 0.84) calc(c * 0.93) h);
+  --success-700: oklch(from var(--brand-success) calc(l * 0.68) calc(c * 0.80) h);
+  --success-800: oklch(from var(--brand-success) calc(l * 0.54) calc(c * 0.63) h);
+  --success-900: oklch(from var(--brand-success) calc(l * 0.42) calc(c * 0.48) h);
+
+  /* ── Palette warning ── */
+  --warning-50:  oklch(from var(--brand-warning) calc(l + (1 - l) * 0.95) calc(c * 0.08) h);
+  --warning-100: oklch(from var(--brand-warning) calc(l + (1 - l) * 0.88) calc(c * 0.18) h);
+  --warning-200: oklch(from var(--brand-warning) calc(l + (1 - l) * 0.76) calc(c * 0.36) h);
+  --warning-300: oklch(from var(--brand-warning) calc(l + (1 - l) * 0.56) calc(c * 0.60) h);
+  --warning-400: oklch(from var(--brand-warning) calc(l + (1 - l) * 0.30) calc(c * 0.82) h);
+  --warning-500: var(--brand-warning);
+  --warning-600: oklch(from var(--brand-warning) calc(l * 0.84) calc(c * 0.95) h);
+  --warning-700: oklch(from var(--brand-warning) calc(l * 0.68) calc(c * 0.85) h);
+  --warning-800: oklch(from var(--brand-warning) calc(l * 0.54) calc(c * 0.70) h);
+  --warning-900: oklch(from var(--brand-warning) calc(l * 0.42) calc(c * 0.55) h);
+
+  /* ── Palette danger ── */
+  --danger-50:  oklch(from var(--brand-danger) calc(l + (1 - l) * 0.95) calc(c * 0.04) h);
+  --danger-100: oklch(from var(--brand-danger) calc(l + (1 - l) * 0.88) calc(c * 0.10) h);
+  --danger-200: oklch(from var(--brand-danger) calc(l + (1 - l) * 0.76) calc(c * 0.22) h);
+  --danger-300: oklch(from var(--brand-danger) calc(l + (1 - l) * 0.56) calc(c * 0.42) h);
+  --danger-400: oklch(from var(--brand-danger) calc(l + (1 - l) * 0.30) calc(c * 0.72) h);
+  --danger-500: var(--brand-danger);
+  --danger-600: oklch(from var(--brand-danger) calc(l * 0.84) calc(c * 0.90) h);
+  --danger-700: oklch(from var(--brand-danger) calc(l * 0.68) calc(c * 0.76) h);
+  --danger-800: oklch(from var(--brand-danger) calc(l * 0.54) calc(c * 0.59) h);
+  --danger-900: oklch(from var(--brand-danger) calc(l * 0.42) calc(c * 0.44) h);
+
+  /* ── Typographie ── */
+  --font-family-primary:   system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-family-mono:      "Cascadia Code", "Fira Code", "Consolas", monospace;
+  --font-weight-light:     300;
+  --font-weight-regular:   400;
+  --font-weight-medium:    500;
+  --font-weight-semi-bold: 600;
+  --font-weight-bold:      700;
+
+  /* ── Font sizes (= --font-size-* du DS UPJV responsive.css) ── */
+  --font-size-body-x-sm: 11px;
+  --font-size-body-sm:   13px;
+  --font-size-body-md:   15px;
+  --font-size-body-lg:   17px;
+
+  /* ── Espacements (= --spacing-* du DS UPJV responsive.css) ── */
+  --spacing-2xs: 2px;
+  --spacing-xs:  4px;
+  --spacing-sm:  8px;
+  --spacing-md:  16px;
+  --spacing-lg:  24px;
+  --spacing-xl:  32px;
+
+  /* ── Ombres (nommage DS UPJV — bottom + right utilisés dans tokens.css) ── */
+  --shadow-xs-bottom: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm-bottom: 0 1px 3px rgba(0, 0, 0, 0.10);
+  --shadow-md-bottom: 0 4px 6px rgba(0, 0, 0, 0.10);
+  --shadow-lg-bottom: 0 10px 15px rgba(0, 0, 0, 0.15);
+  --shadow-sm-right:  1px 0 3px rgba(0, 0, 0, 0.10);
+
+  /* ── Transitions ── */
+  --transition-default: 0.2s ease;
+  --transition-fast:    0.1s ease;
+
+  /* ── Radius (nommage DS UPJV semantic.css) ── */
+  --border-radius-none: 0px;
+  --border-radius-sm:   2px;
+  --border-radius-md:   4px;
+  --border-radius-lg:   8px;
+  --border-radius-full: 9999px;
+
+  /* ── Taille icônes ── */
+  --size-icon-xs:  8px;
+  --size-icon-sm:  16px;
+  --size-icon-md:  24px;
+  --size-icon-lg:  32px;
+}
+
+
+/* ─────────────────────────────────────────
+   COUCHE 2 — Sémantiques (= --colors-* du DS UPJV)
+   Même nommage pour compatibilité avec tokens.css
+   ───────────────────────────────────────── */
+
+:root {
+  color-scheme: light dark;
+
+  /* ── Texte ── */
+  --colors-text-headings:              light-dark(var(--neutral-700), var(--neutral-50));
+  --colors-text-body:                  light-dark(var(--neutral-700), var(--neutral-50));
+  --colors-text-action:                light-dark(var(--primary-700), var(--primary-400));
+  --colors-text-action--hover:         light-dark(var(--primary-900), var(--primary-300));
+  --colors-text-action--active:        light-dark(var(--primary-800), var(--primary-500));
+  --colors-text-disabled:              light-dark(var(--neutral-300), var(--neutral-600));
+  --colors-text-information:           light-dark(var(--information-600), var(--information-400));
+  --colors-text-on-information:        light-dark(var(--information-700), var(--information-200));
+  --colors-text-success:               light-dark(var(--success-600), var(--success-400));
+  --colors-text-on-success:            light-dark(var(--success-700), var(--success-200));
+  --colors-text-warning:               light-dark(var(--warning-600), var(--warning-400));
+  --colors-text-on-warning:            light-dark(var(--warning-700), var(--warning-200));
+  --colors-text-danger:                light-dark(var(--danger-600), var(--danger-400));
+  --colors-text-on-danger:             light-dark(var(--danger-700), var(--danger-200));
+  --colors-text-on-action:             light-dark(var(--neutral-white), var(--neutral-900));
+  --colors-text-on-disabled:           light-dark(var(--neutral-300), var(--neutral-600));
+  --colors-text-on-secondary:          light-dark(var(--neutral-700), var(--neutral-200));
+  --colors-text-on-secondary--hover:   light-dark(var(--primary-700), var(--primary-400));
+  --colors-text-on-secondary--active:  light-dark(var(--primary-800), var(--primary-500));
+
+  /* ── Surfaces ── */
+  --colors-surface-white:              light-dark(var(--neutral-white), var(--neutral-900));
+  --colors-surface-page:               var(--colors-surface-white);
+  --colors-surface-primary:            light-dark(var(--neutral-50),  var(--neutral-800));
+  --colors-surface-secondary:          light-dark(var(--neutral-100), var(--neutral-700));
+  --colors-surface-tertiary:           light-dark(var(--neutral-200), var(--neutral-600));
+  --colors-surface-disabled:           light-dark(var(--neutral-50),  var(--neutral-900));
+  --colors-surface-information:        light-dark(var(--information-100), var(--information-800));
+  --colors-surface-information-2:      light-dark(var(--information-700), var(--information-800));
+  --colors-surface-information-2--hover:  light-dark(var(--information-600), var(--information-700));
+  --colors-surface-information-2--active: light-dark(var(--information-800), var(--information-900));
+  --colors-surface-success:            light-dark(var(--success-100), var(--success-800));
+  --colors-surface-success-2:          light-dark(var(--success-700), var(--success-800));
+  --colors-surface-success-2--hover:   light-dark(var(--success-600), var(--success-700));
+  --colors-surface-success-2--active:  light-dark(var(--success-800), var(--success-900));
+  --colors-surface-warning:            light-dark(var(--warning-100), var(--warning-800));
+  --colors-surface-warning-2:          light-dark(var(--warning-600), var(--warning-800));
+  --colors-surface-warning-2--hover:   light-dark(var(--warning-500), var(--warning-700));
+  --colors-surface-warning-2--active:  light-dark(var(--warning-700), var(--warning-900));
+  --colors-surface-danger:             light-dark(var(--danger-100), var(--danger-800));
+  --colors-surface-danger-2:           light-dark(var(--danger-700), var(--danger-800));
+  --colors-surface-danger-2--hover:    light-dark(var(--danger-600), var(--danger-700));
+  --colors-surface-danger-2--active:   light-dark(var(--danger-800), var(--danger-900));
+  --colors-surface-action:             light-dark(var(--primary-700), var(--primary-600));
+  --colors-surface-action--hover:      light-dark(var(--primary-600), var(--primary-500));
+  --colors-surface-action--active:     light-dark(var(--primary-800), var(--primary-700));
+  --colors-surface-action-secondary:   light-dark(var(--primary-100), var(--neutral-700));
+  --colors-surface-action-2--hover:    light-dark(var(--primary-100), var(--neutral-700));
+  --colors-surface-highlight:          light-dark(var(--primary-200), var(--primary-700));
+
+  /* ── Bordures ── */
+  --colors-border-primary:             light-dark(var(--neutral-100), var(--neutral-600));
+  --colors-border-disabled:            light-dark(var(--neutral-100), var(--neutral-700));
+  --colors-border-information:         light-dark(var(--information-400), var(--information-700));
+  --colors-border-information--hover:  light-dark(var(--information-300), var(--information-500));
+  --colors-border-information--active: light-dark(var(--information-500), var(--information-700));
+  --colors-border-success:             light-dark(var(--success-400), var(--success-700));
+  --colors-border-success--hover:      light-dark(var(--success-300), var(--success-500));
+  --colors-border-success--active:     light-dark(var(--success-500), var(--success-700));
+  --colors-border-warning:             light-dark(var(--warning-400), var(--warning-700));
+  --colors-border-warning--hover:      light-dark(var(--warning-300), var(--warning-500));
+  --colors-border-warning--active:     light-dark(var(--warning-500), var(--warning-700));
+  --colors-border-danger:              light-dark(var(--danger-400), var(--danger-700));
+  --colors-border-danger--hover:       light-dark(var(--danger-300), var(--danger-500));
+  --colors-border-danger--active:      light-dark(var(--danger-500), var(--danger-700));
+  --colors-border-action:              light-dark(var(--primary-700), var(--primary-500));
+  --colors-border-action--hover:       light-dark(var(--primary-600), var(--primary-400));
+  --colors-border-action--active:      light-dark(var(--primary-800), var(--primary-600));
+  --colors-border-action-secondary:    light-dark(var(--neutral-200), var(--neutral-600));
+
+  /* ── Icônes ── */
+  --colors-icon-primary:               light-dark(var(--neutral-700), var(--neutral-50));
+  --colors-icon-secondary:             light-dark(var(--neutral-300), var(--neutral-500));
+  --colors-icon-information:           var(--information-500);
+  --colors-icon-on-information:        light-dark(var(--information-700), var(--information-100));
+  --colors-icon-success:               var(--success-500);
+  --colors-icon-on-success:            light-dark(var(--success-700), var(--success-100));
+  --colors-icon-warning:               var(--warning-500);
+  --colors-icon-on-warning:            light-dark(var(--warning-700), var(--warning-100));
+  --colors-icon-danger:                var(--danger-500);
+  --colors-icon-on-danger:             light-dark(var(--danger-700), var(--danger-100));
+
+  /* ── Tailles icônes ── */
+  --size-icon-xs:  var(--scale-100);
+  --size-icon-sm:  var(--scale-200);
+  --size-icon-md:  var(--scale-300);
+  --size-icon-lg:  var(--scale-400);
+}
+
+/* ── Logo ── */
+:root {
+  --logo-upjv-url: url("graphics/svg/horde-logo.svg");
+}
+
+/* ── Dark mode ── */
+@media (prefers-color-scheme: dark) {
+  html:not(.theme-light) {
+    color-scheme: dark;
+  }
+}
+html.theme-light { color-scheme: light; }
+html.theme-dark  { color-scheme: dark; }

@@ -1,0 +1,43 @@
+/**
+ * IMP UPJV — Sidebar dossiers
+ * ============================
+ * Arborescence des dossiers IMAP dans la sidebar Horde.
+ */
+
+#foldersLoading { padding: 10px; }
+#horde-sidebar .horde-info { display: none; }
+
+.imp-sidebar-container:hover { background: none; }
+.imp-sidebar-container a:hover {
+  cursor: default;
+  text-decoration: none;
+}
+.imp-sidebar-container a,
+.imp-sidebar-mbox-loading {
+  color: var(--theme-text-primary) !important;
+}
+
+#imp-normalmboxes {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#imp-normalmboxes div.imp-sidebar-unsubmbox {
+  font-style: italic;
+}
+
+.horde-subnavi-icon.col,
+.horde-subnavi-icon.exp { cursor: pointer; }
+
+#dropbase a {
+  display: inline !important;
+  padding-right: 1px;
+}
+#dropbase:hover { font-weight: normal !important; }
+
+#foldersSidebar .horde-popdown {
+  display: inline-block;
+  float: none;
+  height: 16px;
+  margin-top: -3px;
+  width: 16px;
+}
