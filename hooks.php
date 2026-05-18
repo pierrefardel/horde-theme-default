@@ -4,6 +4,9 @@
  *
  * Thème Horde moderne autonome (sans CDN externe).
  * Dérivé d'une seule couleur brand via CSS relative colors (oklch).
+ *
+ * Note: le fichier actif sur le serveur est /var/www/horde/var/config/horde/hooks.php
+ * Ce fichier documente la configuration pour ce thème.
  */
 class Horde_Hooks
 {
@@ -14,7 +17,7 @@ class Horde_Hooks
 
         $css = [];
 
-        if ($app === 'horde') {
+        if ($app === 'horde' && $theme === 'default-test') {
             // 1. Primitives + sémantiques --colors-* (sans CDN)
             $css[$fs_base . '/tokens-horde-default.css'] = $base_url . '/themes/horde/default-test/tokens-horde-default.css';
             // 2. Reset + base (box-sizing, scrollbars, body)
