@@ -34,63 +34,166 @@
 }
 div.nicetitle { position: absolute; overflow: hidden; }
 
-/* ── Growler ── */
-#Growler { width: 340px; }
+/* ── Growler (toast notifications) ── */
+#Growler {
+  top: var(--theme-spacing-sm) !important;
+  right: var(--theme-spacing-sm) !important;
+  bottom: auto !important;
+  left: auto !important;
+  z-index: 99999 !important;
+  width: 340px !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-xs);
+  pointer-events: none;
+}
+
 #Growler div.GrowlerNotice {
-    zoom: 1;
-    padding: 10px 10px 10px 30px;
-    margin: 5px auto;
-    text-align: left;
-    display: none;
-    min-height: 20px;
-    border-width: 1px;
-    border-style: solid;
-    background-position: 3px center;
-    background-repeat: no-repeat;
-    cursor: pointer;
-    border-radius: var(--theme-radius-md);
+  position: relative;
+  padding: var(--theme-spacing-sm) var(--theme-spacing-sm) var(--theme-spacing-sm) 36px !important;
+  background: var(--theme-bg-primary);
+  border: none;
+  border-radius: var(--theme-radius-md);
+  box-shadow: var(--theme-shadow-md);
+  pointer-events: auto;
+  cursor: pointer;
+  overflow: hidden;
+  opacity: 1 !important;
+  background-image: none !important;
+  background-position: unset !important;
+  animation: growler-in 0.2s ease-out;
 }
-#Growler div.GrowlerNoticeHead { font-weight: bold; }
-.GrowlerNoticeBody { margin-right: 30px; overflow-x: hidden; }
-#Growler div.horde-error,   #GrowlerLog li.horde-error   { background-image: url("graphics/alerts/error.png"); }
-#Growler div.horde-message, #GrowlerLog li.horde-message { background-image: url("graphics/alerts/message.png"); }
-#Growler div.horde-success, #GrowlerLog li.horde-success { background-image: url("graphics/alerts/success.png"); }
-#Growler div.horde-warning, #GrowlerLog li.horde-warning { background-image: url("graphics/alerts/warning.png"); }
-#Growler div.horde-alarm,   #GrowlerLog li.horde-alarm   { background-image: url("graphics/alerts/alarm.png"); }
-#Growler div.horde-error div.GrowlerNoticeBody { padding-right: 15px; }
-#GrowlerLog {
-    position: fixed;
-    bottom: 0; left: 0;
-    width: 100%; max-height: 200px;
-    z-index: 10000; overflow-y: auto;
+
+@keyframes growler-in {
+  from { opacity: 0; transform: translateX(calc(100% + var(--theme-spacing-sm))); }
+  to   { opacity: 1; transform: translateX(0); }
 }
-#GrowlerLog ul { overflow: auto; }
-#GrowlerLog ul li {
-    color: var(--theme-text-primary);
-    font-size: 100%;
-    list-style-type: none;
-    overflow: hidden;
-    padding: 10px 30px;
-    border-bottom: 1px dotted;
-    background-position: 3px center;
-    background-repeat: no-repeat;
+
+/* Icône — positionnée en absolu à gauche */
+#Growler div.GrowlerNotice::before {
+  content: '';
+  position: absolute;
+  left: var(--theme-spacing-sm);
+  top: var(--theme-spacing-sm);
+  width: 16px; height: 16px;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
 }
-#GrowlerLog ul li.horde-error { color: var(--theme-text-on-action); }
-#GrowlerLog ul li:last-child { border: 0; }
-#GrowlerLog li.GrowlerInfo, #GrowlerLog li.GrowlerNoAlerts { font-weight: bold; background: #999; }
-#GrowlerLog span.GrowlerAlertDate { font-size: 90%; font-style: italic; padding-left: 10px; }
-.GrowlerLogClear { padding-left: 10px; }
+
+/* Variantes sémantiques — fond + border-top 4px + border latérale */
+#Growler div.horde-success {
+  background-color: var(--theme-bg-success-light);
+  border-color: var(--theme-border-success);
+  border-top: 4px solid var(--theme-icon-success) !important;
+}
+#Growler div.horde-error {
+  background-color: var(--theme-bg-danger-light);
+  border-color: var(--theme-border-danger);
+  border-top: 4px solid var(--theme-icon-danger) !important;
+}
+#Growler div.horde-warning,
+#Growler div.horde-alarm {
+  background-color: var(--theme-bg-warning-light);
+  border-color: var(--theme-border-warning);
+  border-top: 4px solid var(--theme-icon-warning) !important;
+}
+#Growler div.horde-message {
+  background-color: var(--theme-bg-information-light);
+  border-color: var(--theme-border-information);
+  border-top: 4px solid var(--theme-icon-information) !important;
+}
+
+/* Icônes */
+#Growler div.horde-success::before { mask-image: url("graphics/svg/success.svg"); background-color: var(--theme-icon-success); }
+#Growler div.horde-error::before   { mask-image: url("graphics/svg/error.svg");   background-color: var(--theme-icon-danger); }
+#Growler div.horde-warning::before,
+#Growler div.horde-alarm::before   { mask-image: url("graphics/svg/warning.svg"); background-color: var(--theme-icon-warning); }
+#Growler div.horde-message::before { mask-image: url("graphics/svg/info.svg");    background-color: var(--theme-icon-information); }
+
+/* Titre — couleur conditionnelle */
+#Growler div.GrowlerNoticeHead {
+  font-weight: var(--theme-font-weight-bold);
+  font-size: var(--theme-font-size-sm);
+  margin-bottom: 2px;
+}
+#Growler div.horde-success .GrowlerNoticeHead { color: var(--theme-text-on-success); }
+#Growler div.horde-error   .GrowlerNoticeHead { color: var(--theme-text-on-danger); }
+#Growler div.horde-warning .GrowlerNoticeHead,
+#Growler div.horde-alarm   .GrowlerNoticeHead { color: var(--theme-text-on-warning); }
+#Growler div.horde-message .GrowlerNoticeHead { color: var(--theme-text-on-information); }
+
+/* Body — couleur conditionnelle */
+.GrowlerNoticeBody {
+  font-size: var(--theme-font-size-sm);
+  overflow-x: hidden;
+  word-wrap: break-word;
+  margin-right: 20px;
+}
+#Growler div.horde-success .GrowlerNoticeBody { color: var(--theme-text-on-success); }
+#Growler div.horde-error   .GrowlerNoticeBody { color: var(--theme-text-on-danger); }
+#Growler div.horde-warning .GrowlerNoticeBody,
+#Growler div.horde-alarm   .GrowlerNoticeBody { color: var(--theme-text-on-warning); }
+#Growler div.horde-message .GrowlerNoticeBody { color: var(--theme-text-on-information); }
+
+/* Bouton fermeture — absolu en haut à droite, couleur conditionnelle */
 div.GrowlerNoticeExit {
-    background: url("graphics/close.png") no-repeat;
-    cursor: pointer; float: right;
-    height: 20px; width: 20px;
-    text-indent: -10000px; overflow: hidden;
+  background: none;
+  position: absolute;
+  top: var(--theme-spacing-sm);
+  right: var(--theme-spacing-sm);
+  width: 16px; height: 16px;
+  cursor: pointer;
+  text-indent: -9999px; overflow: hidden;
+  mask-image: url("graphics/svg/close.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+  float: none !important;
 }
-.horde-success { border-color: var(--theme-text-success); background-color: var(--theme-text-success); }
-.horde-error   { background-color: var(--theme-text-danger); border-color: var(--theme-text-danger); color: var(--theme-text-on-action); }
-.horde-warning { background-color: var(--theme-bg-warning-light); border-color: #e1c444; }
-.horde-message { background-color: var(--theme-bg-information-light); border-color: #5c8c9f; }
-.horde-alarm   { background-color: #f49e51; border-color: #d38847; }
+div.GrowlerNoticeExit:hover { opacity: 1; }
+#Growler div.horde-success .GrowlerNoticeExit { background-color: var(--theme-text-on-success); }
+#Growler div.horde-error   .GrowlerNoticeExit { background-color: var(--theme-text-on-danger); }
+#Growler div.horde-warning .GrowlerNoticeExit,
+#Growler div.horde-alarm   .GrowlerNoticeExit { background-color: var(--theme-text-on-warning); }
+#Growler div.horde-message .GrowlerNoticeExit { background-color: var(--theme-text-on-information); }
+
+/* GrowlerLog — historique en bas de page */
+#GrowlerLog {
+  position: fixed;
+  bottom: 0; left: 0;
+  width: 100%; max-height: 200px;
+  z-index: 10000; overflow-y: auto;
+  background: var(--theme-bg-primary);
+  border-top: 1px solid var(--theme-border);
+}
+#GrowlerLog ul { overflow: auto; list-style: none; margin: 0; padding: 0; }
+#GrowlerLog ul li {
+  display: flex; align-items: center; gap: var(--theme-spacing-sm);
+  color: var(--theme-text-primary);
+  font-size: var(--theme-font-size-sm);
+  padding: var(--theme-spacing-xs) var(--theme-spacing-md);
+  border-bottom: 1px solid var(--theme-border);
+  background-image: none !important;
+}
+#GrowlerLog ul li.horde-success { background-color: var(--theme-bg-success-light) !important; }
+#GrowlerLog ul li.horde-error   { background-color: var(--theme-bg-danger-light)  !important; }
+#GrowlerLog ul li.horde-warning,
+#GrowlerLog ul li.horde-alarm   { background-color: var(--theme-bg-warning-light) !important; }
+#GrowlerLog ul li.horde-message { background-color: var(--theme-bg-information-light) !important; }
+#GrowlerLog ul li:last-child { border: 0; }
+#GrowlerLog li.GrowlerInfo, #GrowlerLog li.GrowlerNoAlerts { font-weight: var(--theme-font-weight-semi-bold); background-color: var(--theme-bg-secondary) !important; }
+#GrowlerLog span.GrowlerAlertDate { font-size: var(--theme-font-size-xs); font-style: italic; padding-left: var(--theme-spacing-sm); color: var(--theme-text-secondary); }
+.GrowlerLogClear { padding-left: var(--theme-spacing-sm); }
+
+/* Variantes globales horde-* (utilisées hors Growler aussi) */
+.horde-success { background-color: var(--theme-bg-success-light); border-color: var(--theme-border-success); color: var(--theme-text-on-success); }
+.horde-error   { background-color: var(--theme-bg-danger-light);  border-color: var(--theme-border-danger);  color: var(--theme-text-on-danger); }
+.horde-warning { background-color: var(--theme-bg-warning-light); border-color: var(--theme-border-warning); color: var(--theme-text-on-warning); }
+.horde-message { background-color: var(--theme-bg-information-light); border-color: var(--theme-border-information); color: var(--theme-text-on-information); }
+.horde-alarm   { background-color: var(--theme-bg-warning-light); border-color: var(--theme-border-warning); color: var(--theme-text-on-warning); }
 
 /* ── KeyNavList ── */
 .KeyNavList {
@@ -106,13 +209,13 @@ div.GrowlerNoticeExit {
 .KeyNavList ul li {
     cursor: pointer;
     height: 19px;
-    border-bottom: 1px solid #919293;
+    border-bottom: 1px solid var(--theme-border-subtle);
     padding: 5px 10px 0;
     color: var(--theme-text-primary);
     white-space: nowrap;
 }
-.KeyNavList ul li.noselect { color: #888; }
-.KeyNavList ul li.selected { background: #c2ccd0; }
+.KeyNavList ul li.noselect { color: var(--theme-text-disabled); }
+.KeyNavList ul li.selected { background: var(--theme-bg-selected-hover); }
 .KeyNavList ul li:hover, .KeyNavList ul li.selected:hover {
     background: var(--theme-bg-action);
     color: var(--theme-text-on-action);
@@ -125,32 +228,32 @@ div.modal-form {
     margin: 5em auto;
     background-color: var(--theme-text-on-action);
     border-radius: var(--theme-radius-md);
-    box-shadow: 0 0 2em #ccc;
+    box-shadow: 0 0 2em var(--theme-border-subtle);
 }
-.horde-form-header { margin-bottom: 1em; border-bottom: thin dashed #ccc; }
+.horde-form-header { margin-bottom: 1em; border-bottom: thin dashed var(--theme-border-subtle); }
 div.modal-form .notices { padding-top: 1em; font-size: 14px; }
-div.modal-form .notices li:first-child { border-top: 1px solid #d0d0d0; }
+div.modal-form .notices li:first-child { border-top: 1px solid var(--theme-border-subtle); }
 div.modal-form form { padding: 1em; }
 div.modal-form label { font-weight: bold; }
 div.modal-form input, div.modal-form select { width: 18em; margin-bottom: .5em; }
 div.modal-form input { padding: 0 0.25em; width: 17.5em; }
 div.modal-form .submit-button { display: block; margin: .5em auto; width: auto; }
-div.modal-form .extras { font-size: 14px; border-top: thin dashed #ccc; margin: .5em 0; }
+div.modal-form .extras { font-size: 14px; border-top: thin dashed var(--theme-border-subtle); margin: .5em 0; }
 
 /* ── Calendar popup ── */
 .hordeCalendarPopup {
-    border: 1px solid #ccc;
+    border: 1px solid var(--theme-border-subtle);
     background: var(--theme-bg-white);
     width: 12em;
 }
 .hordeCalendarPopup thead { font-weight: bold; }
-.hordeCalendarPopup th { border-bottom: 1px solid #ccc; }
+.hordeCalendarPopup th { border-bottom: 1px solid var(--theme-border-subtle); }
 .hordeCalendarPopup tbody { text-align: right; }
 .hordeCalendarPopup a { color: var(--theme-text-primary); display: block; padding: 2px; }
 .hordeCalendarPopup tbody a:hover { background: var(--theme-bg-warning-light); }
-.hordeCalendarPopup .hordeCalendarCurrent { font-weight: bold; background: #eef; }
+.hordeCalendarPopup .hordeCalendarCurrent { font-weight: bold; background: var(--theme-bg-calendar-current); }
 .hordeCalendarPopup .hordeCalendarToday { font-weight: bold; }
-.hordeCalendarPopup .hordeCalendarWeek { background: #bbb; font-size: 90%; font-style: italic; }
+.hordeCalendarPopup .hordeCalendarWeek { background: var(--theme-bg-calendar-week); font-size: 90%; font-style: italic; }
 
 /* ── Quick add ── */
 .quickAdd {
@@ -247,8 +350,8 @@ ul.horde-tags { display: inline; list-style-type: none; }
 
 /* ── Mime headers ── */
 .mimeHeaders {
-    border: 1px solid #ccc;
-    background: #f9f9f9;
+    border: 1px solid var(--theme-border-subtle);
+    background: var(--theme-bg-input);
     display: inline-block;
     margin-bottom: 3px; padding: 5px;
     border-radius: var(--theme-radius-md);

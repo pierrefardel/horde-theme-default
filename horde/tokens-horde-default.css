@@ -115,13 +115,13 @@
   --font-size-body-md:   15px;
   --font-size-body-lg:   17px;
 
-  /* ── Espacements (= --spacing-* du DS UPJV responsive.css) ── */
-  --spacing-2xs: 2px;
-  --spacing-xs:  4px;
-  --spacing-sm:  8px;
-  --spacing-md:  16px;
-  --spacing-lg:  24px;
-  --spacing-xl:  32px;
+  /* ── Espacements (= --spacing-* du DS UPJV responsive.css via --scale-*) ── */
+  --spacing-2xs: 4px;   /* scale-50 */
+  --spacing-xs:  8px;   /* scale-100 */
+  --spacing-sm:  16px;  /* scale-200 */
+  --spacing-md:  24px;  /* scale-300 */
+  --spacing-lg:  32px;  /* scale-400 */
+  --spacing-xl:  40px;  /* scale-500 */
 
   /* ── Ombres (nommage DS UPJV — bottom + right utilisés dans tokens.css) ── */
   --shadow-xs-bottom: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -160,23 +160,24 @@
   /* ── Texte ── */
   --colors-text-headings:              light-dark(var(--neutral-700), var(--neutral-50));
   --colors-text-body:                  light-dark(var(--neutral-700), var(--neutral-50));
-  --colors-text-action:                light-dark(var(--primary-700), var(--primary-400));
-  --colors-text-action--hover:         light-dark(var(--primary-900), var(--primary-300));
-  --colors-text-action--active:        light-dark(var(--primary-800), var(--primary-500));
-  --colors-text-disabled:              light-dark(var(--neutral-300), var(--neutral-600));
-  --colors-text-information:           light-dark(var(--information-600), var(--information-400));
+  --colors-text-body-on-dark:          var(--neutral-50);
+  --colors-text-action:                light-dark(var(--primary-700), var(--primary-500));
+  --colors-text-action--hover:         light-dark(var(--primary-900), var(--primary-600));
+  --colors-text-action--active:        light-dark(var(--primary-800), var(--primary-700));
+  --colors-text-disabled:              var(--neutral-200);
+  --colors-text-information:           light-dark(var(--information-500), var(--information-400));
   --colors-text-on-information:        light-dark(var(--information-700), var(--information-200));
-  --colors-text-success:               light-dark(var(--success-600), var(--success-400));
+  --colors-text-success:               light-dark(var(--success-500), var(--success-400));
   --colors-text-on-success:            light-dark(var(--success-700), var(--success-200));
-  --colors-text-warning:               light-dark(var(--warning-600), var(--warning-400));
+  --colors-text-warning:               var(--warning-500);
   --colors-text-on-warning:            light-dark(var(--warning-700), var(--warning-200));
-  --colors-text-danger:                light-dark(var(--danger-600), var(--danger-400));
+  --colors-text-danger:                var(--danger-500);
   --colors-text-on-danger:             light-dark(var(--danger-700), var(--danger-200));
-  --colors-text-on-action:             light-dark(var(--neutral-white), var(--neutral-900));
-  --colors-text-on-disabled:           light-dark(var(--neutral-300), var(--neutral-600));
-  --colors-text-on-secondary:          light-dark(var(--neutral-700), var(--neutral-200));
-  --colors-text-on-secondary--hover:   light-dark(var(--primary-700), var(--primary-400));
-  --colors-text-on-secondary--active:  light-dark(var(--primary-800), var(--primary-500));
+  --colors-text-on-action:             var(--neutral-50);
+  --colors-text-on-disabled:           var(--neutral-200);
+  --colors-text-on-secondary:          var(--neutral-700);
+  --colors-text-on-secondary--hover:   var(--primary-700);
+  --colors-text-on-secondary--active:  var(--primary-800);
 
   /* ── Surfaces ── */
   --colors-surface-white:              light-dark(var(--neutral-white), var(--neutral-900));
@@ -201,36 +202,41 @@
   --colors-surface-danger-2:           light-dark(var(--danger-700), var(--danger-800));
   --colors-surface-danger-2--hover:    light-dark(var(--danger-600), var(--danger-700));
   --colors-surface-danger-2--active:   light-dark(var(--danger-800), var(--danger-900));
-  --colors-surface-action:             light-dark(var(--primary-700), var(--primary-600));
-  --colors-surface-action--hover:      light-dark(var(--primary-600), var(--primary-500));
+  --colors-surface-action:             light-dark(var(--primary-900), var(--primary-800));
+  --colors-surface-action--hover:      light-dark(var(--primary-700), var(--primary-600));
   --colors-surface-action--active:     light-dark(var(--primary-800), var(--primary-700));
-  --colors-surface-action-secondary:   light-dark(var(--primary-100), var(--neutral-700));
-  --colors-surface-action-2--hover:    light-dark(var(--primary-100), var(--neutral-700));
-  --colors-surface-highlight:          light-dark(var(--primary-200), var(--primary-700));
+  --colors-surface-action-disabled:    var(--neutral-50);
+  --colors-surface-action-secondary:   var(--neutral-100);
+  --colors-surface-action-2--hover:    var(--primary-100);
+  --colors-surface-highlight:          light-dark(var(--primary-300), var(--primary-700));
+  --colors-surface-overlay:            light-dark(
+    oklch(from var(--brand-primary) l c h / 0.85),
+    oklch(from var(--brand-primary) calc(l * 0.55) c h / 0.85)
+  );
 
   /* ── Bordures ── */
   --colors-border-primary:             light-dark(var(--neutral-100), var(--neutral-600));
   --colors-border-disabled:            light-dark(var(--neutral-100), var(--neutral-700));
-  --colors-border-information:         light-dark(var(--information-400), var(--information-700));
-  --colors-border-information--hover:  light-dark(var(--information-300), var(--information-500));
-  --colors-border-information--active: light-dark(var(--information-500), var(--information-700));
-  --colors-border-success:             light-dark(var(--success-400), var(--success-700));
-  --colors-border-success--hover:      light-dark(var(--success-300), var(--success-500));
-  --colors-border-success--active:     light-dark(var(--success-500), var(--success-700));
-  --colors-border-warning:             light-dark(var(--warning-400), var(--warning-700));
-  --colors-border-warning--hover:      light-dark(var(--warning-300), var(--warning-500));
-  --colors-border-warning--active:     light-dark(var(--warning-500), var(--warning-700));
-  --colors-border-danger:              light-dark(var(--danger-400), var(--danger-700));
-  --colors-border-danger--hover:       light-dark(var(--danger-300), var(--danger-500));
-  --colors-border-danger--active:      light-dark(var(--danger-500), var(--danger-700));
-  --colors-border-action:              light-dark(var(--primary-700), var(--primary-500));
-  --colors-border-action--hover:       light-dark(var(--primary-600), var(--primary-400));
-  --colors-border-action--active:      light-dark(var(--primary-800), var(--primary-600));
-  --colors-border-action-secondary:    light-dark(var(--neutral-200), var(--neutral-600));
+  --colors-border-information:         light-dark(var(--information-500), var(--information-700));
+  --colors-border-information--hover:  light-dark(var(--information-400), var(--information-500));
+  --colors-border-information--active: light-dark(var(--information-600), var(--information-700));
+  --colors-border-success:             light-dark(var(--success-500), var(--success-700));
+  --colors-border-success--hover:      light-dark(var(--success-400), var(--success-500));
+  --colors-border-success--active:     light-dark(var(--success-600), var(--success-700));
+  --colors-border-warning:             light-dark(var(--warning-500), var(--warning-700));
+  --colors-border-warning--hover:      light-dark(var(--warning-400), var(--warning-500));
+  --colors-border-warning--active:     light-dark(var(--warning-600), var(--warning-700));
+  --colors-border-danger:              light-dark(var(--danger-500), var(--danger-700));
+  --colors-border-danger--hover:       light-dark(var(--danger-400), var(--danger-500));
+  --colors-border-danger--active:      light-dark(var(--danger-600), var(--danger-700));
+  --colors-border-action:              var(--primary-900);
+  --colors-border-action--hover:       var(--primary-700);
+  --colors-border-action--active:      var(--primary-800);
+  --colors-border-action-secondary:    var(--neutral-200);
 
   /* ── Icônes ── */
   --colors-icon-primary:               light-dark(var(--neutral-700), var(--neutral-50));
-  --colors-icon-secondary:             light-dark(var(--neutral-300), var(--neutral-500));
+  --colors-icon-secondary:             light-dark(var(--neutral-200), var(--neutral-100));
   --colors-icon-information:           var(--information-500);
   --colors-icon-on-information:        light-dark(var(--information-700), var(--information-100));
   --colors-icon-success:               var(--success-500);
@@ -240,11 +246,6 @@
   --colors-icon-danger:                var(--danger-500);
   --colors-icon-on-danger:             light-dark(var(--danger-700), var(--danger-100));
 
-  /* ── Tailles icônes ── */
-  --size-icon-xs:  var(--scale-100);
-  --size-icon-sm:  var(--scale-200);
-  --size-icon-md:  var(--scale-300);
-  --size-icon-lg:  var(--scale-400);
 }
 
 /* ── Logo ── */

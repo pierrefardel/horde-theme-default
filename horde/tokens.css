@@ -88,6 +88,7 @@
   /* ── Icônes ── */
   --theme-icon-primary:        var(--colors-icon-primary);
   --theme-icon-secondary:      var(--colors-icon-secondary);
+  --theme-icon-action:         var(--colors-text-on-action);
   --theme-icon-information:    var(--colors-icon-information);
   --theme-icon-on-information: var(--colors-icon-on-information);
   --theme-icon-success:        var(--colors-icon-success);
@@ -104,11 +105,12 @@
   --theme-font-size-sm:        var(--font-size-body-sm);
   --theme-font-size-xs:        var(--font-size-body-x-sm);
   --theme-font-size-lg:        var(--font-size-body-lg);
-  --theme-font-weight-light:   var(--font-weight-light);
-  --theme-font-weight-normal:  var(--font-weight-regular);
-  --theme-font-weight-medium:  var(--font-weight-medium);
-  --theme-font-weight-bold:    var(--font-weight-semi-bold);
-  --theme-font-weight-xbold:   var(--font-weight-bold);
+  --theme-font-weight-light:      var(--font-weight-light);
+  --theme-font-weight-normal:     var(--font-weight-regular);
+  --theme-font-weight-medium:     var(--font-weight-medium);
+  --theme-font-weight-semi-bold:  var(--font-weight-semi-bold);
+  --theme-font-weight-bold:       var(--font-weight-semi-bold);
+  --theme-font-weight-xbold:      var(--font-weight-bold);
 
   /* ── Espacements ── */
   --theme-spacing-2xs:         var(--spacing-2xs);
@@ -147,4 +149,71 @@
   --theme-subbar-height:       22px;
   --theme-body-top:            82px;
   --theme-sidebar-width:       var(--horde-sidebar-width, 240px);
+}
+
+/* ─────────────────────────────────────────
+   COUCHE 3 — Tokens Horde-spécifiques
+   Définis directement en --theme-* avec light-dark()
+   Dérivés de --neutral-* / --primary-* / --information-*
+   Disponibles dans TOUS les thèmes (default-test ET upjv)
+   car ces primitives sont exposées par le DS UPJV ET tokens-horde-default.css
+   ───────────────────────────────────────── */
+:root {
+  /* ── Bordures subtiles ── */
+  --theme-border-subtle:           light-dark(var(--neutral-200), var(--neutral-700));
+  --theme-border-input:            light-dark(var(--neutral-300), var(--neutral-600));
+
+  /* ── Surfaces supplémentaires ── */
+  --theme-bg-input:                light-dark(var(--neutral-50), var(--neutral-800));
+  --theme-bg-overlay:              var(--colors-surface-overlay);
+  --theme-bg-overlay-split:        light-dark(rgba(0,0,0,0.12), rgba(255,255,255,0.12));
+  --theme-bg-selected-hover:       light-dark(var(--primary-100), var(--primary-800));
+  --theme-bg-linedrow-alt:         light-dark(var(--neutral-100), var(--neutral-800));
+  --theme-bg-calendar-current:     light-dark(var(--primary-100), var(--primary-800));
+  --theme-bg-calendar-week:        light-dark(var(--neutral-300), var(--neutral-600));
+  --theme-bg-uploader:             light-dark(var(--neutral-100), var(--neutral-700));
+  --theme-text-uploader:           light-dark(var(--neutral-600), var(--neutral-200));
+  --theme-bg-redbox-info:          light-dark(var(--information-100), var(--information-800));
+
+  /* ── Texte supplémentaire ── */
+  --theme-text-placeholder:        light-dark(var(--neutral-400), var(--neutral-500));
+  --theme-text-error-critical:     light-dark(oklch(0.50 0.22 25deg), oklch(0.75 0.18 25deg));
+
+  /* ── Citations email ── */
+  --theme-quoted-1:                light-dark(oklch(0.38 0.08 300deg), oklch(0.65 0.06 270deg));
+  --theme-quoted-2:                light-dark(oklch(0.42 0.09 195deg), oklch(0.65 0.08 195deg));
+  --theme-quoted-3:                light-dark(oklch(0.38 0.15 25deg),  oklch(0.68 0.12 25deg));
+  --theme-quoted-4:                light-dark(oklch(0.38 0.15 265deg), oklch(0.68 0.12 265deg));
+  --theme-quoted-5:                light-dark(oklch(0.50 0.12 55deg),  oklch(0.72 0.10 65deg));
+
+  /* ── Diff ins/del ── */
+  --theme-bg-ins:                  light-dark(oklch(0.93 0.06 145deg), oklch(0.22 0.06 145deg));
+  --theme-bg-del:                  light-dark(oklch(0.93 0.06 25deg),  oklch(0.22 0.06 25deg));
+
+  /* ── Syntax highlighting ── */
+  --theme-syntax-parentheses:      light-dark(oklch(0.40 0.14 145deg), oklch(0.72 0.14 145deg));
+  --theme-syntax-comment:          light-dark(var(--neutral-400),       var(--neutral-500));
+  --theme-syntax-tag:              light-dark(oklch(0.42 0.10 240deg), oklch(0.70 0.10 240deg));
+  --theme-syntax-tag-bg:           light-dark(var(--neutral-200),       var(--neutral-700));
+  --theme-syntax-meta:             light-dark(oklch(0.42 0.10 210deg), oklch(0.70 0.10 210deg));
+  --theme-syntax-id:               light-dark(oklch(0.52 0.14 55deg),  oklch(0.72 0.12 55deg));
+  --theme-syntax-id-bg:            light-dark(var(--neutral-100),       var(--neutral-800));
+  --theme-syntax-attr:             light-dark(oklch(0.45 0.18 265deg), oklch(0.72 0.14 265deg));
+  --theme-syntax-value:            light-dark(oklch(0.45 0.16 15deg),  oklch(0.72 0.14 15deg));
+  --theme-syntax-color:            light-dark(oklch(0.50 0.20 350deg), oklch(0.75 0.16 350deg));
+  --theme-syntax-eol:              light-dark(oklch(0.42 0.18 265deg), oklch(0.70 0.14 265deg));
+  --theme-syntax-url:              light-dark(oklch(0.48 0.10 75deg),  oklch(0.72 0.10 75deg));
+  --theme-syntax-file:             light-dark(var(--neutral-500),       var(--neutral-300));
+  --theme-syntax-file-bg:          light-dark(oklch(0.90 0.14 90deg),  oklch(0.28 0.10 75deg));
+  --theme-syntax-lineno-bg:        light-dark(var(--neutral-100),       var(--neutral-800));
+  --theme-syntax-lineno-border:    light-dark(var(--neutral-200),       var(--neutral-700));
+
+  /* ── Spellcheck ── */
+  --theme-text-spellcheck-ok:      light-dark(oklch(0.40 0.14 145deg), oklch(0.72 0.14 145deg));
+
+  /* ── Help ── */
+  --theme-bg-help-tip:             light-dark(oklch(0.93 0.05 145deg), oklch(0.22 0.06 145deg));
+  --theme-text-help-tip:           light-dark(oklch(0.38 0.14 145deg), oklch(0.72 0.14 145deg));
+  --theme-bg-help-warn:            light-dark(oklch(0.93 0.05 25deg),  oklch(0.22 0.06 25deg));
+  --theme-text-help-warn:          light-dark(oklch(0.38 0.15 25deg),  oklch(0.72 0.12 25deg));
 }

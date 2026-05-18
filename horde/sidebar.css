@@ -68,6 +68,12 @@
 .horde-new-extra {
   display: none;
 }
+.horde-new-extra a { display: block; }
+.horde-portal-new {
+  float: left;
+  border-right: 1px solid var(--theme-border);
+  margin-right: 10px;
+}
 
 /* Navigation sidebar */
 .horde-subnavi {
@@ -219,3 +225,4 @@
   background: var(--theme-bg-secondary);
   z-index: 10;
 }
+.DragElt .horde-splitbar-vert-handle { display: block; }

@@ -53,14 +53,14 @@ span.horde-tree-image-16 { background-image: url("graphics/tree/leaf.png"); }
 
 /* ── Uploader ── */
 .hordeUploaderHeaderContent { font-size: 18px; background-color: transparent; padding: 5px 10px 10px; color: var(--theme-text-primary); }
-.hordeUploaderHeader { background-color: #BFC9CD; }
-.hordeUploaderFilelistHeader { background: #ebeff0; color: #42454A; padding: 8px; height: 20px; }
+.hordeUploaderHeader { background-color: var(--theme-bg-uploader); }
+.hordeUploaderFilelistHeader { background: var(--theme-bg-uploader); color: var(--theme-text-uploader); padding: 8px; height: 20px; }
 .hordeUploaderSubHeader { font-size: 12px; }
-.hordeUploaderFooter { border-top: 1px solid #fff; height: 22px; line-height: 20px; vertical-align: middle; background: #ebeff0; color: #42454A; padding: 8px; }
+.hordeUploaderFooter { border-top: 1px solid var(--theme-border); height: 22px; line-height: 20px; vertical-align: middle; background: var(--theme-bg-uploader); color: var(--theme-text-uploader); padding: 8px; }
 .hordeUploaderFilelist { height: 350px; overflow: auto; }
-.hordeUploaderFilelistItem { border-bottom: 1px solid #ddd; padding: 10px 8px; }
-.hordeUploaderFilelistItemDone { color: #aaa; }
-.hordeUploaderFilelistItemError { color: red; font-weight: bold; }
+.hordeUploaderFilelistItem { border-bottom: 1px solid var(--theme-border-subtle); padding: 10px 8px; }
+.hordeUploaderFilelistItemDone { color: var(--theme-text-disabled); }
+.hordeUploaderFilelistItemError { color: var(--theme-text-danger); font-weight: bold; }
 .hordeUploaderFilename { float: left; width: 200px; }
 .hordeUploaderFilestatus, .hordeUploaderFilesize, .hordeUploaderFileaction { float: right; text-align: right; }
 .hordeUploaderFilestatus, .hordeUploaderFilesize { width: 80px; }
@@ -92,33 +92,33 @@ span.horde-tree-image-16 { background-image: url("graphics/tree/leaf.png"); }
     margin-top: 0 !important;
 }
 #RB_window p, #RB_window ul { margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; }
-.RB_confirm { background: var(--theme-bg-warning-light); border: 1px solid #ccc; padding: 1em; border-radius: var(--theme-radius-md); }
+.RB_confirm { background: var(--theme-bg-warning-light); border: 1px solid var(--theme-border-subtle); padding: 1em; border-radius: var(--theme-radius-md); }
 .RB_confirm input { margin: .2em; }
 .RB_confirm ul { margin-left: .5em; }
-#RB_info { width: 30em; padding: 1em; border: 1px solid #ccc; background: #ccf; border-radius: var(--theme-radius-md); }
+#RB_info { width: 30em; padding: 1em; border: 1px solid var(--theme-border-subtle); background: var(--theme-bg-redbox-info); border-radius: var(--theme-radius-md); }
 #RB_info input { margin: .2em; }
 
 /* ── Source markup ── */
 table.lineNumbered * { line-height: 16px; }
-.lineNumbered th { background: #e9e9e9; border-right: 1px solid #e0e0e0; border-bottom: none; padding: 0 10px; text-align: right; }
+.lineNumbered th { background: var(--theme-syntax-lineno-bg); border-right: 1px solid var(--theme-syntax-lineno-border); border-bottom: none; padding: 0 10px; text-align: right; }
 .lineNumbered td { vertical-align: top; width: 100%; white-space: pre; background: var(--theme-bg-white); padding-left: 10px; }
-.parentheses { color: #2a6; font-weight: bold; }
-.comment { color: #aac; }
-.htag  { color: #569; background: #d5d6da; font-weight: bold; }
-.metac { color: #0ff; background: #d5d6da; }
-.id    { color: #e82; background: #e4e4e0; }
-.attr  { color: #6af; }
-.value { color: #d46; }
-.color { color: #f57; }
-.eol   { color: #26e; }
-.url   { color: #962; }
-.file  { color: #444; background: #fe4; }
+.parentheses { color: var(--theme-syntax-parentheses); font-weight: bold; }
+.comment { color: var(--theme-syntax-comment); }
+.htag  { color: var(--theme-syntax-tag); background: var(--theme-syntax-tag-bg); font-weight: bold; }
+.metac { color: var(--theme-syntax-meta); background: var(--theme-syntax-tag-bg); }
+.id    { color: var(--theme-syntax-id); background: var(--theme-syntax-id-bg); }
+.attr  { color: var(--theme-syntax-attr); }
+.value { color: var(--theme-syntax-value); }
+.color { color: var(--theme-syntax-color); }
+.eol   { color: var(--theme-syntax-eol); }
+.url   { color: var(--theme-syntax-url); }
+.file  { color: var(--theme-syntax-file); background: var(--theme-syntax-file-bg); }
 .class { font-style: italic; }
 
 /* ── SpellChecker ── */
 .spellcheckChecking, .spellcheckIncorrect { color: var(--theme-text-danger); }
 .spellcheckIncorrect, .spellcheckCorrected { text-decoration: underline; cursor: pointer; }
-.spellcheckCorrected { color: #090; }
+.spellcheckCorrected { color: var(--theme-text-spellcheck-ok); }
 
 /* ── In-place editing ── */
 form.inplaceeditor-form { background: none; }
@@ -126,8 +126,8 @@ form.inplaceeditor-form { background: none; }
 
 /* ── Loading image ── */
 span.loadingImg {
-    background: #fff url("graphics/loading.gif") no-repeat center;
-    border: 1px #e0e0e0 solid;
+    background: var(--theme-bg-white) url("graphics/loading.gif") no-repeat center;
+    border: 1px solid var(--theme-border-subtle);
     height: 16px; width: 16px;
     margin: 10px 0 0 10px; padding: 3px;
     position: absolute; z-index: 1000;
@@ -138,7 +138,7 @@ span.loadingImg {
     background: var(--theme-bg-primary);
     color: var(--theme-text-primary);
     white-space: nowrap; padding: 1px 2px;
-    border: 1px solid #888; font-size: 90%;
+    border: 1px solid var(--theme-border); font-size: 90%;
     border-radius: 3px;
 }
 span.keydownImg  { background-image: url("graphics/keys/down.png"); }
@@ -169,11 +169,12 @@ body.help_about, body.help_entry { margin: 0.5em; }
 .help h2 { padding: 1em 0 0.5em; font-size: 110%; }
 .help p  { margin: 0 1em 1em; }
 .help em { display: block; padding: 5px; margin: 0 1em 1em; }
-.help em.helpTip  { color: #090; background: #e0f0e0; }
-.help em.helpWarn { color: #900; background: #f0e0e0; }
+.help em.helpTip  { color: var(--theme-text-help-tip); background: var(--theme-bg-help-tip); }
+.help em.helpWarn { color: var(--theme-text-help-warn); background: var(--theme-bg-help-warn); }
 
 /* ── Permissions ── */
 .permsAdd, .permsDelete, .permsEdit { padding-left: 3px; }
+.permsAdd img, .permsDelete img, .permsEdit img { width: 16px; height: 16px; }
 .horde-perms  { background-image: url("graphics/perms.png"); }
 .horde-search { background-image: url("graphics/search.png"); }
 
@@ -188,7 +189,30 @@ body.help_about, body.help_entry { margin: 0.5em; }
 .horde-admin-sql      { background-image: url("graphics/sql.png"); }
 .horde-admin-shell    { background-image: url("graphics/shell.png"); }
 .horde-admin-mobile   { background-image: url("graphics/mobile.png"); }
-.horde-admin-data, .horde-admin-hashtable, .horde-data { background-image: url("graphics/data.png"); }
+.horde-admin-data, .horde-data { background-image: url("graphics/data.png"); }
+.horde-admin-hashtable    { background-image: url("graphics/admin/hashtable.png"); }
+.horde-admin-cache        { background-image: url("graphics/admin/cache.png"); }
+.horde-admin-sessions     { background-image: url("graphics/admin/sessions.png"); }
+.horde-admin-api-registry { background-image: url("graphics/admin/api-registry.png"); }
+.horde-admin-oauth        { background-image: url("graphics/admin/oauth.png"); }
+.horde-admin-auth-status  { background-image: url("graphics/admin/auth-status.png"); }
+.horde-admin-info         { background-image: url("graphics/status/info.png"); }
+
+/* ── Splitbar horizontal ── */
+.horde-splitbar-horiz {
+  height: 8px;
+  cursor: row-resize;
+  background-color: var(--theme-border);
+  background-image: none;
+}
+.horde-splitbar-horiz-handle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
 
 /* ── Session / ActiveSync ── */
 .current-sessions, .activesync-devices { width: 100%; }

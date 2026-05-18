@@ -11,23 +11,43 @@
   padding: var(--theme-spacing-sm);
   background-color: var(--theme-bg-primary);
   border-bottom: 1px solid var(--theme-border);
-  position:sticky;
-  top:0;
+  position: sticky;
+  top: 0;
   box-shadow: var(--theme-shadow-sm);
+  max-height: 250px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
-.msgHeaders a {
-  color: var(--theme-text-primary);
-}
+.msgHeaders a { color: var(--theme-text-primary); }
+#msgHeadersTable tr { vertical-align: top; }
+#msgHeadersTable td { padding-bottom: 0; }
 #msgHeadersTable td.label {
   color: var(--theme-text-secondary);
   font-weight: var(--theme-font-weight-medium);
+  padding-right: 4px;
+  text-align: right;
+  vertical-align: middle;
+  white-space: nowrap;
 }
+.msgHeaders .subject { font-weight: var(--theme-font-weight-bold); }
 
 /* ── Log & pièces jointes ── */
 #msgloglist,
 #partlist {
   border-top: 1px solid var(--theme-border);
+  margin-top: 2px;
+  margin-left: 5px;
+  padding: 4px 2px 0;
 }
+#msgloglist,
+#partlist ul { list-style-type: none; }
+.partlistDownloadAll { float: right; font-style: italic; }
+#partlist .horde-tree-image { padding-right: 1px; }
+#msgloglist li, #partlist li { padding: 2px; }
+
+.resentFrom { font-style: italic; padding: 2px 0 2px 2px; }
+.resentFrom .address { font-style: normal; }
+.resentFrom .address:first-child { margin-left: 3px; }
 
 /* ── Corps du message ── */
 .messageBody {
@@ -37,11 +57,22 @@
 /* ── Adresses (groupe) ── */
 .msgHeaders div.addrgroup-div {
   background-color: var(--theme-bg-primary);
+  display: inline-block;
+  margin: 1px;
+  padding: 1px 2px;
 }
+.msgHeaders .horde-button { margin: 1px; padding: 1px 3px; }
+.msgHeaders a.addrgroup-name { font-weight: var(--theme-font-weight-bold); }
 .largeaddrlist,
 .largeaddrlistlimit {
   color: var(--theme-text-action);
+  cursor: pointer;
+  font-weight: var(--theme-font-weight-bold);
+  margin-right: 5px;
+  padding: 1px;
 }
+.largeaddrlist:hover,
+.largeaddrlistlimit:hover { text-decoration: underline; }
 
 /* ── Icônes actions — neutralise les PNG du default (SVG dans icons.css) ── */
 #ctx_reply_reply span.iconImg,
@@ -104,4 +135,42 @@ span.mimePartInfoSize {
 }
 .mimePartWrapInvalid {
   border-color: var(--theme-border-danger);
+}
+
+/* ── Structure MIME ── */
+div.partsTreeDiv { min-height: 0; }
+.messageBody div.mimePartData { line-height: 1.3em; margin-bottom: 8px; }
+.htmlMsgData { margin: 2px 0; width: 100%; }
+.mimeStatusMessageTable { display: inline-block; margin-bottom: 3px; padding: 4px; }
+.mimeStatusIcon { width: 22px; }
+div.mimeStatusMessage, div.mimePartInfo { margin-bottom: 7px; }
+.mimePartInfo div {
+  margin: 0;
+  padding: 5px;
+  display: inline-block;
+}
+.mimePartInfo div > img { vertical-align: top; }
+.mimePartInfoAtc div {
+  border-style: dashed;
+  background-position: 2px 50%;
+  background-repeat: no-repeat;
+  padding-left: 35px;
+}
+.mimeStatusMessageTable td { padding: 0; }
+.mimeStatusMessageTable td table td { padding-right: 2px; white-space: nowrap; }
+.mimePartWrap,
+.mimePartWrapValid,
+.mimePartWrapInvalid { margin: 2px 0; padding: 10px; border-width: 1px; border-style: solid; }
+.downloadAtc { margin-left: 1px; }
+.saveImgAtc  { margin-left: 1px; }
+
+/* ── Thread images ── */
+div.msgSubject span.horde-tree-image { margin-top: -3px; margin-right: 1px; }
+
+/* ── Context menus message ── */
+.context div.contactAddr,
+.context div.mboxName {
+  font-style: italic;
+  padding: 0 2px;
+  text-align: center;
 }

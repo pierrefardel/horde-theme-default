@@ -97,6 +97,8 @@ body.horde-ajax #horde-contentwrapper {
   overflow: auto;
   border-radius: var(--theme-radius-lg);
 }
+.horde-no-sidebar #horde-content { padding-left: 0; }
+.horde-content { padding: 5px 5px 0; }
 
 #horde-page {
   position: absolute;

@@ -2,6 +2,28 @@
  * IMP UPJV — liste des messages (style Gmail)
  */
 
+/* ── Structure de base des lignes (hérité Horde, overridé plus bas) ── */
+div.vpRow {
+  border-bottom: 1px solid var(--theme-border);
+  cursor: pointer;
+  height: 21px;
+  overflow: hidden;
+}
+div.vpRow div {
+  overflow: hidden;
+  padding-top: 4px;
+  position: absolute;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Colonnes — positions absolues par défaut (overridées en mode horiz flex) */
+div.msgFrom    { left: 85px; width: 150px; }
+div.msgFrom a  { color: inherit; }
+div.msgSubject { left: 240px; right: 225px; }
+div.msgDate    { text-align: right; right: 88px; width: 130px; }
+div.msgSize    { text-align: right; right: 18px; width: 50px; }
+
 /* Pas de message sélectionné : limite la hauteur à celle de #previewInfo */
 #previewPane:has(#previewInfo:not([style="display: none;"])) {
   height: auto !important;
@@ -96,6 +118,8 @@
 /* Colonnes — valeurs par défaut (mode vert, fallback) */
 div.msgStatus {
   font-size: 0;
+  margin-left: 8px;
+  width: 70px;
 }
 div.msgStatus .iconImg {
   position: relative;
@@ -146,6 +170,7 @@ div.vpRowHoriz.vpRow {
   border-bottom: 1px solid var(--theme-border) !important;
   cursor: pointer;
   overflow: hidden;
+  gap:var(--theme-spacing-sm);
   font-size: var(--theme-font-size-sm);
   transition: background-color 0.1s ease;
   padding: 0 var(--theme-spacing-2xs);
@@ -267,35 +292,43 @@ div.vpRow div.msgSubject span.flagUser {
    LISTE DES MAILS — états de ligne
    ============================================= */
 
-/* Couleurs sémantiques des flags — !important obligatoire car PHP injecte
-   background en inline style depuis Flag/Imap/*.php et Flag/System/*.php. */
-div.vpRow.flagUnseen       { background-color: var(--theme-bg-information-light)  !important; color: var(--theme-text-on-information) !important; }
-div.vpRow.flagAnswered     { background-color: var(--theme-bg-warning-light)      !important; color: var(--theme-text-on-warning)     !important; }
-div.vpRow.flagHighpriority { background-color: var(--theme-bg-danger-light)       !important; color: var(--theme-text-on-danger)      !important; }
-div.vpRow.flagFlagged      { background-color: var(--theme-bg-warning-light)      !important; color: var(--theme-text-on-warning)     !important; }
-div.vpRow.flagDraft        { background-color: var(--theme-bg-success-light)      !important; color: var(--theme-text-on-success)     !important; }
+/* Flags — pas de fond coloré sur les rows, info portée par les icônes uniquement
+   background-color: transparent !important neutralise l'injection JS inline style="background:#..."
+   La sélection (vpRowSelected) reprend le dessus car elle vient après dans la cascade. */
+div.vpRow.flagUnseen:not(.vpRowSelected),
+div.vpRow.flagAnswered:not(.vpRowSelected),
+div.vpRow.flagHighpriority:not(.vpRowSelected),
+div.vpRow.flagFlagged:not(.vpRowSelected),
+div.vpRow.flagDraft:not(.vpRowSelected),
+div.vpRow.flagForwarded:not(.vpRowSelected),
+div.vpRow.flagJunk:not(.vpRowSelected),
+div.vpRow.flagNotJunk:not(.vpRowSelected),
+div.vpRow.flagPersonal:not(.vpRowSelected),
+div.vpRow.flagList:not(.vpRowSelected),
+div.vpRow.flagAttachmsg:not(.vpRowSelected),
+div.vpRow.flagSignedmsg:not(.vpRowSelected),
+div.vpRow.flagEncryptmsg:not(.vpRowSelected),
+div.vpRow.flagLowpriority:not(.vpRowSelected) { background-color: transparent !important; }
 
-/* Ligne sélectionnée → action (libère information pour flagUnseen) */
-/* Rétablir l'accent de sélection sur les lignes flaggées */
-div.vpRow.flagUnseen.vpRowSelected       { box-shadow: inset 4px 0 0 var(--theme-border-information); }
-div.vpRow.flagAnswered.vpRowSelected     { box-shadow: inset 4px 0 0 var(--theme-border-warning); }
-div.vpRow.flagHighpriority.vpRowSelected { box-shadow: inset 4px 0 0 var(--theme-border-danger); }
-div.vpRow.flagFlagged.vpRowSelected      { box-shadow: inset 4px 0 0 var(--theme-border-warning); }
-div.vpRow.flagDraft.vpRowSelected        { box-shadow: inset 4px 0 0 var(--theme-border-success); }
+/* Hover explicite sur rows flaggées — doit aussi être !important pour battre le style JS inline */
+div.vpRow.flagUnseen:not(.vpRowSelected):hover,
+div.vpRow.flagAnswered:not(.vpRowSelected):hover,
+div.vpRow.flagHighpriority:not(.vpRowSelected):hover,
+div.vpRow.flagFlagged:not(.vpRowSelected):hover,
+div.vpRow.flagDraft:not(.vpRowSelected):hover,
+div.vpRow.flagForwarded:not(.vpRowSelected):hover,
+div.vpRow.flagJunk:not(.vpRowSelected):hover,
+div.vpRow.flagNotJunk:not(.vpRowSelected):hover,
+div.vpRow.flagPersonal:not(.vpRowSelected):hover,
+div.vpRow.flagList:not(.vpRowSelected):hover,
+div.vpRow.flagAttachmsg:not(.vpRowSelected):hover,
+div.vpRow.flagSignedmsg:not(.vpRowSelected):hover,
+div.vpRow.flagEncryptmsg:not(.vpRowSelected):hover,
+div.vpRow.flagLowpriority:not(.vpRowSelected):hover { background-color: var(--theme-bg-secondary) !important; }
 
-/* Forwarded — accent gauche */
-div.vpRow.flagForwarded { box-shadow: inset 4px 0 0 var(--theme-border-information); }
+div.vpRow.flagJunk { font-style: italic; }
 
-/* Junk — fond danger-light + italic */
-div.vpRow.flagJunk {
-  background-color: var(--theme-bg-danger-light) !important;
-  color: var(--theme-text-on-danger) !important;
-  font-style: italic;
-}
-div.vpRow.flagJunk.vpRowSelected { box-shadow: inset 4px 0 0 var(--theme-border-danger); }
-
-/* Personal — accent gauche action */
-div.vpRow.flagPersonal { box-shadow: inset 4px 0 0 var(--theme-border-action); }
+/* flagDeleted — seule exception, état destructif dominant */
 
 /* ── Priorité flags multiples ──
    flagDeleted domine tout — renforce l'opacité + neutralise les fonds des autres flags.
@@ -335,27 +368,22 @@ div.vpRow.flagDeleted * { text-decoration: line-through; }
   mask-position: center;
 }
 
-.msgflags.flagAnswered     { -webkit-mask-image: url("../graphics/svg/action-reply.svg");       mask-image: url("../graphics/svg/action-reply.svg");       background-color: var(--theme-icon-warning) !important; }
-.msgflags.flagForwarded    { -webkit-mask-image: url("../graphics/svg/action-forward.svg");     mask-image: url("../graphics/svg/action-forward.svg");     background-color: var(--theme-icon-primary) !important; }
-.msgflags.flagFlagged      { -webkit-mask-image: url("../graphics/svg/flag-flagged.svg");       mask-image: url("../graphics/svg/flag-flagged.svg");       background-color: var(--theme-icon-information) !important; }
-.msgflags.flagDraft        { -webkit-mask-image: url("../graphics/svg/flag-draft-2.svg");       mask-image: url("../graphics/svg/flag-draft-2.svg");       background-color: var(--theme-icon-success) !important; }
-.msgflags.flagJunk         { -webkit-mask-image: url("../graphics/svg/spam.svg");               mask-image: url("../graphics/svg/spam.svg");               background-color: var(--theme-icon-danger) !important; }
-.msgflags.flagNotJunk      { -webkit-mask-image: url("../graphics/svg/action-innocent.svg");    mask-image: url("../graphics/svg/action-innocent.svg");    background-color: var(--theme-icon-success) !important; }
-.msgflags.flagDeleted      { -webkit-mask-image: url("../graphics/svg/trash.svg");              mask-image: url("../graphics/svg/trash.svg");              background-color: var(--theme-icon-danger) !important; }
-.msgflags.flagUnseen       { -webkit-mask-image: url("../graphics/svg/flag-unseen.svg");        mask-image: url("../graphics/svg/flag-unseen.svg"); }
-.msgflags.flagPersonal     { -webkit-mask-image: url("../graphics/svg/flag-personal.svg");      mask-image: url("../graphics/svg/flag-personal.svg");      background-color: var(--theme-icon-information) !important; }
-.msgflags.flagHighpriority { -webkit-mask-image: url("../graphics/svg/flag-highpriority.svg");  mask-image: url("../graphics/svg/flag-highpriority.svg");  background-color: var(--theme-icon-danger) !important; }
-.msgflags.flagLowpriority  { -webkit-mask-image: url("../graphics/svg/flag-lowpriority.svg");   mask-image: url("../graphics/svg/flag-lowpriority.svg");   background-color: var(--theme-icon-warning) !important; }
-.msgflags.flagList         { -webkit-mask-image: url("../graphics/svg/flag-list.svg");            mask-image: url("../graphics/svg/flag-list.svg"); }
-.msgflags.flagSignedmsg    { -webkit-mask-image: url("../graphics/svg/oa-whitelist.svg");  mask-image: url("../graphics/svg/oa-whitelist.svg"); }
-.msgflags.flagEncryptmsg   { -webkit-mask-image: url("../graphics/svg/mbox-acl.svg");      mask-image: url("../graphics/svg/mbox-acl.svg"); }
-.msgflags.flagAttachmsg    { -webkit-mask-image: url("../graphics/svg/flag-attachmsg.svg"); mask-image: url("../graphics/svg/flag-attachmsg.svg"); }
-.msgflags.flagList         { -webkit-mask-image: url("../graphics/svg/preview-thread.svg"); mask-image: url("../graphics/svg/preview-thread.svg"); }
-
-/* Ligne sélectionnée : icônes en blanc */
-div.vpRowSelected .msgflags.iconImg {
-  background-color: var(--theme-bg-white) !important;
-}
+/* Icônes flags — couleurs sémantiques, persistent en sélection */
+.msgflags.flagAnswered     { -webkit-mask-image: url("../graphics/svg/action-reply.svg");       mask-image: url("../graphics/svg/action-reply.svg");       background-color: var(--theme-icon-warning)     !important; }
+.msgflags.flagForwarded    { -webkit-mask-image: url("../graphics/svg/action-forward.svg");     mask-image: url("../graphics/svg/action-forward.svg");     background-color: var(--theme-icon-information) !important; }
+.msgflags.flagFlagged      { -webkit-mask-image: url("../graphics/svg/flag-flagged.svg");       mask-image: url("../graphics/svg/flag-flagged.svg");       background-color: var(--theme-icon-warning)     !important; }
+.msgflags.flagDraft        { -webkit-mask-image: url("../graphics/svg/flag-draft-2.svg");       mask-image: url("../graphics/svg/flag-draft-2.svg");       background-color: var(--theme-icon-success)     !important; }
+.msgflags.flagJunk         { -webkit-mask-image: url("../graphics/svg/spam.svg");               mask-image: url("../graphics/svg/spam.svg");               background-color: var(--theme-icon-danger)      !important; }
+.msgflags.flagNotJunk      { -webkit-mask-image: url("../graphics/svg/action-innocent.svg");    mask-image: url("../graphics/svg/action-innocent.svg");    background-color: var(--theme-icon-success)     !important; }
+.msgflags.flagDeleted      { -webkit-mask-image: url("../graphics/svg/trash.svg");              mask-image: url("../graphics/svg/trash.svg");              background-color: var(--theme-icon-danger)      !important; }
+.msgflags.flagUnseen       { -webkit-mask-image: url("../graphics/svg/flag-unseen.svg");        mask-image: url("../graphics/svg/flag-unseen.svg");        background-color: var(--theme-icon-information) !important; }
+.msgflags.flagPersonal     { -webkit-mask-image: url("../graphics/svg/flag-personal.svg");      mask-image: url("../graphics/svg/flag-personal.svg");      background-color: var(--theme-icon-action)      !important; }
+.msgflags.flagHighpriority { -webkit-mask-image: url("../graphics/svg/flag-highpriority.svg");  mask-image: url("../graphics/svg/flag-highpriority.svg");  background-color: var(--theme-icon-danger)      !important; }
+.msgflags.flagLowpriority  { -webkit-mask-image: url("../graphics/svg/flag-lowpriority.svg");   mask-image: url("../graphics/svg/flag-lowpriority.svg");   background-color: var(--theme-icon-secondary)   !important; }
+.msgflags.flagList         { -webkit-mask-image: url("../graphics/svg/preview-thread.svg");     mask-image: url("../graphics/svg/preview-thread.svg");     background-color: var(--theme-icon-secondary)   !important; }
+.msgflags.flagSignedmsg    { -webkit-mask-image: url("../graphics/svg/oa-whitelist.svg");       mask-image: url("../graphics/svg/oa-whitelist.svg");       background-color: var(--theme-icon-secondary)   !important; }
+.msgflags.flagEncryptmsg   { -webkit-mask-image: url("../graphics/svg/mbox-acl.svg");           mask-image: url("../graphics/svg/mbox-acl.svg");           background-color: var(--theme-icon-secondary)   !important; }
+.msgflags.flagAttachmsg    { -webkit-mask-image: url("../graphics/svg/flag-attachmsg.svg");     mask-image: url("../graphics/svg/flag-attachmsg.svg");     background-color: var(--theme-icon-secondary)   !important; }
 
 /* ── CHECKBOX msCheck — liste messages + menus contextuels (ctx_flag) ── */
 
@@ -503,10 +531,7 @@ div.msgStatus .iconImg.msgflags {
   mask-position: center;
 }
 
-/* Ligne sélectionnée : icônes en blanc */
-div.vpRowSelected div.msgStatus .iconImg.msgflags {
-  background-color: var(--theme-icon-secondary) !important;
-}
+/* Icônes flags : couleurs sémantiques persistantes même en sélection — pas de reset ici */
 
 /* ── HEADER LISTE MESSAGES ── */
 

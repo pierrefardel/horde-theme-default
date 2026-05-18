@@ -146,7 +146,7 @@
   justify-content: center;
   width: 28px;
   flex-shrink: 0;
-  border-left: 1px solid rgba(0,0,0,0.12);
+  border-left: 1px solid var(--theme-bg-overlay-split);
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
@@ -165,10 +165,35 @@
   color: var(--theme-text-primary);
 }
 
+/* ── Boutons désactivés ── */
+.horde-buttonbar .disabled {
+  display: none;
+}
+
 /* ── Select dans la toolbar ── */
 .horde-buttonbar select {
   background-color: transparent;
   border-width: 0;
   color: var(--theme-text-primary);
   font-weight: bold;
+  margin-top: 0;
+  cursor: pointer;
+  height: auto;
 }
+.horde-buttonbar li option { padding: 0; }
+.horde-buttonbar li span.accessKey { padding: 0; }
+
+.horde-buttonbar .rightFloat li.horde-nobutton { margin-right: 5px; }
+.horde-buttonbar .rightFloat li.horde-active { background-color: var(--theme-bg-btn-secondary-hover); }
+
+/* ── Icônes bouton (horde-icon) ── */
+.horde-buttonbar li.horde-icon a { padding-left: 25px; background-position: left center; background-repeat: no-repeat; }
+.horde-buttonbar .horde-icon { background-position: right center; background-repeat: no-repeat; }
+
+/* ── Chevron has-menu ── */
+.horde-buttonbar .horde-hasmenu { padding-right: 24px; }
+
+/* ── Bouton split horde-button-* (ancien layout, conservé pour compatibilité) ── */
+.horde-button-icon { width: 20px; height: 24px; }
+.horde-button-left, .horde-button-left-arrow { height: 22px; }
+.horde-button-right, .horde-button-right-arrow { height: 22px; }

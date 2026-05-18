@@ -53,6 +53,19 @@ span.iconImg { margin-right: 0; }
 
 #button_compose { display: none; }
 
+/* IMP buttonbar override */
+.horde-buttonbar { padding-right: 12px; }
+
+/* Context menus contacts */
+#ctx_contacts img.contactimg,
+#ctx_contacts div.flagimg {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+#ctx_contacts div.flagimg img { padding-right: 3px; }
+
 /* Options message */
 .optionsContainer { float: right; }
 .optionsContainer div { padding-bottom: 2px; }

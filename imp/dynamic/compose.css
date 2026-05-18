@@ -87,7 +87,7 @@
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   width: 10px; height: 10px;
-  background-color: #fff;
+  background-color: var(--theme-text-on-action);
   -webkit-mask-image: url("../graphics/svg/ms-check.svg");
   mask-image: url("../graphics/svg/ms-check.svg");
   -webkit-mask-size: contain;
@@ -337,7 +337,7 @@ span.attachmentImg {
 
 /* Chargement RTE */
 #rteloading {
-  background-color: rgba(0,0,0,.35);
+  background-color: var(--theme-bg-overlay);
   position: absolute;
   z-index: 100;
 }

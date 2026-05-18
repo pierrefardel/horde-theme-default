@@ -53,7 +53,7 @@
 }
 .contextSelected {
   background-color: var(--theme-bg-highlight) !important;
-  color: #fff !important;
+  color: var(--theme-text-on-action) !important;
 }
-a.contextSelected:hover { color: #000 !important; }
+a.contextSelected:hover { color: var(--theme-text-primary) !important; }
 .contextMenu .iconImg { vertical-align: top; margin: 0; }

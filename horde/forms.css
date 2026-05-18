@@ -125,6 +125,27 @@ input[disabled], input[disabled]:hover, textarea[disabled], option[disabled] {
 }
 .checkbox, .radio { border: 0; height: 14px; width: 14px; background: transparent; }
 
+.horde-form div.checkbox {
+  display: inline-block;
+  width: auto !important;
+  height: auto !important;
+  border: none;
+  background: transparent;
+  padding: 1px 0;
+  overflow: visible;
+}
+.horde-form div.checkbox label { display: inline; cursor: pointer; }
+.horde-form td.control input[type="checkbox"] {
+  width: auto;
+  height: auto;
+  min-width: 1em;
+  margin: 0 3px 0 0;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+table.horde-table td img { width: 16px; height: 16px; vertical-align: middle; }
+
 /* ── Tables ── */
 table { border: none; }
 td, th { padding: 1px; }
@@ -138,7 +159,7 @@ ul.linedRow { list-style-type: none; }
 table.linedRow, ul.linedRow { border-bottom: none; }
 .linedRowSelectedCol, td.linedRowSelectedCol, table.linedRow td.linedRowSelectedCol {
   color: var(--theme-text-primary);
-  background: #f3f3f3;
+  background: var(--theme-bg-linedrow-alt);
   border-bottom: 1px solid var(--theme-border);
 }
 .selectedRow, tr.selectedRow td, .selectedRow a {
@@ -150,8 +171,7 @@ table.nopadding table td, table.nopadding table th { padding: 1px; }
 table.nopadding .headerbox td, table.nopadding .headerbox th { padding: 1px 5px; }
 
 .sortdown, .sortup { font-weight: bold; }
-.sortup  { background: url("graphics/za.png") left center no-repeat !important; text-indent: 15px; }
-.sortdown { background: url("graphics/az.png") left center no-repeat !important; text-indent: 15px; }
+/* icônes sortup/sortdown → icons.css */
 
 table.horde-table { border-spacing: 0; width: 100%; }
 table.horde-table th {
@@ -187,24 +207,62 @@ table.horde-table thead .horde-split-right {
   background-image: none !important;
   width: 0;
 }
-.horde-table-header .horde-split-right,
-table.horde-table thead .horde-split-right { background-position: right center; }
 table.horde-table thead .horde-split-left.sortup,
 table.horde-table thead .horde-split-right.sortup,
-table.horde-table thead .horde-split-left.sortdown,
-table.horde-table thead .horde-split-right.sortdown { text-indent: 20px; }
-table.horde-table thead .horde-split-left.sortup,
-table.horde-table thead .horde-split-left.sortdown { background-position: 5px center, left center; }
-table.horde-table thead .horde-split-right.sortup,
-table.horde-table thead .horde-split-right.sortdown { background-position: 5px center, right center; }
-table.horde-table thead .horde-split-left.sortup,
-table.horde-table thead .horde-split-right.sortup {
-  background-image: none !important;
-}
 table.horde-table thead .horde-split-left.sortdown,
 table.horde-table thead .horde-split-right.sortdown {
-  background-image: url("graphics/az.png"), url("graphics/tablehead-split.png");
+  background-image: none !important;
 }
 .horde-table-header .iconImg { vertical-align: middle;margin:0; order:-1; }
 
 /* Tabs → déplacé dans components.css */
+
+/* ── Formulaires V3 (Horde\Form\V3) ── */
+.horde-form .form-table { width: 100%; padding: 2px; border-collapse: collapse; }
+.horde-form .form-table tr { vertical-align: top; }
+.horde-form .form-table td { padding-bottom: 5px; }
+
+.horde-form td.label { padding: 5px 9px 0 0; text-align: right; width: 15%; }
+
+.horde-form span.required { color: var(--theme-text-danger); font-weight: bold; }
+.horde-form .optional { color: var(--theme-text-secondary); font-weight: normal; font-size: 85%; }
+
+.horde-form td.control { padding: 3px 0; }
+.horde-form td.control input[type="text"],
+.horde-form td.control input[type="email"],
+.horde-form td.control input[type="number"],
+.horde-form td.control input[type="password"],
+.horde-form td.control input[type="url"],
+.horde-form td.control input[type="tel"],
+.horde-form td.control select,
+.horde-form td.control textarea { box-sizing: border-box; }
+
+.horde-form .help-text { color: var(--theme-text-secondary); font-size: 70%; display: block; }
+
+.horde-form .field-error { color: var(--theme-text-danger); display: block; font-size: 85%; }
+.horde-form td.control.error input,
+.horde-form td.control.error select,
+.horde-form td.control.error textarea { border-color: var(--theme-border-danger); }
+
+.horde-form .form-errors {
+  color: var(--theme-text-danger);
+  margin: 0.5em 0; padding: 0.5em;
+  border: 1px solid var(--theme-border-danger);
+  background: var(--theme-bg-danger-light);
+  border-radius: var(--theme-radius-sm);
+}
+
+.horde-form .form-header { margin-bottom: 1em; border-bottom: thin dashed var(--theme-border); }
+.horde-form .form-header h2 { margin: 0.3em 0; font-size: 1.1em; }
+
+.horde-form .section-header td {
+  background-color: var(--theme-bg-secondary);
+  padding: 5px; font-weight: bold;
+}
+
+.horde-form .form-buttons { padding: 10px; margin: 10px 0; background-color: var(--theme-bg-primary); }
+.horde-form .form-buttons-inner { padding-left: 15%; }
+.horde-form .form-buttons-inner input[type="submit"],
+.horde-form .form-buttons-inner input[type="button"] { color: var(--theme-text-on-action); }
+
+.horde-form .odd { background-color: var(--theme-bg-secondary); }

@@ -19,7 +19,7 @@
 #horde-logo {
   float: none;
   flex-shrink: 0;
-  width: 80px;
+  width: 40px;
   height: 36px;
   background-image: var(--logo-upjv-url);
   background-size: contain;
@@ -132,21 +132,52 @@ a.horde-mainnavi-active:active {
 }
 
 /* Dropdown navigation */
-.horde-dropdown ul {
+.horde-dropdown {
+  float: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+}
+.horde-dropdown li ul {
+  display: none;
   position: absolute;
   top: 44px;
   left: 0;
-  border: 1px solid var(--theme-border);
-  border-radius: var(--theme-radius-sm);
-  background-color: var(--theme-bg-white);
-  box-shadow: var(--theme-shadow-md);
+  list-style: none;
   padding: 4px 0;
+  margin: 0;
   min-width: 200px;
   z-index: 300;
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-md);
+  background-color: var(--theme-bg-white);
+  box-shadow: var(--theme-shadow-md);
+}
+.horde-dropdown li:hover ul,
+.horde-dropdown li.over ul {
+  display: block;
+}
+.horde-dropdown li:hover ul ul,
+.horde-dropdown li.over ul ul {
+  display: none;
+}
+.horde-dropdown ul li ul {
+  margin-top: -25px;
+  margin-left: 100%;
+  top: 24px;
+}
+.horde-dropdown ul li:hover ul,
+.horde-dropdown ul li.over ul {
+  display: block;
 }
 .horde-dropdown ul li {
+  position: relative;
   border-bottom: none;
   white-space: nowrap;
+}
+.horde-dropdown ul li:last-child {
+  border-bottom: 0;
 }
 .horde-drowdown-str {
   height: auto;
@@ -166,9 +197,6 @@ a.horde-mainnavi-active:active {
 .horde-drowdown-str a.horde-mainnavi:hover {
   background-color: var(--theme-bg-secondary) !important;
   color: var(--theme-text-headings) !important;
-}
-.horde-dropdown ul {
-  border-radius: var(--theme-radius-md);
 }
 
 /* Recherche */
@@ -318,4 +346,22 @@ a.horde-mainnavi-active:active {
 }
 #horde-info a {
   color: var(--theme-text-action);
+}
+
+/* Icône settings — remplacée par SVG mask dans notre thème, conservé pour compatibilité */
+.horde-icon-settings a {
+  width: 22px;
+  height: 27px;
+}
+
+/* Hover texte dropdown */
+.horde-drowdown-str:hover a {
+  color: var(--theme-text-action);
+}
+
+#horde-login-pass-capslock {
+  color: var(--theme-text-danger);
+  font-size: 90%;
+  font-weight: bold;
+  padding-bottom: 15px;
 }
