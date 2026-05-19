@@ -2,8 +2,21 @@
  * IMP UPJV — fenêtre de composition (style Outlook/Gmail)
  */
 
+.msgwrite table {
+  width: fit-content;
+}
+
 #to, #cc, #bcc, #subject {
-  width: 546px;
+  background-color: var(--theme-bg-white);
+  display: inline-block;
+  max-height: 150px;
+  min-height: 28px;
+  overflow-y: auto;
+  padding: 3px 3px 1px;
+  width: 556px;
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-field);
+  transition: var(--theme-transition);
 }
 
 /* Bouton fermer fenêtre compose */
@@ -13,7 +26,7 @@
   width: 32px !important;
   height: 32px !important;
   background-color: var(--theme-bg-danger) !important;
-  border-radius: var(--theme-radius-full);
+  border-radius: var(--theme-radius-selector);
   padding: var(--theme-spacing-xs);
   -webkit-mask-image: none !important;
   mask-image: none !important;
@@ -51,11 +64,15 @@
   background-color: var(--theme-bg-primary);
   border-bottom: 1px solid var(--theme-border);
   cursor: default;
-  padding: 10px 8px;
+  padding: var(--theme-spacing-sm);
+  display: grid;
+  gap: var(--theme-spacing-xs);
 }
 .msgwrite .optionsContainer {
-  max-width: 175px;
-  padding: 8px 8px 0 0;
+  max-width: fit-content;
+  display: flex;
+  gap: var(--theme-spacing-sm);
+  padding: var(--theme-spacing-xs);
 }
 .msgwrite .optionsContainer label  { cursor: pointer; display: flex; align-items: center; gap: 6px; }
 .msgwrite .optionsContainer .horde-popdown { height: 18px; margin-top: -6px; }
@@ -105,12 +122,12 @@
   padding: 6px 4px 0 0;
   font-weight: var(--theme-font-weight-bold);
   font-size: var(--theme-font-size-sm);
-  color: var(--theme-text-disabled);
+  color: var(--theme-text-primary);
 }
 
 /* Champs destinataires (autocomplete) */
 .impACBox {
-  background-color: var(--theme-bg-primary);
+  background-color: var(--theme-bg-white);
   display: inline-block;
   max-height: 150px;
   min-height: 28px;
@@ -118,7 +135,7 @@
   padding: 3px 3px 1px;
   width: 556px;
   border: 1px solid var(--theme-border);
-  border-radius: var(--theme-radius-md);
+  border-radius: var(--theme-radius-field);
   transition: var(--theme-transition);
 }
 .impACBoxFocus {
@@ -194,7 +211,7 @@
 #signatureBorder {
   background-color: var(--theme-bg-white);
   border: 1px solid var(--theme-border);
-  border-radius: var(--theme-radius-md);
+  border-radius: var(--theme-radius-field);
   height: 4.4em;
   margin-top: 4px;
   padding: 0.2em 5px;
@@ -252,7 +269,7 @@
 }
 #attach_list span.attach_upload_progress {
   background-color: var(--theme-bg-secondary);
-  border-radius: var(--theme-radius-full);
+  border-radius: var(--theme-radius-selector);
   bottom: 4px;
   display: inline-block;
   height: 6px;
@@ -262,7 +279,7 @@
 }
 #attach_list span.attach_upload_progress span {
   background-color: var(--theme-bg-action);
-  border-radius: var(--theme-radius-full);
+  border-radius: var(--theme-radius-selector);
   display: inline-block;
   height: 100%;
   transition: width 0.2s ease-in-out;
@@ -271,7 +288,7 @@
 /* Zone de dépôt */
 #atcdrop {
   border: 2px dashed var(--theme-border);
-  border-radius: var(--theme-radius-lg);
+  border-radius: var(--theme-radius-box);
   display: table-cell;
   color: var(--theme-text-disabled);
   font-size: 110%;
@@ -287,9 +304,21 @@
 }
 
 span.attachmentImg {
-  background-image: url("../graphics/attachment.png");
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
   float: left;
   margin-right: 8px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("../graphics/svg/attachment.svg");
+  mask-image: url("../graphics/svg/attachment.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
 }
 
 /* Notices */
@@ -301,7 +330,7 @@ span.attachmentImg {
   display: inline-block;
   font-weight: var(--theme-font-weight-bold);
   padding: 3px 8px;
-  border-radius: var(--theme-radius-md);
+  border-radius: var(--theme-radius-box);
 }
 #replyallnotice,
 #replylistnotice {
@@ -343,7 +372,7 @@ span.attachmentImg {
 }
 #rteloading span {
   background-color: var(--theme-bg-white);
-  border-radius: var(--theme-radius-md);
+  border-radius: var(--theme-radius-box);
   left: 15px;
   padding: 8px 12px;
   position: absolute;

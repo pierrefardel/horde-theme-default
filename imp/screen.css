@@ -28,12 +28,23 @@ div.vpRowSelected .msCheck,
     font-weight: bold;
 }
 
+/* Label liste boîtes aux lettres */
+#mailboxLabel {
+    margin-left: 20px;
+}
+
 /* Entêtes message */
 .variableLengthHeader {
     background-color: var(--colors-surface-primary);
     background-image: none;
     border-bottom: 1px solid var(--colors-border-primary);
     padding: 8px 12px;
+}
+
+/* En-têtes MIME à l'impression */
+.mimeHeadersPrint {
+    border-color: var(--colors-border-primary);
+    font-size: 12px;
 }
 
 /* Mailing list */

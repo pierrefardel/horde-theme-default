@@ -1,2 +1,2 @@
 <?php
-$theme_name = _("Horde Default Test");
+$theme_name = _("Horde Modern");

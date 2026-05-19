@@ -61,7 +61,7 @@
   margin: 1px;
   padding: 1px 2px;
 }
-.msgHeaders .horde-button { margin: 1px; padding: 1px 3px; }
+.msgHeaders .horde-button { margin: 1px; padding:3px; }
 .msgHeaders a.addrgroup-name { font-weight: var(--theme-font-weight-bold); }
 .largeaddrlist,
 .largeaddrlistlimit {
@@ -112,6 +112,33 @@
   background-image: none;
 }
 
+.downloadAtc,
+.saveImgAtc,
+.printAtc {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+.downloadAtc {
+  -webkit-mask-image: url("../graphics/svg/download.svg");
+  mask-image: url("../graphics/svg/download.svg");
+}
+.saveImgAtc {
+  -webkit-mask-image: url("../graphics/svg/preview-save.svg");
+  mask-image: url("../graphics/svg/preview-save.svg");
+}
+.printAtc {
+  -webkit-mask-image: url("../graphics/svg/print.svg");
+  mask-image: url("../graphics/svg/print.svg");
+}
+
 /* ── MIME ── */
 .mimeStatusMessageTable {
   background-color: var(--theme-bg-warning-light);
@@ -151,10 +178,9 @@ div.mimeStatusMessage, div.mimePartInfo { margin-bottom: 7px; }
 }
 .mimePartInfo div > img { vertical-align: top; }
 .mimePartInfoAtc div {
-  border-style: dashed;
+  border: 1px dotted var(--theme-border);
   background-position: 2px 50%;
   background-repeat: no-repeat;
-  padding-left: 35px;
 }
 .mimeStatusMessageTable td { padding: 0; }
 .mimeStatusMessageTable td table td { padding-right: 2px; white-space: nowrap; }

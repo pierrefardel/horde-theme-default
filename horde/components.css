@@ -16,9 +16,9 @@
     border-bottom: 1px solid var(--theme-border);
     padding: 7px 10px;
     position: relative;
-    border-radius: var(--theme-radius-md);
+    border-radius: var(--theme-radius-box);
 }
-.notices li:first-child, .notice { border-radius: var(--theme-radius-md); }
+.notices li:first-child, .notice { border-radius: var(--theme-radius-box); }
 .notices img, .notice img { bottom: 0; margin: auto; position: absolute; top: 0; }
 .notices div.noticetext, .notice div.noticetext { margin-left: 30px; }
 
@@ -30,7 +30,7 @@
     background: var(--theme-bg-primary);
     border: 1px solid var(--theme-border);
     box-shadow: var(--theme-shadow-md);
-    border-radius: var(--theme-radius-md);
+    border-radius: var(--theme-radius-box);
 }
 div.nicetitle { position: absolute; overflow: hidden; }
 
@@ -54,7 +54,7 @@ div.nicetitle { position: absolute; overflow: hidden; }
   padding: var(--theme-spacing-sm) var(--theme-spacing-sm) var(--theme-spacing-sm) 36px !important;
   background: var(--theme-bg-primary);
   border: none;
-  border-radius: var(--theme-radius-md);
+  border-radius: var(--theme-radius-box);
   box-shadow: var(--theme-shadow-md);
   pointer-events: auto;
   cursor: pointer;
@@ -201,14 +201,14 @@ div.GrowlerNoticeExit:hover { opacity: 1; }
     border: 1px solid var(--theme-border);
     border-bottom-width: 0;
     box-shadow: var(--theme-shadow-md);
-    border-radius: var(--theme-radius-md);
+    border-radius: var(--theme-radius-box);
     overflow-x: hidden; overflow-y: auto;
     position: absolute; z-index: 10000;
 }
 .KeyNavList ul { list-style-type: none; }
 .KeyNavList ul li {
     cursor: pointer;
-    height: 19px;
+    height: auto;
     border-bottom: 1px solid var(--theme-border-subtle);
     padding: 5px 10px 0;
     color: var(--theme-text-primary);
@@ -227,7 +227,7 @@ div.modal-form {
     font-size: 150%; width: 20em;
     margin: 5em auto;
     background-color: var(--theme-text-on-action);
-    border-radius: var(--theme-radius-md);
+    border-radius: var(--theme-radius-box);
     box-shadow: 0 0 2em var(--theme-border-subtle);
 }
 .horde-form-header { margin-bottom: 1em; border-bottom: thin dashed var(--theme-border-subtle); }
@@ -260,7 +260,7 @@ div.modal-form .extras { font-size: 14px; border-top: thin dashed var(--theme-bo
     width: 30em; padding: 1em;
     border: 1px solid #ccc;
     background: var(--theme-bg-warning-light);
-    border-radius: var(--theme-radius-md);
+    border-radius: var(--theme-radius-box);
 }
 .quickAdd textarea { width: 100%; height: 10em; margin-top: .5em; }
 .quickAdd p { margin: .5em 0; }
@@ -280,7 +280,7 @@ ul.horde-tags { display: inline; list-style-type: none; }
   align-items: center;
   width: fit-content;
   gap: var(--theme-spacing-2xs);
-  border-radius: var(--theme-radius-full);
+  border-radius: var(--theme-radius-selector);
 }
 .header ul.horde-tags li { font-size: 72%; }
 .hordeACListItem img, ul.horde-tags li img { vertical-align: middle; }
@@ -354,5 +354,5 @@ ul.horde-tags { display: inline; list-style-type: none; }
     background: var(--theme-bg-input);
     display: inline-block;
     margin-bottom: 3px; padding: 5px;
-    border-radius: var(--theme-radius-md);
+    border-radius: var(--theme-radius-box);
 }

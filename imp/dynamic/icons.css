@@ -578,6 +578,6 @@ span.readonlyImg {
   width: 10px; height: 10px;
   flex-shrink: 0;
   margin-left: auto;
-  border-radius: var(--theme-radius-full);
+  border-radius: var(--theme-radius-selector);
   background-color: var(--theme-bg-action);
 }

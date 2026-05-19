@@ -19,9 +19,9 @@
 #horde-logo {
   float: none;
   flex-shrink: 0;
-  width: 40px;
-  height: 36px;
-  background-image: var(--logo-upjv-url);
+  width: var(--brand-logo-width, 40px);
+  height: var(--brand-logo-height, 36px);
+  background-image: var(--brand-logo-url);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center left;
@@ -35,7 +35,13 @@
 }
 
 #horde-version {
-  display: none;
+  display: var(--show-version, none);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-xbold);
+  color: var(--theme-text-primary);
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-xs);
+  background-color: var(--theme-bg-tertiary);
+  border-radius: var(--theme-radius-selector);
 }
 
 #horde-navigation {
@@ -87,7 +93,7 @@ a.horde-mainnavi:active {
   gap: 4px;
   padding: 6px 10px;
   color: var(--theme-text-primary);
-  border-radius: var(--theme-radius-full);
+  border-radius: var(--theme-radius-field);
   font-size: var(--theme-font-size-sm);
   font-weight: var(--theme-font-weight-medium);
   text-decoration: none;
@@ -108,7 +114,7 @@ a.horde-mainnavi-active:active,
 a.horde-mainnavi-active:hover {
   background-color: var(--theme-bg-action-active);
   color: var(--theme-text-on-action);
-  border-radius: var(--theme-radius-full);
+  border-radius: var(--theme-radius-field);
   padding: 6px 10px;
   text-decoration: none;
   box-shadow: var(--theme-shadow-sm);
@@ -150,7 +156,7 @@ a.horde-mainnavi-active:active {
   min-width: 200px;
   z-index: 300;
   border: 1px solid var(--theme-border);
-  border-radius: var(--theme-radius-md);
+  border-radius: var(--theme-radius-box);
   background-color: var(--theme-bg-white);
   box-shadow: var(--theme-shadow-md);
 }
@@ -213,7 +219,7 @@ a.horde-mainnavi-active:active {
   align-items: center;
   background-color: var(--theme-bg-white);
   border: 1px solid var(--theme-border);
-  border-radius: var(--theme-radius-full);
+  border-radius: var(--theme-radius-field);
   height: 40px;
   width: 100%;
   padding: 0 var(--theme-spacing-xs);
@@ -312,7 +318,7 @@ a.horde-mainnavi-active:active {
   height: 34px;
   background-color: var(--theme-bg-danger);
   border: 1px solid var(--theme-border-danger);
-  border-radius: var(--theme-radius-full);
+  border-radius: var(--theme-radius-selector);
   position: relative;
   cursor: pointer;
   transition: background-color 0.15s ease, border-color 0.15s ease;

@@ -42,16 +42,16 @@ a.icon      { display: block; width: 100%; height: 100%; }
     padding: 3px;
     border: 1px dashed var(--theme-border-disabled);
     background: var(--theme-bg-white);
-    border-radius: var(--theme-radius-md);
+    border-radius: var(--theme-radius-box);
 }
-.solidbox { border: 1px solid var(--theme-text-primary); border-radius: var(--theme-radius-md); }
-.greybox  { border: 1px solid var(--theme-text-primary); background: var(--theme-bg-secondary); border-radius: var(--theme-radius-md); }
+.solidbox { border: 1px solid var(--theme-text-primary); border-radius: var(--theme-radius-box); }
+.greybox  { border: 1px solid var(--theme-text-primary); background: var(--theme-bg-secondary); border-radius: var(--theme-radius-box); }
 .headerbox {
     border: 1px solid var(--theme-border-subtle);
     border-top-width: 0;
     background: var(--theme-bg-white);
     vertical-align: top;
-    border-radius: var(--theme-radius-md);
+    border-radius: var(--theme-radius-box);
 }
 .headerbox form { padding: 2px; }
 .header {

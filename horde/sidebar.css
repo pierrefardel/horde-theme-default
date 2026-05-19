@@ -31,7 +31,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--theme-radius-full);
+  border-radius: var(--theme-radius-field);
   margin-bottom: var(--theme-spacing-sm);
   transition:
     background-color 0.15s ease,
@@ -135,7 +135,8 @@
   height: fit-content;
   overflow: hidden;
   background-color: var(--theme-bg-white);
-  border-radius: var(--theme-radius-lg);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
 }
 
 /* Ressources sidebar */

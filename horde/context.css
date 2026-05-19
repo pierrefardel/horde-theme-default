@@ -7,7 +7,7 @@
 .context, .horde-buttonbar li div {
   background: var(--theme-bg-white) !important;
   border: 1px solid var(--theme-border) !important;
-  border-radius: var(--theme-radius-md) !important;
+  border-radius: var(--theme-radius-box) !important;
   box-shadow: var(--theme-shadow-lg) !important;
   overflow: visible !important;
   padding: 4px 0 !important;

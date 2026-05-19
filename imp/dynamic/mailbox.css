@@ -18,11 +18,27 @@ div.vpRow div {
 }
 
 /* Colonnes — positions absolues par défaut (overridées en mode horiz flex) */
-div.msgFrom    { left: 85px; width: 150px; }
-div.msgFrom a  { color: inherit; }
-div.msgSubject { left: 240px; right: 225px; }
-div.msgDate    { text-align: right; right: 88px; width: 130px; }
-div.msgSize    { text-align: right; right: 18px; width: 50px; }
+div.msgFrom {
+  left: 85px;
+  width: 150px;
+}
+div.msgFrom a {
+  color: inherit;
+}
+div.msgSubject {
+  left: 240px;
+  right: 225px;
+}
+div.msgDate {
+  text-align: right;
+  right: 88px;
+  width: 130px;
+}
+div.msgSize {
+  text-align: right;
+  right: 18px;
+  width: 50px;
+}
 
 /* Pas de message sélectionné : limite la hauteur à celle de #previewInfo */
 #previewPane:has(#previewInfo:not([style="display: none;"])) {
@@ -35,6 +51,8 @@ div.msgSize    { text-align: right; right: 18px; width: 50px; }
   overflow-y: auto !important;
   overflow-x: hidden;
   width: 100%;
+  background: var(--theme-bg-white);
+  z-index: 3;
 }
 
 /* Preview vide */
@@ -53,7 +71,7 @@ div.msgSize    { text-align: right; right: 18px; width: 50px; }
   height: 100%;
 }
 #previewInfo::before {
-  content: '';
+  content: "";
   display: block;
   width: 32px;
   height: 32px;
@@ -74,6 +92,15 @@ div.msgSize    { text-align: right; right: 18px; width: 50px; }
   overflow: hidden;
   position: relative;
 }
+#msgSplitPane > div:first-child {
+  overflow: auto;
+  height: var(--imp-list-height) !important;
+  width: var(--imp-list-width, 100%) !important;
+  float: none !important;
+}
+.msglist { width: 100% !important; }
+.vpScroll { display: none !important; }
+#previewPane { flex: 1; height: var(--imp-preview-height, auto) !important; }
 .horde-splitbar-horiz {
   height: 6px;
   background: var(--theme-bg-primary);
@@ -81,6 +108,7 @@ div.msgSize    { text-align: right; right: 18px; width: 50px; }
   border-bottom: 1px solid var(--theme-border);
   cursor: row-resize;
   background-position: center -1px;
+  z-index: 3;
 }
 .horde-splitbar-horiz-handle {
   position: absolute;
@@ -94,9 +122,21 @@ div.msgSize    { text-align: right; right: 18px; width: 50px; }
 }
 
 /* En-tête de liste */
-#msglistHeaderHoriz .msgSize { padding-right: 12px; }
-#msglistHeaderHoriz { border-bottom: 0; }
-#msglistHeaderVert  { white-space: nowrap; }
+#msglistHeaderContainer{
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+
+#msglistHeaderHoriz .msgSize {
+  padding-right: 12px;
+}
+#msglistHeaderHoriz {
+  border-bottom: 0;
+}
+#msglistHeaderVert {
+  white-space: nowrap;
+}
 #msglistHeaderContainer .horde-popdown {
   display: inline-block;
   float: none;
@@ -126,7 +166,9 @@ div.msgStatus .iconImg {
   margin-top: -2px;
   width: 16px;
 }
-div.msgFrom a { color: inherit; }
+div.msgFrom a {
+  color: inherit;
+}
 div.msgSort {
   float: right;
   padding-top: 2px;
@@ -144,10 +186,20 @@ div.msgSort {
 /* Largeurs colonnes — une seule source de vérité, consommée par header + lignes */
 #msglistHeaderHoriz,
 .msglist {
-  --col-status: 80px;
-  --col-from:   180px;
-  --col-date:   110px;
-  --col-size:   60px;
+  --col-status: 60px;
+  --col-from: 180px;
+  --col-date: 110px;
+  --col-size: 60px;
+}
+
+.msglist {
+  position: relative;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  overflow: auto;
+  width: 100% !important;
 }
 
 /* Reset position:absolute du default sur les enfants directs de vpRowHoriz.
@@ -166,25 +218,48 @@ div.vpRowHoriz.vpRow > div {
 div.vpRowHoriz.vpRow {
   display: flex;
   align-items: center;
-  height: var(--theme-spacing-lg);
+  height: auto;
   border-bottom: 1px solid var(--theme-border) !important;
   cursor: pointer;
   overflow: hidden;
-  gap:var(--theme-spacing-sm);
+  gap: var(--theme-spacing-sm);
   font-size: var(--theme-font-size-sm);
   transition: background-color 0.1s ease;
-  padding: 0 var(--theme-spacing-2xs);
+  padding: var(--theme-spacing-xs) var(--spacing-sm);
 }
 
 /* Colonnes horiz — largeurs cohérentes avec le header */
-div.vpRowHoriz div.msgStatus  { flex-shrink: 0; width: var(--col-status); display:flex; align-items:center; gap: var(--theme-spacing-xs); }
-div.vpRowHoriz div.msgFrom    { flex-shrink: 0; width: var(--col-from); }
-div.vpRowHoriz div.msgSubject { flex: 1; min-width: 0; }
-div.vpRowHoriz div.msgDate    { flex-shrink: 0; width: var(--col-date); text-align:left; }
-div.vpRowHoriz div.msgSize    { flex-shrink: 0; width: var(--col-size); text-align: right; padding-right: 8px; }
+div.vpRowHoriz div.msgStatus {
+  flex-shrink: 0;
+  width: var(--col-status);
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+}
+div.vpRowHoriz div.msgFrom {
+  flex-shrink: 0;
+  width: var(--col-from);
+}
+div.vpRowHoriz div.msgSubject {
+  flex: 1;
+  min-width: 0;
+}
+div.vpRowHoriz div.msgDate {
+  flex-shrink: 0;
+  width: var(--col-date);
+  text-align: left;
+}
+div.vpRowHoriz div.msgSize {
+  flex-shrink: 0;
+  width: var(--col-size);
+  text-align: right;
+  padding-right: 8px;
+}
 
 /* Séparateur de colonne (padding interne hérité du default) */
-div.vpRowHoriz div.sep { padding-left: 0px; }
+div.vpRowHoriz div.sep {
+  padding-left: 0px;
+}
 
 /* Hover */
 div.vpRowHoriz.vpRow:hover {
@@ -212,7 +287,7 @@ span.vpEmpty {
   background: none;
 }
 span.vpEmpty::before {
-  content: '';
+  content: "";
   display: block;
   width: 32px;
   height: 32px;
@@ -235,13 +310,20 @@ div.vpRow div.horde-popdown {
 }
 
 /* Flags texte sur lignes */
-div.flagLowpriority  { font-weight: normal !important; }
-div.flagUnseen       { font-weight: bold; }
-div.flagDeleted *    { text-decoration: line-through; color: var(--theme-text-disabled); }
+div.flagLowpriority {
+  font-weight: normal !important;
+}
+div.flagUnseen {
+  font-weight: bold;
+}
+div.flagDeleted * {
+  text-decoration: line-through;
+  color: var(--theme-text-disabled);
+}
 
 /* Indicateurs de message non lu — point bleu style Gmail */
 div.flagUnseen div.msgFrom::before {
-  content: '';
+  content: "";
   display: inline-block;
   width: 8px;
   height: 8px;
@@ -264,19 +346,25 @@ div.vpRow div.msgSubject span.flagUser {
 }
 
 /* Flags icônes */
-.msgflags { margin-right: 1px; }
-.msgflags.iconImg { width: 16px; }
+.msgflags {
+  margin-right: 1px;
+}
+.msgflags.iconImg {
+  width: 16px;
+}
 
 /* Scrollbar JS custom — masquée */
 .vpScroll,
 .vpScrollCursor,
 .vpScrollDown,
-.vpScrollUp { display: none !important; }
+.vpScrollUp {
+  display: none !important;
+}
 #slider_count {
   background-color: var(--theme-bg-primary);
   font-weight: bold;
   padding: 2px 6px;
-  border-radius: var(--theme-radius-md);
+  border-radius: var(--theme-radius-box);
   position: absolute;
   opacity: 0.9;
   box-shadow: var(--theme-shadow-sm);
@@ -308,7 +396,9 @@ div.vpRow.flagList:not(.vpRowSelected),
 div.vpRow.flagAttachmsg:not(.vpRowSelected),
 div.vpRow.flagSignedmsg:not(.vpRowSelected),
 div.vpRow.flagEncryptmsg:not(.vpRowSelected),
-div.vpRow.flagLowpriority:not(.vpRowSelected) { background-color: transparent !important; }
+div.vpRow.flagLowpriority:not(.vpRowSelected) {
+  background-color: transparent !important;
+}
 
 /* Hover explicite sur rows flaggées — doit aussi être !important pour battre le style JS inline */
 div.vpRow.flagUnseen:not(.vpRowSelected):hover,
@@ -324,9 +414,13 @@ div.vpRow.flagList:not(.vpRowSelected):hover,
 div.vpRow.flagAttachmsg:not(.vpRowSelected):hover,
 div.vpRow.flagSignedmsg:not(.vpRowSelected):hover,
 div.vpRow.flagEncryptmsg:not(.vpRowSelected):hover,
-div.vpRow.flagLowpriority:not(.vpRowSelected):hover { background-color: var(--theme-bg-secondary) !important; }
+div.vpRow.flagLowpriority:not(.vpRowSelected):hover {
+  background-color: var(--theme-bg-secondary) !important;
+}
 
-div.vpRow.flagJunk { font-style: italic; }
+div.vpRow.flagJunk {
+  font-style: italic;
+}
 
 /* flagDeleted — seule exception, état destructif dominant */
 
@@ -339,13 +433,21 @@ div.vpRow.flagDeleted {
   font-style: normal !important;
   box-shadow: none !important;
 }
-div.vpRow.flagDeleted * { text-decoration: line-through; }
-.vpRowHoriz.flagDeleted { opacity: 0.55; }
+div.vpRow.flagDeleted * {
+  text-decoration: line-through;
+}
+.vpRowHoriz.flagDeleted {
+  opacity: 0.55;
+}
 
 /* Mail non lu — plus visible */
 .vpRowHoriz.vpRow:not(.msgReadRow) .msgFrom a,
 .vpRowHoriz.vpRow:not(.msgReadRow) .msgSubject {
   font-weight: var(--theme-font-weight-medium);
+}
+.vpRowHoriz.vpRow.flagUnseen .msgFrom a,
+.vpRowHoriz.vpRow.flagUnseen .msgSubject {
+  font-weight: var(--theme-font-weight-bold);
 }
 
 /* Mail supprimé */
@@ -369,25 +471,90 @@ div.vpRow.flagDeleted * { text-decoration: line-through; }
 }
 
 /* Icônes flags — couleurs sémantiques, persistent en sélection */
-.msgflags.flagAnswered     { -webkit-mask-image: url("../graphics/svg/action-reply.svg");       mask-image: url("../graphics/svg/action-reply.svg");       background-color: var(--theme-icon-warning)     !important; }
-.msgflags.flagForwarded    { -webkit-mask-image: url("../graphics/svg/action-forward.svg");     mask-image: url("../graphics/svg/action-forward.svg");     background-color: var(--theme-icon-information) !important; }
-.msgflags.flagFlagged      { -webkit-mask-image: url("../graphics/svg/flag-flagged.svg");       mask-image: url("../graphics/svg/flag-flagged.svg");       background-color: var(--theme-icon-warning)     !important; }
-.msgflags.flagDraft        { -webkit-mask-image: url("../graphics/svg/flag-draft-2.svg");       mask-image: url("../graphics/svg/flag-draft-2.svg");       background-color: var(--theme-icon-success)     !important; }
-.msgflags.flagJunk         { -webkit-mask-image: url("../graphics/svg/spam.svg");               mask-image: url("../graphics/svg/spam.svg");               background-color: var(--theme-icon-danger)      !important; }
-.msgflags.flagNotJunk      { -webkit-mask-image: url("../graphics/svg/action-innocent.svg");    mask-image: url("../graphics/svg/action-innocent.svg");    background-color: var(--theme-icon-success)     !important; }
-.msgflags.flagDeleted      { -webkit-mask-image: url("../graphics/svg/trash.svg");              mask-image: url("../graphics/svg/trash.svg");              background-color: var(--theme-icon-danger)      !important; }
-.msgflags.flagUnseen       { -webkit-mask-image: url("../graphics/svg/flag-unseen.svg");        mask-image: url("../graphics/svg/flag-unseen.svg");        background-color: var(--theme-icon-information) !important; }
-.msgflags.flagPersonal     { -webkit-mask-image: url("../graphics/svg/flag-personal.svg");      mask-image: url("../graphics/svg/flag-personal.svg");      background-color: var(--theme-icon-action)      !important; }
-.msgflags.flagHighpriority { -webkit-mask-image: url("../graphics/svg/flag-highpriority.svg");  mask-image: url("../graphics/svg/flag-highpriority.svg");  background-color: var(--theme-icon-danger)      !important; }
-.msgflags.flagLowpriority  { -webkit-mask-image: url("../graphics/svg/flag-lowpriority.svg");   mask-image: url("../graphics/svg/flag-lowpriority.svg");   background-color: var(--theme-icon-secondary)   !important; }
-.msgflags.flagList         { -webkit-mask-image: url("../graphics/svg/preview-thread.svg");     mask-image: url("../graphics/svg/preview-thread.svg");     background-color: var(--theme-icon-secondary)   !important; }
-.msgflags.flagSignedmsg    { -webkit-mask-image: url("../graphics/svg/oa-whitelist.svg");       mask-image: url("../graphics/svg/oa-whitelist.svg");       background-color: var(--theme-icon-secondary)   !important; }
-.msgflags.flagEncryptmsg   { -webkit-mask-image: url("../graphics/svg/mbox-acl.svg");           mask-image: url("../graphics/svg/mbox-acl.svg");           background-color: var(--theme-icon-secondary)   !important; }
-.msgflags.flagAttachmsg    { -webkit-mask-image: url("../graphics/svg/flag-attachmsg.svg");     mask-image: url("../graphics/svg/flag-attachmsg.svg");     background-color: var(--theme-icon-secondary)   !important; }
+.msgflags.flagAnswered {
+  -webkit-mask-image: url("../graphics/svg/action-reply.svg");
+  mask-image: url("../graphics/svg/action-reply.svg");
+  background-color: var(--theme-icon-warning) !important;
+}
+.msgflags.flagForwarded {
+  -webkit-mask-image: url("../graphics/svg/action-forward.svg");
+  mask-image: url("../graphics/svg/action-forward.svg");
+  background-color: var(--theme-icon-information) !important;
+}
+.msgflags.flagFlagged {
+  -webkit-mask-image: url("../graphics/svg/flag-flagged.svg");
+  mask-image: url("../graphics/svg/flag-flagged.svg");
+  background-color: var(--theme-icon-warning) !important;
+}
+.msgflags.flagDraft {
+  -webkit-mask-image: url("../graphics/svg/flag-draft-2.svg");
+  mask-image: url("../graphics/svg/flag-draft-2.svg");
+  background-color: var(--theme-icon-success) !important;
+}
+.msgflags.flagJunk {
+  -webkit-mask-image: url("../graphics/svg/spam.svg");
+  mask-image: url("../graphics/svg/spam.svg");
+  background-color: var(--theme-icon-danger) !important;
+}
+.msgflags.flagNotJunk {
+  -webkit-mask-image: url("../graphics/svg/action-innocent.svg");
+  mask-image: url("../graphics/svg/action-innocent.svg");
+  background-color: var(--theme-icon-success) !important;
+}
+.msgflags.flagDeleted {
+  -webkit-mask-image: url("../graphics/svg/trash.svg");
+  mask-image: url("../graphics/svg/trash.svg");
+  background-color: var(--theme-icon-danger) !important;
+}
+.msgflags.flagUnseen {
+  -webkit-mask-image: url("../graphics/svg/flag-unseen.svg");
+  mask-image: url("../graphics/svg/flag-unseen.svg");
+  background-color: var(--theme-icon-information) !important;
+}
+.msgflags.flagPersonal {
+  -webkit-mask-image: url("../graphics/svg/flag-personal.svg");
+  mask-image: url("../graphics/svg/flag-personal.svg");
+  background-color: var(--theme-icon-action) !important;
+}
+.msgflags.flagHighpriority {
+  -webkit-mask-image: url("../graphics/svg/flag-highpriority.svg");
+  mask-image: url("../graphics/svg/flag-highpriority.svg");
+  background-color: var(--theme-icon-danger) !important;
+}
+.msgflags.flagLowpriority {
+  -webkit-mask-image: url("../graphics/svg/flag-lowpriority.svg");
+  mask-image: url("../graphics/svg/flag-lowpriority.svg");
+  background-color: var(--theme-icon-secondary) !important;
+}
+.msgflags.flagList {
+  -webkit-mask-image: url("../graphics/svg/preview-thread.svg");
+  mask-image: url("../graphics/svg/preview-thread.svg");
+  background-color: var(--theme-icon-secondary) !important;
+}
+.msgflags.flagSignedmsg {
+  -webkit-mask-image: url("../graphics/svg/oa-whitelist.svg");
+  mask-image: url("../graphics/svg/oa-whitelist.svg");
+  background-color: var(--theme-icon-secondary) !important;
+}
+.msgflags.flagEncryptmsg {
+  -webkit-mask-image: url("../graphics/svg/mbox-acl.svg");
+  mask-image: url("../graphics/svg/mbox-acl.svg");
+  background-color: var(--theme-icon-secondary) !important;
+}
+.msgflags.flagAttachmsg {
+  -webkit-mask-image: url("../graphics/svg/flag-attachmsg.svg");
+  mask-image: url("../graphics/svg/flag-attachmsg.svg");
+  background-color: var(--theme-icon-secondary) !important;
+}
 
 /* ── CHECKBOX msCheck — liste messages + menus contextuels (ctx_flag) ── */
 
-div.msgStatus .iconImg.msCheck,
+/* Checkbox masquée dans la liste — la sélection est indiquée par box-shadow sur vpRowSelected */
+div.vpRow:not(.horde-table-header) div.msgStatus .iconImg.msCheck,
+div.vpRow:not(.horde-table-header) div.msgStatus .iconImg.msCheckOn {
+  display: none !important;
+}
+
 .context .iconImg.msCheck,
 .context .iconImg.msCheckOn {
   background-image: none !important;
@@ -405,13 +572,15 @@ div.msgStatus .iconImg.msCheck::before,
 div.msgStatus .iconImg.msCheckOn::before,
 .context .iconImg.msCheck::before,
 .context .iconImg.msCheckOn::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: 50%; left: 50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  width: 15px; height: 15px;
+  width: 15px;
+  height: 15px;
   border: 1.5px solid var(--theme-border);
-  border-radius: var(--theme-radius-full);
+  border-radius: var(--theme-radius-selector);
   background-color: var(--theme-bg-tertiary);
   box-sizing: border-box;
 }
@@ -437,11 +606,13 @@ div.vpRowSelected div.msgStatus .iconImg.msCheck::before,
 div.msgStatus .iconImg.msCheckOn::after,
 div.vpRowSelected div.msgStatus .iconImg.msCheck::after,
 .context .iconImg.msCheckOn::after {
-  content: '';
+  content: "";
   position: absolute;
-  top: 50%; left: 50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  width: 10px; height: 10px;
+  width: 10px;
+  height: 10px;
   background-color: var(--theme-text-on-action);
   -webkit-mask-image: url("../graphics/svg/ms-check.svg");
   mask-image: url("../graphics/svg/ms-check.svg");
@@ -458,16 +629,19 @@ div.vpRowSelected div.msgStatus .iconImg.msCheck::after,
   cursor: pointer;
   background-image: none !important;
   position: relative;
-  width: 16px; height: 16px;
+  width: 16px;
+  height: 16px;
   display: inline-block;
 }
 
 .msCheckAll::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: 50%; left: 50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  width: 15px; height: 15px;
+  width: 15px;
+  height: 15px;
   border: 1.5px solid var(--theme-border-action);
   border-radius: 3px;
   background-color: var(--theme-bg-primary);
@@ -490,7 +664,7 @@ div.vpRowSelected div.msgStatus .iconImg.msCheck::after,
 }
 
 .horde-buttonbar .horde-popdown::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -515,7 +689,7 @@ div.msgStatus .iconImg {
   width: 16px !important;
   height: 16px !important;
   vertical-align: middle;
-  margin-top:auto;
+  margin-top: auto;
   flex-shrink: 0;
 }
 
@@ -560,11 +734,32 @@ div.msgStatus .iconImg.msgflags {
   gap: 4px;
 }
 
-#msglistHeaderHoriz .msgStatus  { flex-shrink: 0; width: var(--col-status);position:relative; }
-#msglistHeaderHoriz .msgFrom    { flex-shrink: 0; width: var(--col-from);position:relative; }
-#msglistHeaderHoriz .msgSubject { flex: 1; min-width: 0;position:relative; }
-#msglistHeaderHoriz .msgDate    { flex-shrink: 0; width: var(--col-date); position:relative; }
-#msglistHeaderHoriz .msgSize    { flex-shrink: 0; width: var(--col-size); padding-right: 8px;position:relative; }
+#msglistHeaderHoriz .msgStatus {
+  flex-shrink: 0;
+  width: var(--col-status);
+  position: relative;
+}
+#msglistHeaderHoriz .msgFrom {
+  flex-shrink: 0;
+  width: var(--col-from);
+  position: relative;
+}
+#msglistHeaderHoriz .msgSubject {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+#msglistHeaderHoriz .msgDate {
+  flex-shrink: 0;
+  width: var(--col-date);
+  position: relative;
+}
+#msglistHeaderHoriz .msgSize {
+  flex-shrink: 0;
+  width: var(--col-size);
+  padding-right: 8px;
+  position: relative;
+}
 
 /* Links dans header */
 .vpRow.horde-table-header a {
@@ -593,11 +788,13 @@ div.msgStatus .iconImg.msgflags {
 }
 
 .sortup::before {
-  content: '';
+  content: "";
   position: absolute;
-  left: 0; top: 50%;
+  left: 0;
+  top: 50%;
   transform: translateY(-50%);
-  width: 14px; height: 14px;
+  width: 14px;
+  height: 14px;
   background-color: var(--theme-icon-secondary);
   -webkit-mask-image: url("../graphics/svg/sortup.svg");
   mask-image: url("../graphics/svg/sortup.svg");
@@ -610,11 +807,13 @@ div.msgStatus .iconImg.msgflags {
 }
 
 .sortdown::before {
-  content: '';
+  content: "";
   position: absolute;
-  left: 0; top: 50%;
+  left: 0;
+  top: 50%;
   transform: translateY(-50%);
-  width: 14px; height: 14px;
+  width: 14px;
+  height: 14px;
   background-color: var(--theme-icon-secondary);
   -webkit-mask-image: url("../graphics/svg/sortdown.svg");
   mask-image: url("../graphics/svg/sortdown.svg");
@@ -639,11 +838,13 @@ div.msgStatus .iconImg.msgflags {
 }
 
 #msglistHeaderContainer .horde-popdown::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: 50%; left: 50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  width: 12px; height: 12px;
+  width: 12px;
+  height: 12px;
   background-color: var(--theme-icon-secondary);
   -webkit-mask-image: url("../graphics/svg/horde-popdown.svg");
   mask-image: url("../graphics/svg/horde-popdown.svg");
@@ -675,7 +876,9 @@ div.vpRowVert {
   font-size: var(--theme-font-size-sm);
 }
 
-div.vpRowVert:hover { background-color: var(--theme-bg-secondary); }
+div.vpRowVert:hover {
+  background-color: var(--theme-bg-secondary);
+}
 
 /* Neutralise le margin-top générique sur les icônes dans msgStatus en mode vert */
 div.vpRowVert div.iconImg.msgStatus .iconImg {
@@ -745,7 +948,7 @@ div.vpRowVert div.msgDate {
   color: var(--theme-text-disabled);
   white-space: nowrap;
   margin-left: 0px;
-  order:1;
+  order: 1;
 }
 
 /* Sujet */
@@ -758,7 +961,6 @@ div.vpRowVert div.msgSubject {
   color: var(--theme-text-secondary);
   font-weight: normal;
 }
-
 
 .imp-sidebar-container a,
 .imp-sidebar-mbox-loading {
@@ -775,22 +977,28 @@ div.vpRowVert div.msgSubject {
   gap: var(--theme-spacing-xs);
 }
 
-#searchbar .closeImg{
-margin-left:auto;
+#searchbar .closeImg {
+  margin-left: auto;
 }
 
-#searchbar #search_label { color: inherit;
-order:-1; }
+#searchbar #search_label {
+  color: inherit;
+  order: -1;
+}
 
 /* Viewport error */
 #viewport_error {
   background-color: var(--theme-bg-danger-light);
   border-bottom: 1px solid var(--theme-border-danger);
 }
-#viewport_error div { color: var(--theme-text-on-danger); }
+#viewport_error div {
+  color: var(--theme-text-on-danger);
+}
 
 /* En-tête compact (collapsed) */
-#msgHeadersColl { line-height: 20px; }
+#msgHeadersColl {
+  line-height: 20px;
+}
 #msgHeadersColl .from .horde-button {
   line-height: 16px !important;
   margin: 0;

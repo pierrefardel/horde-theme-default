@@ -17,7 +17,7 @@
 :root {
 
   /* ── Couleur brand ── */
-  --brand-primary: oklch(0.74 0.17 122);   /* #9CC916 — vert Horde */
+  --brand-primary: oklch(0.52 0.20 200);   /* T1 — teal saturé */
 
   /* ── Couleurs support (teintes fixes, chroma/luminosité dérivées de brand) ── */
   --brand-neutral:     oklch(from var(--brand-primary) 0.55 clamp(0, calc(c * 0.12), 0.04) h);
@@ -139,7 +139,19 @@
   --border-radius-sm:   2px;
   --border-radius-md:   4px;
   --border-radius-lg:   8px;
+  --border-radius-xl:   16px;
   --border-radius-full: 9999px;
+
+  /* ── Forme globale (3 curseurs — presets dans tokens.css) ── */
+  --theme-radius-none:     0px;
+  --theme-radius-sm:       var(--border-radius-sm);
+  --theme-radius-md:       var(--border-radius-md);
+  --theme-radius-lg:       var(--border-radius-lg);
+  --theme-radius-xl:       var(--border-radius-xl);
+  --theme-radius-full:     var(--border-radius-full);
+  --theme-radius-box:      var(--theme-radius-md);
+  --theme-radius-field:    var(--theme-radius-md);
+  --theme-radius-selector: var(--theme-radius-full);
 
   /* ── Taille icônes ── */
   --size-icon-xs:  8px;
@@ -210,8 +222,8 @@
   --colors-surface-action-2--hover:    var(--primary-100);
   --colors-surface-highlight:          light-dark(var(--primary-300), var(--primary-700));
   --colors-surface-overlay:            light-dark(
-    oklch(from var(--brand-primary) l c h / 0.85),
-    oklch(from var(--brand-primary) calc(l * 0.55) c h / 0.85)
+    oklch(from var(--brand-primary) 0.2 calc(c * 0.15) h / 0.65),
+    oklch(from var(--brand-primary) 0.1 calc(c * 0.1)  h / 0.75)
   );
 
   /* ── Bordures ── */
@@ -250,7 +262,17 @@
 
 /* ── Logo ── */
 :root {
-  --logo-upjv-url: url("graphics/svg/horde-logo.svg");
+  --brand-logo-url-light: url("graphics/svg/horde-logo.svg");
+  --brand-logo-url-dark:  url("graphics/svg/horde-logo-dark.svg");
+  --brand-logo-url:       var(--brand-logo-url-light);
+  --brand-logo-width:     80px;
+  --brand-logo-height:    32px;
+  --show-version:         block;
+}
+@media (prefers-color-scheme: dark) {
+  html:not(.theme-light) {
+    --brand-logo-url: var(--brand-logo-url-dark, var(--brand-logo-url-light));
+  }
 }
 
 /* ── Dark mode ── */
@@ -261,3 +283,16 @@
 }
 html.theme-light { color-scheme: light; }
 html.theme-dark  { color-scheme: dark; }
+
+/* ── Presets de forme (piloté par classe sur <html>) ── */
+/* soft = défaut, pas de classe nécessaire */
+html.shape-rounded {
+  --theme-radius-box:      var(--theme-radius-lg);
+  --theme-radius-field:    var(--theme-radius-full);
+  --theme-radius-selector: var(--theme-radius-full);
+}
+html.shape-sharp {
+  --theme-radius-box:      var(--theme-radius-none);
+  --theme-radius-field:    var(--theme-radius-none);
+  --theme-radius-selector: var(--theme-radius-none);
+}
