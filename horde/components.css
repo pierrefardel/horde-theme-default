@@ -43,7 +43,7 @@ div.nicetitle { position: absolute; overflow: hidden; }
   z-index: 99999 !important;
   width: 340px !important;
   padding: 0 !important;
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   gap: var(--theme-spacing-xs);
   pointer-events: none;

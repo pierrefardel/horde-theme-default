@@ -580,7 +580,7 @@ div.msgStatus .iconImg.msCheckOn::before,
   width: 15px;
   height: 15px;
   border: 1.5px solid var(--theme-border);
-  border-radius: var(--theme-radius-selector);
+  border-radius: var(--theme-radius-field);
   background-color: var(--theme-bg-tertiary);
   box-sizing: border-box;
 }

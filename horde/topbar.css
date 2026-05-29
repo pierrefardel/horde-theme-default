@@ -306,7 +306,7 @@ a.horde-mainnavi-active:active {
   padding: 0;
   order: 1;
   background-image: none;
-  width: 34px;
+  width: auto;
   height: auto;
   aspect-ratio: 1 / 1;
 }
@@ -314,11 +314,11 @@ a.horde-mainnavi-active:active {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   background-color: var(--theme-bg-danger);
   border: 1px solid var(--theme-border-danger);
-  border-radius: var(--theme-radius-selector);
+  border-radius: var(--theme-radius-field);
   position: relative;
   cursor: pointer;
   transition: background-color 0.15s ease, border-color 0.15s ease;

@@ -61,7 +61,7 @@
   margin: 1px;
   padding: 1px 2px;
 }
-.msgHeaders .horde-button { margin: 1px; padding:3px; }
+.msgHeaders .horde-button { margin: 1px; padding:3px 6px; }
 .msgHeaders a.addrgroup-name { font-weight: var(--theme-font-weight-bold); }
 .largeaddrlist,
 .largeaddrlistlimit {

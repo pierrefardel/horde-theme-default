@@ -63,9 +63,7 @@
 }
 .imp-maillog-sent { color: var(--theme-text-action) !important; }
 
-/* Redbox (popup) */
-#RB_window { max-width: 50%; }
-#RB_window input[type="text"], #RB_window select { display: block; margin: 2px 0; }
+/* Redbox (popup) — styles IMP spécifiques */
 .RB_Form { width: 20em; padding: 6px; border: 1px solid var(--theme-border); }
 .RB_Form input { margin: .2em; }
 #mbox_import { overflow: hidden; }

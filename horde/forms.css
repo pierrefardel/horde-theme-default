@@ -23,22 +23,101 @@
 input, select, textarea {
   font-size: 100%;
   font-weight: normal;
-  background-color: var(--theme-bg-primary);
-  border: 1px solid var(--theme-border);
+  background-color: var(--theme-bg-input);
+  border: 1px solid var(--theme-border-input);
+  color: var(--theme-text-primary);
 }
 input, select { min-height: 20px; }
 input, option { padding: 1px 5px; }
 select { padding: 2px 0 0 2px; }
+
+/* ── Champs texte — style DS UPJV ── */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="url"],
+input[type="tel"],
+input[type="number"],
+textarea,
+select {
+  background-color: var(--theme-bg-input);
+  border: 1px solid var(--theme-border-input);
+  border-radius: var(--theme-radius-field);
+  color: var(--theme-text-primary);
+  padding: var(--theme-spacing-xs) var(--theme-spacing-sm);
+  font-size: var(--theme-font-size-sm);
+  outline: none;
+  transition: var(--theme-transition);
+  width: 100%;
+  box-sizing: border-box;
+}
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="search"]::placeholder,
+textarea::placeholder {
+  color: var(--theme-text-placeholder);
+  opacity: 0.7;
+}
+input[type="text"]:not(:disabled):hover,
+input[type="email"]:not(:disabled):hover,
+input[type="password"]:not(:disabled):hover,
+input[type="search"]:not(:disabled):hover,
+input[type="url"]:not(:disabled):hover,
+input[type="tel"]:not(:disabled):hover,
+input[type="number"]:not(:disabled):hover,
+textarea:not(:disabled):hover,
+select:not(:disabled):hover {
+  border-color: var(--theme-border-action-hover);
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="url"]:focus,
+input[type="tel"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--theme-border-action);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--theme-bg-action) 15%, transparent);
+}
+input[type="text"]:disabled,
+input[type="email"]:disabled,
+input[type="password"]:disabled,
+input[type="search"]:disabled,
+input[type="url"]:disabled,
+input[type="tel"]:disabled,
+input[type="number"]:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: var(--theme-bg-disabled);
+  border-color: var(--theme-border-disabled);
+  color: var(--theme-text-disabled);
+  cursor: not-allowed;
+}
+input[type="text"]:read-only,
+input[type="email"]:read-only,
+textarea:read-only {
+  background-color: var(--theme-bg-secondary);
+  cursor: default;
+}
+/* Supprimer les flèches sur number et le bouton clear sur search */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
+input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
+
 input:focus, textarea:focus, select:focus {
-  background-color: var(--theme-text-on-action);
-  border-color: var(--theme-text-primary);
+  background-color: var(--theme-bg-input);
 }
 input[type="submit"], input[type="button"], input[type="reset"],
 a.horde-button, a.horde-default, a.horde-create, a.horde-delete {
   background-image: none;
   background-color: var(--theme-bg-btn-secondary);
   border: 1px solid var(--theme-border-btn-secondary);
-  border-radius: var(--theme-radius-sm);
+  border-radius: var(--theme-radius-field);
   padding: 6px 12px;
   color: var(--theme-text-primary);
   cursor: pointer;
@@ -103,16 +182,17 @@ input.horde-delete:hover, a.horde-delete:hover {
   border-color: var(--theme-border-danger-hover);
 }
 
-/* horde-cancel → btn-link */
+/* horde-cancel → btn-secondary */
 input.horde-cancel, a.horde-cancel {
-  background: transparent;
-  border-color: transparent;
-  color: var(--theme-text-action);
-  padding: 6px 4px;
-  text-decoration: none;
+  background-color: var(--theme-bg-btn-secondary);
+  border-color: var(--theme-border-btn-secondary);
 }
 input.horde-cancel:hover, a.horde-cancel:hover {
-  text-decoration: underline;
+  background-color: var(--theme-bg-btn-secondary-hover);
+  border-color: var(--theme-border-btn-secondary);
+}
+input.horde-cancel:active, a.horde-cancel:active {
+  background-color: var(--theme-bg-btn-secondary-active);
 }
 
 form[action^="https://"] input[type="submit"].horde-default {
@@ -142,6 +222,79 @@ input[disabled], input[disabled]:hover, textarea[disabled], option[disabled] {
   margin: 0 3px 0 0;
   vertical-align: middle;
   cursor: pointer;
+}
+
+/* ── Checkbox — style DS UPJV ── */
+input[type="checkbox"]:not(.msCheck) {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  flex-shrink: 0;
+  width: var(--theme-spacing-md);
+  height: var(--theme-spacing-md);
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--theme-border-input);
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-white);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  vertical-align: middle;
+}
+input[type="checkbox"]:not(.msCheck)::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transform: scale(0) rotate(-45deg);
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+input[type="checkbox"]:not(.msCheck):checked {
+  background-color: var(--theme-bg-action-active);
+  border-color: var(--theme-border-action-active);
+  transform: scale(1.05);
+  animation: checkboxPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+input[type="checkbox"]:not(.msCheck):checked::after {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+input[type="checkbox"]:not(.msCheck):indeterminate {
+  background-color: var(--theme-bg-action-active);
+  border-color: var(--theme-border-action-active);
+}
+input[type="checkbox"]:not(.msCheck):indeterminate::after {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+}
+input[type="checkbox"]:not(.msCheck):not(:disabled):hover {
+  border-color: var(--theme-border-action-hover);
+  transform: scale(1.05);
+}
+input[type="checkbox"]:not(.msCheck):focus-visible {
+  outline: 2px solid var(--theme-border-action);
+  outline-offset: 2px;
+}
+input[type="checkbox"]:not(.msCheck):disabled {
+  background-color: var(--theme-bg-disabled);
+  border-color: var(--theme-border-disabled);
+  cursor: not-allowed;
+}
+input[type="checkbox"]:not(.msCheck):disabled:checked::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2395a3b3' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+}
+@keyframes checkboxPop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
 }
 
 table.horde-table td img { width: 16px; height: 16px; vertical-align: middle; }
