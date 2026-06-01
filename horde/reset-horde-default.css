@@ -6,8 +6,11 @@
  * qui casserait des composants existants.
  */
 
-/* ── Google Fonts — Inter ── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* ── Inter — auto-hébergé (pas de dépendance Google Fonts) ── */
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('graphics/fonts/inter-400.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('graphics/fonts/inter-500.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('graphics/fonts/inter-600.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap; src: url('graphics/fonts/inter-700.woff2') format('woff2'); }
 
 /* ── Box-sizing ── */
 *, *::before, *::after {

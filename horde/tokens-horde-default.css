@@ -262,17 +262,10 @@
 
 /* ── Logo ── */
 :root {
-  --brand-logo-url-light: url("graphics/svg/horde-logo.svg");
-  --brand-logo-url-dark:  url("graphics/svg/horde-logo-dark.svg");
-  --brand-logo-url:       var(--brand-logo-url-light);
-  --brand-logo-width:     80px;
-  --brand-logo-height:    32px;
-  --show-version:         block;
-}
-@media (prefers-color-scheme: dark) {
-  html:not(.theme-light) {
-    --brand-logo-url: var(--brand-logo-url-dark, var(--brand-logo-url-light));
-  }
+  --brand-logo-url:    url("graphics/svg/horde-logo.svg");
+  --brand-logo-width:  80px;
+  --brand-logo-height: 32px;
+  --show-version:      block;
 }
 
 /* ── Dark mode ── */

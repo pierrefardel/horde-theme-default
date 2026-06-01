@@ -19,12 +19,18 @@
 #horde-logo {
   float: none;
   flex-shrink: 0;
-  width: var(--brand-logo-width, 40px);
+  width: var(--brand-logo-width, 80px);
   height: var(--brand-logo-height, 36px);
-  background-image: var(--brand-logo-url);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center left;
+  background-image: none;
+  background-color: var(--brand-primary);
+  -webkit-mask-image: var(--brand-logo-url);
+  mask-image: var(--brand-logo-url);
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center left;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center left;
 }
 
 
