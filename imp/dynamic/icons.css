@@ -24,7 +24,7 @@ span.infoIcon, span.prefsIcon, span.logoutIcon, span.readonlyImg,
 .context span.iconImg,
 .contextMenu span.iconImg,
 .msgHeaders span.iconImg,
-.optionsContainer span.iconImg,
+.optionsContainer span.iconImg:not(.horde-popdown),
 #th_expand span.iconImg,
 #th_collapse span.iconImg,
 #msg_newwin_options span.iconImg,
@@ -111,6 +111,10 @@ span.infoIcon, span.prefsIcon, span.logoutIcon, span.readonlyImg,
 .horde-buttonbar li a.actionSend::before {
   -webkit-mask-image: url("../graphics/svg/send.svg");
   mask-image: url("../graphics/svg/send.svg");
+}
+.horde-buttonbar li a.actionRedirect::before {
+  -webkit-mask-image: url("../graphics/svg/maillog-redirect.svg");
+  mask-image: url("../graphics/svg/maillog-redirect.svg");
 }
 .horde-buttonbar li a.actionDrafts::before {
   -webkit-mask-image: url("../graphics/svg/drafts.svg");
@@ -561,6 +565,25 @@ span.readonlyImg {
 #ctx_sortopts span.iconImg.sortup::before,
 #ctx_sortopts span.iconImg.sortdown::before {
   display: none !important;
+}
+
+/* ── optionsContainer message (vue standalone + preview) ── */
+#msg_view_source span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/view-source.svg");
+  mask-image: url("../graphics/svg/view-source.svg");
+}
+.saveAsImg {
+  -webkit-mask-image: url("../graphics/svg/download.svg");
+  mask-image: url("../graphics/svg/download.svg");
+}
+#msg_all_parts span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/all-parts.svg");
+  mask-image: url("../graphics/svg/all-parts.svg");
+}
+#msg_listinfo span.iconImg,
+#ctx_preview_listinfo span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/info.svg");
+  mask-image: url("../graphics/svg/info.svg");
 }
 
 /* Tri actif — layout flex, coche à droite portée par un span dédié */

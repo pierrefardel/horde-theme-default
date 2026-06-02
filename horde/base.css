@@ -22,7 +22,7 @@ body:not(.horde-ajax) {
   top: 0;
   flex-shrink: 0;
   height: var(--theme-topbar-height);
-  z-index: 1000;
+  z-index: 80;
   display: flex;
   align-items: center;
   overflow: visible;
@@ -33,7 +33,7 @@ body:not(.horde-ajax) {
   position: sticky;
   top: var(--theme-topbar-height);
   flex-shrink: 0;
-  z-index: 999;
+  z-index: 70;
   display: flex;
   align-items: center;
 }
@@ -47,7 +47,7 @@ body.horde-ajax #horde-body {
   min-height: 0;
   float: none;
   display: grid;
-  grid-template-columns: var(--horde-sidebar-width, auto) 6px 1fr;
+  grid-template-columns: clamp(var(--theme-sidebar-min-width), var(--horde-sidebar-width, var(--theme-sidebar-min-width)), var(--theme-sidebar-max-width)) 6px 1fr;
   grid-template-areas: "sidebar split content";
 }
 
@@ -97,6 +97,7 @@ body.horde-ajax #horde-contentwrapper {
   height: 100%;
   overflow: auto;
   border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
 }
 .horde-no-sidebar #horde-content { padding-left: 0; }
 .horde-content { padding: 5px 5px 0; }

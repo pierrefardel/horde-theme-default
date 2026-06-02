@@ -1,0 +1,241 @@
+/**
+ * Kronolith UPJV — Globals
+ * =========================
+ * Autocomplete, tags, prefs, free/busy grid, print.
+ */
+
+/* ── Toolbar Kronolith — hiérarchie navigation / filtres ── */
+
+/* Filtres de vue poussés à droite */
+.horde-buttonbar li.horde-icon:first-of-type {
+  margin-left: auto;
+}
+
+#kronolithPrintHeader {
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-secondary);
+  font-size: var(--theme-font-size-lg);
+}
+
+#kronolithBody{
+  padding: var(--theme-spacing-sm);
+}
+
+/* Bouton Aujourd'hui */
+#kronolithGotoToday {
+  font-size: var(--theme-font-size-xs) !important;
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-action);
+  background-color: var(--theme-bg-btn-secondary);
+  border: 1px solid var(--theme-border-btn-secondary);
+  border-radius: var(--theme-radius-field);
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+#kronolithGotoToday:hover {
+  background-color: var(--theme-bg-btn-secondary-hover);
+}
+
+/* Indicateur de période — texte proéminent */
+.horde-buttonbar li:has(#kronolithCurrent) {
+  padding: 0 var(--theme-spacing-sm) !important;
+  min-width: 140px;
+  justify-content: center;
+}
+#kronolithCurrent {
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-headings);
+  white-space: nowrap;
+}
+
+/* Filtres de vue — style DS UPJV filter component */
+.horde-buttonbar li.horde-icon a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-sm);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-action);
+  background: var(--theme-bg-white);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-field);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--theme-transition);
+  text-decoration: none;
+}
+.horde-buttonbar li.horde-icon a:hover {
+  color: var(--theme-text-on-action);
+  background: var(--theme-bg-action);
+  border-color: var(--theme-bg-action);
+}
+.horde-buttonbar li.horde-icon a:hover::before {
+  background-color: var(--theme-text-on-action) !important;
+}
+.horde-buttonbar li.horde-icon.horde-active a {
+  color: var(--theme-text-on-action);
+  background: var(--theme-bg-action);
+  border-color: var(--theme-bg-action);
+}
+.horde-buttonbar li.horde-icon.horde-active a::before {
+  background-color: var(--theme-text-on-action) !important;
+}
+
+/* ── Autocomplete ── */
+.autocomplete {
+  background: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border);
+  position: absolute;
+  padding: 2px;
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
+  z-index: 10000;
+}
+.autocomplete ul {
+  margin: 1px;
+  padding: 1px;
+  list-style-type: none;
+}
+.autocomplete ul li {
+  padding: 3px;
+  cursor: pointer;
+  font-size: 90%;
+  color: var(--theme-text-primary);
+}
+.autocomplete ul .selected {
+  background: var(--theme-bg-action);
+  color: var(--theme-text-on-action);
+}
+
+/* ── Tags ── */
+.panel-tags {
+  margin-left: 10px;
+}
+.panel-tags ul {
+  margin: 1px;
+  padding: 1px;
+  list-style-type: none;
+}
+li.panel-tags {
+  float: left;
+  padding: 2px;
+}
+.panel-tags li:hover {
+  text-decoration: underline;
+}
+
+/* ── Prefs ── */
+.fburl {
+  border: 1px solid var(--theme-border);
+  padding: 5px 0 10px 15px;
+  border-radius: var(--theme-radius-box);
+}
+.fburl .fixed {
+  padding-top: 3px;
+}
+
+/* ── Free/Busy grid ── */
+.kronolithFBLegend {
+  font-size: 90%;
+  padding-right: 10px;
+}
+.kronolithFBBusy {
+  position: relative;
+  background: var(--theme-bg-danger);
+}
+.kronolithFBUnknown {
+  background: var(--theme-bg-secondary);
+}
+.kronolithFBFree {
+  position: relative;
+  background: var(--theme-bg-success);
+  color: var(--theme-text-on-action);
+}
+div.fbgrid {
+  background-color: var(--theme-bg-white);
+  overflow: auto;
+  padding: 0 1ex;
+}
+.fbgrid table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.fbgrid table td,
+.fbgrid table th {
+  border: 1px solid var(--theme-border);
+}
+.fbgrid table .label {
+  border: none;
+  padding-right: 1ex;
+}
+
+/* ── Selected control ── */
+.selected-control {
+  background: var(--theme-bg-information-light);
+  border-bottom: 1px solid var(--theme-border);
+}
+
+/* ── Color picker (z-index Kronolith) ── */
+#color-picker {
+  z-index: 103;
+}
+
+/* ── Print ── */
+#calendarPrint {
+  display: none;
+}
+
+@media print {
+  .rowEven td,
+  .rowOdd td {
+    background: var(--theme-bg-white);
+    color: var(--theme-text-primary);
+    border-bottom: thin solid var(--theme-border);
+  }
+  .rowEven td td,
+  .rowOdd td td {
+    border: none;
+  }
+  .selected-control {
+    background: var(--theme-bg-white);
+    border-bottom: thin solid var(--theme-border);
+  }
+  .iconAlarm,
+  .iconDelete,
+  .iconEdit,
+  .iconRecur,
+  .iconAdd,
+  .iconNav,
+  a.newEvent,
+  .tabset {
+    display: none;
+  }
+  #calendarPrint {
+    display: block;
+  }
+  .year-event {
+    background: var(--theme-bg-white);
+  }
+  table.monthgrid {
+    border-top: thin solid var(--theme-border);
+    border-left: thin solid var(--theme-border);
+  }
+  table.monthgrid th,
+  table.monthgrid td {
+    border-right: thin solid var(--theme-border);
+    border-bottom: thin solid var(--theme-border);
+    padding: 2px;
+  }
+  .month-eventbox {
+    border: none;
+    border-bottom: thin solid var(--theme-border);
+  }
+  .kronolith-all-day td {
+    height: auto;
+  }
+  .kronolith-today {
+    background-color: inherit;
+  }
+}

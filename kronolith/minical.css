@@ -1,0 +1,113 @@
+/**
+ * Kronolith UPJV — Mini calendrier
+ * ==================================
+ * Mini calendrier dans la sidebar.
+ */
+
+.kronolith-minical {
+  border-spacing: 10px;
+  border-radius: var(--theme-radius-box);
+  overflow: hidden;
+}
+.kronolith-minical td {
+  background-color: var(--theme-bg-secondary);
+  padding: 10px;
+  vertical-align: top;
+}
+.kronolith-minical > tbody > tr > td {
+  padding: 0;
+}
+
+/* ── Table interne ── */
+.kronolith-minical table {
+  border-spacing: 1px;
+  border: 0;
+  background-color: var(--theme-bg-secondary);
+  width: 100%;
+}
+.kronolith-minical table th,
+.kronolith-minical table td {
+  background-color: var(--theme-bg-white);
+  height: 22px;
+  width: 22px;
+  padding: 1px;
+  text-align: center;
+  vertical-align: middle;
+}
+.kronolith-minical table th,
+.kronolith-minical table td.kronolith-minical-week {
+  background-color: var(--theme-bg-tertiary);
+  color: var(--theme-text-primary);
+}
+.kronolith-minical table tbody td {
+  empty-cells: show;
+}
+.kronolith-minical table tbody td a {
+  display: block;
+  color: var(--theme-text-primary);
+  text-decoration: none;
+}
+
+/* ── Hover ── */
+.kronolith-minical table tbody td:hover,
+.kronolith-minical table tbody td:hover a,
+.kronolith-minical .kronolith-selected:hover,
+#horde-sidebar .kronolith-minical .kronolith-selected:hover a {
+  background-color: var(--theme-bg-selected-hover);
+  color: var(--theme-text-primary);
+}
+
+/* ── Navigation ── */
+tr.kronolith-minical-nav,
+tr.kronolith-minical-nav th {
+  background-color: var(--theme-bg-secondary);
+}
+#kronolith-minical-prev,
+#kronolith-minical-next {
+  display: block;
+  text-indent: -10000px;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  background-color: var(--theme-icon-secondary);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+#kronolith-minical-next {
+  mask-image: url("graphics/svg/nav-next.svg");
+  -webkit-mask-image: url("graphics/svg/nav-next.svg");
+}
+#kronolith-minical-prev {
+  mask-image: url("graphics/svg/nav-prev.svg");
+  -webkit-mask-image: url("graphics/svg/nav-prev.svg");
+}
+
+/* ── États ── */
+.kronolith-minical .kronolith-minical-empty {
+  background: none;
+}
+.kronolith-minical .kronolith-other-month,
+.kronolith-minical .kronolith-other-month a {
+  color: var(--theme-text-disabled);
+}
+.kronolith-minical .kronolith-selected,
+#horde-sidebar .kronolith-minical .kronolith-selected a {
+  background-color: var(--theme-bg-action);
+  color: var(--theme-text-on-action);
+}
+.kronolith-minical .kronolith-today,
+.kronolith-minical .kronolith-today:hover,
+.kronolith-minical .kronolith-today a,
+.kronolith-minical .kronolith-today:hover a,
+#horde-sidebar .kronolith-minical .kronolith-today a {
+  background-color: var(--theme-bg-calendar-current) !important;
+  color: var(--theme-text-primary);
+  font-weight: var(--theme-font-weight-bold);
+}
+.kronolith-minical .kronolith-selected.kronolith-today {
+  border-color: var(--theme-bg-white);
+}

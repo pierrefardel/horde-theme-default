@@ -15,7 +15,7 @@
   padding: 3px 3px 1px;
   width: 556px;
   border: 1px solid var(--theme-border);
-  border-radius: var(--theme-radius-field);
+  border-radius: var(--theme-radius-box);
   transition: var(--theme-transition);
 }
 
@@ -34,6 +34,12 @@
   margin-left:auto;
   float: none !important;
   margin-top: 0 !important;
+}
+.headercloseimg:hover {
+  background-color: var(--theme-bg-danger-hover) !important;
+}
+.headercloseimg:active {
+  background-color: var(--theme-bg-danger-active) !important;
 }
 .headercloseimg::before {
   content: '';
@@ -74,45 +80,14 @@
   gap: var(--theme-spacing-sm);
   padding: var(--theme-spacing-xs);
 }
+.msgwrite .optionsContainer > div  { display: flex; align-items: center; gap: 6px; }
 .msgwrite .optionsContainer label  { cursor: pointer; display: flex; align-items: center; gap: 6px; }
-.msgwrite .optionsContainer .horde-popdown { height: 18px; margin-top: -6px; }
 
-/* Checkbox style msCheck */
+
+/* Checkbox compose — hérite du composant forms.css, taille réduite pour contexte compact */
 .msgwrite .optionsContainer input.checkbox {
-  appearance: none;
-  -webkit-appearance: none;
-  position: relative;
-  width: 15px; height: 15px;
-  flex-shrink: 0;
-  border: 1.5px solid var(--theme-border);
-  border-radius: 3px;
-  background-color: var(--theme-bg-white);
-  cursor: pointer;
-  margin: 0;
-  vertical-align: middle;
-}
-.msgwrite .optionsContainer input.checkbox:hover {
-  border-color: var(--theme-bg-action);
-}
-.msgwrite .optionsContainer input.checkbox:checked {
-  background-color: var(--theme-bg-action);
-  border-color: var(--theme-border-action);
-}
-.msgwrite .optionsContainer input.checkbox:checked::after {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 10px; height: 10px;
-  background-color: var(--theme-text-on-action);
-  -webkit-mask-image: url("../graphics/svg/ms-check.svg");
-  mask-image: url("../graphics/svg/ms-check.svg");
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
+  width: 15px;
+  height: 15px;
 }
 .msgwrite #other_options .horde-popdown    { height: 16px; }
 .msgwrite tr  { vertical-align: top; }
@@ -135,7 +110,7 @@
   padding: 3px 3px 1px;
   width: 556px;
   border: 1px solid var(--theme-border);
-  border-radius: var(--theme-radius-field);
+  border-radius: var(--theme-radius-box);
   transition: var(--theme-transition);
 }
 .impACBoxFocus {
@@ -150,7 +125,39 @@
   border-radius: var(--theme-radius-sm);
   padding: 0 4px;
 }
-.impACItemRemove { padding-left: 3px; }
+/* img reste cliquable mais invisible — le JS s'appuie dessus pour le remove */
+li.hordeACListItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+img.impACItemRemove {
+  opacity: 0;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+/* SVG par-dessus l'img via ::after — margin-left négatif pour superposer sur l'img invisible */
+li.hordeACListItem::after {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: -14px;
+  flex-shrink: 0;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("../graphics/svg/close.svg");
+  mask-image: url("../graphics/svg/close.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  pointer-events: none;
+  vertical-align: middle;
+}
 .impACList li.hordeACListItem {
   font-size: 100%;
   margin-bottom: 1px;

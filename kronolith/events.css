@@ -1,0 +1,75 @@
+/**
+ * Kronolith UPJV — Événements
+ * =============================
+ * Affichage des événements dans les vues.
+ */
+
+/* ── Base événement ── */
+.kronolith-event {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: var(--theme-radius-sm);
+}
+.kronolith-event .kronolith-event-info {
+  padding: 3px 5px 4px;
+  overflow: hidden;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  text-decoration: inherit;
+}
+img.kronolithEventIcon {
+  float: left;
+  margin: 0 2px 2px 0;
+}
+.kronolith-event .kronolith-time {
+  font-weight: var(--theme-font-weight-bold);
+  margin-right: 2px;
+  white-space: nowrap;
+}
+.kronolith-event-tentative {
+  font-style: italic;
+}
+.kronolith-event-cancelled {
+  text-decoration: line-through;
+}
+.kronolith-location {
+  font-size: 90%;
+  margin-left: 2px;
+  color: var(--theme-text-secondary);
+}
+.kronolith-event img {
+  padding-top: 3px;
+  vertical-align: top;
+}
+
+/* ── Événements vue mois et all-day ── */
+#kronolithViewMonth .kronolith-event,
+.kronolithViewDay .kronolith-all-day .kronolith-event {
+  line-height: 15px;
+  padding: 3px 10px;
+}
+#kronolithViewMonth .kronolith-event {
+  max-height: 2.5em;
+}
+.kronolithViewDay .kronolith-event {
+  max-height: 40px;
+}
+#kronolithViewMonth .kronolith-event:hover,
+.kronolithViewDay .kronolith-event:hover {
+  max-height: none;
+}
+#kronolithViewDay .kronolith-all-day .kronolith-event {
+  float: left;
+}
+
+/* ── Eventbox ── */
+.block-eventbox,
+table.nopadding td.block-eventbox {
+  padding: 0 4px;
+}
+
+/* ── Lien new event ── */
+a.newEvent img {
+  vertical-align: top;
+  padding: 3px 0 0 3px;
+}

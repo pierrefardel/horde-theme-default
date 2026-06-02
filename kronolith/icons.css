@@ -1,0 +1,123 @@
+/**
+ * Kronolith UPJV — Icônes
+ * =========================
+ * Navigation toolbar + icônes diverses.
+ * Pattern : ::before avec mask-image sur les <a>, jamais direct sur l'élément.
+ */
+
+/* ── Reset PNG ── */
+.horde-buttonbar a.kronolithNext,
+.horde-buttonbar a.kronolithPrev,
+#kronolithNavAgenda,
+#kronolithNavTasks,
+#kronolithNavDay,
+#kronolithNavWeek,
+#kronolithNavWorkweek,
+#kronolithNavMonth,
+#kronolithNavYear,
+.kronolith-icon-today,
+.kronolith-icon-goto,
+.kronolith-icon-search,
+.kronolith-icon-back {
+  background-image: none;
+}
+
+/* ── Prev / Next — icône seule, texte masqué ── */
+.horde-buttonbar a.kronolithPrev,
+.horde-buttonbar a.kronolithNext {
+  color: transparent !important;
+  font-size: 0 !important;
+  text-indent: -9999px;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  position: relative;
+}
+.horde-buttonbar a.kronolithPrev::before,
+.horde-buttonbar a.kronolithNext::before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  text-indent: 0;
+  background-color: var(--theme-icon-primary);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+.horde-buttonbar a.kronolithPrev::before {
+  mask-image: url("graphics/svg/nav-prev.svg");
+  -webkit-mask-image: url("graphics/svg/nav-prev.svg");
+}
+.horde-buttonbar a.kronolithNext::before {
+  mask-image: url("graphics/svg/nav-next.svg");
+  -webkit-mask-image: url("graphics/svg/nav-next.svg");
+}
+
+/* ── Vues nav — icône + texte ── */
+.horde-buttonbar li.horde-icon a#kronolithNavDay::before,
+.horde-buttonbar li.horde-icon a#kronolithNavWeek::before,
+.horde-buttonbar li.horde-icon a#kronolithNavWorkweek::before,
+.horde-buttonbar li.horde-icon a#kronolithNavMonth::before,
+.horde-buttonbar li.horde-icon a#kronolithNavYear::before,
+.horde-buttonbar li.horde-icon a#kronolithNavTasks::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  vertical-align: middle;
+  background-color: var(--theme-icon-primary);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  flex-shrink: 0;
+}
+.horde-buttonbar li.horde-active a#kronolithNavDay::before,
+.horde-buttonbar li.horde-active a#kronolithNavWeek::before,
+.horde-buttonbar li.horde-active a#kronolithNavWorkweek::before,
+.horde-buttonbar li.horde-active a#kronolithNavMonth::before,
+.horde-buttonbar li.horde-active a#kronolithNavYear::before,
+.horde-buttonbar li.horde-active a#kronolithNavTasks::before {
+  background-color: var(--theme-text-on-action);
+}
+a#kronolithNavDay::before      { mask-image: url("graphics/svg/day-view.svg");      -webkit-mask-image: url("graphics/svg/day-view.svg"); }
+a#kronolithNavWeek::before     { mask-image: url("graphics/svg/week-view.svg");     -webkit-mask-image: url("graphics/svg/week-view.svg"); }
+a#kronolithNavWorkweek::before { mask-image: url("graphics/svg/workweek-view.svg"); -webkit-mask-image: url("graphics/svg/workweek-view.svg"); }
+a#kronolithNavMonth::before    { mask-image: url("graphics/svg/month-view.svg");    -webkit-mask-image: url("graphics/svg/month-view.svg"); }
+a#kronolithNavYear::before     { mask-image: url("graphics/svg/year-view.svg");     -webkit-mask-image: url("graphics/svg/year-view.svg"); }
+a#kronolithNavTasks::before    { mask-image: url("graphics/svg/tasks.svg");         -webkit-mask-image: url("graphics/svg/tasks.svg"); }
+
+/* ── Icônes standalone (hors toolbar) ── */
+.kronolith-icon-today::before,
+.kronolith-icon-goto::before,
+.kronolith-icon-search::before,
+.kronolith-icon-back::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  background-color: var(--theme-icon-primary);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+.kronolith-icon-today::before  { mask-image: url("graphics/svg/today.svg");  -webkit-mask-image: url("graphics/svg/today.svg"); }
+.kronolith-icon-goto::before   { mask-image: url("graphics/svg/goto.svg");   -webkit-mask-image: url("graphics/svg/goto.svg"); }
+.kronolith-icon-search::before { mask-image: url("graphics/svg/search.svg"); -webkit-mask-image: url("graphics/svg/search.svg"); }
+.kronolith-icon-back::before   { mask-image: url("graphics/svg/back.svg");   -webkit-mask-image: url("graphics/svg/back.svg"); }

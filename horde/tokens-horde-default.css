@@ -260,19 +260,21 @@
 
 }
 
-/* ── Logo ── */
+/* ── Logo — mode mask-image, couleur suit --theme-text-primary ── */
 :root {
-  --brand-logo-url:    url("graphics/svg/horde-logo.svg");
+  --brand-logo-url:    none;
+  --brand-logo-mask:   url("graphics/svg/horde-logo-dark.svg");
+  --brand-logo-color:  var(--theme-text-primary);
   --brand-logo-width:  80px;
   --brand-logo-height: 32px;
   --show-version:      block;
+  --theme-sidebar-min-width: 250px;
+  --theme-sidebar-max-width: 500px;
 }
 
 /* ── Dark mode ── */
 @media (prefers-color-scheme: dark) {
-  html:not(.theme-light) {
-    color-scheme: dark;
-  }
+  html:not(.theme-light) { color-scheme: dark; }
 }
 html.theme-light { color-scheme: light; }
 html.theme-dark  { color-scheme: dark; }

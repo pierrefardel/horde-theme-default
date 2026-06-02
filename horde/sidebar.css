@@ -8,6 +8,7 @@
   background-color: var(--theme-bg-primary);
   border-right: none;
   padding-bottom: 0;
+  width: clamp(var(--theme-sidebar-min-width), var(--horde-sidebar-width, var(--theme-sidebar-min-width)), var(--theme-sidebar-max-width)) !important;
 }
 #horde-sidebar a {
   color: var(--theme-text-primary);
@@ -39,6 +40,7 @@
   position: sticky;
   top: 0;
   z-index: 20;
+  box-shadow:var(--theme-shadow-md);
 }
 
 .horde-new:hover {
@@ -49,6 +51,7 @@
 
 .horde-new-link {
   width: 100%;
+  text-align: center;
 }
 
 .horde-new a,
@@ -218,12 +221,12 @@
   cursor: col-resize;
 }
 .horde-splitbar-vert-handle {
-  display: none;
+  display: block;
   position: absolute;
   top: 0;
   bottom: 0;
   width: 6px;
   background: var(--theme-bg-secondary);
   z-index: 10;
+  cursor: col-resize;
 }
-.DragElt .horde-splitbar-vert-handle { display: block; }

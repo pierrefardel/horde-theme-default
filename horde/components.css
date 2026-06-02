@@ -329,7 +329,7 @@ ul.horde-tags { display: inline; list-style-type: none; }
   color: var(--theme-text-primary);
   font-weight: var(--theme-font-weight-medium);
   text-decoration: none;
-  border-radius: var(--theme-radius-sm);
+  border-radius: var(--theme-radius-field);
   transition: background-color 0.2s ease, color 0.2s ease;
   cursor: pointer;
 }

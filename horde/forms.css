@@ -27,8 +27,6 @@ input, select, textarea {
   border: 1px solid var(--theme-border-input);
   color: var(--theme-text-primary);
 }
-input, select { min-height: 20px; }
-input, option { padding: 1px 5px; }
 select { padding: 2px 0 0 2px; }
 
 /* ── Champs texte — style DS UPJV ── */
@@ -49,8 +47,24 @@ select {
   font-size: var(--theme-font-size-sm);
   outline: none;
   transition: var(--theme-transition);
-  width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
+}
+/* textarea : radius-box */
+textarea {
+  border-radius: var(--theme-radius-box);
+}
+/* select : apparence custom + chevron SVG */
+select {
+  border-radius: var(--theme-radius-box);
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--theme-spacing-xs) center;
+  background-size: 16px;
+  padding-right: calc(var(--theme-spacing-xs) * 2 + 16px);
+  cursor: pointer;
 }
 input[type="text"]::placeholder,
 input[type="email"]::placeholder,
@@ -230,8 +244,8 @@ input[type="checkbox"]:not(.msCheck) {
   -webkit-appearance: none;
   margin: 0;
   flex-shrink: 0;
-  width: var(--theme-spacing-md);
-  height: var(--theme-spacing-md);
+  width: var(--theme-spacing-sm);
+  height: var(--theme-spacing-sm);
   aspect-ratio: 1 / 1;
   border: 2px solid var(--theme-border-input);
   border-radius: var(--theme-radius-field);
@@ -246,8 +260,8 @@ input[type="checkbox"]:not(.msCheck) {
 input[type="checkbox"]:not(.msCheck)::after {
   content: "";
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 60%;
+  height: 60%;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
   background-size: contain;
   background-repeat: no-repeat;
@@ -295,6 +309,18 @@ input[type="checkbox"]:not(.msCheck):disabled:checked::after {
   0%   { transform: scale(1); }
   50%  { transform: scale(0.9); }
   100% { transform: scale(1); }
+}
+
+/* Inputs pleine largeur dans les contextes formulaire */
+.horde-form td.control input[type="text"],
+.horde-form td.control input[type="email"],
+.horde-form td.control input[type="password"],
+.horde-form td.control input[type="url"],
+.horde-form td.control input[type="tel"],
+.horde-form td.control input[type="number"],
+.horde-form td.control select,
+.horde-form td.control textarea {
+  width: 100%;
 }
 
 table.horde-table td img { width: 16px; height: 16px; vertical-align: middle; }

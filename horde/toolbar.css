@@ -20,16 +20,19 @@
   padding: var(--theme-spacing-xs) !important;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap:var(--theme-spacing-sm);
 }
 .horde-buttonbar ul {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--theme-spacing-xs);
   list-style: none;
   float: none;
 }
 .horde-buttonbar .rightFloat {
-  margin-left: auto;
   order:1;
 }
 
