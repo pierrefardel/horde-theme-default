@@ -5,29 +5,35 @@
  */
 
 .kronolith-minical {
-  border-spacing: 10px;
   border-radius: var(--theme-radius-box);
   overflow: hidden;
+  box-shadow: var(--theme-shadow-md);
+  padding: 5px;
+  background: var(--theme-bg-white);
 }
+
 .kronolith-minical td {
   background-color: var(--theme-bg-secondary);
   padding: 10px;
   vertical-align: top;
 }
+
 .kronolith-minical > tbody > tr > td {
   padding: 0;
 }
 
-#kronolithMinicalDate{
+#kronolithMinicalDate {
   font-weight: var(--theme-font-weight-semi-bold);
 }
 
 /* ── Table interne ── */
 .kronolith-minical table {
-  border-spacing: 1px;
-  border: 0;
-  background-color: var(--theme-bg-secondary);
+  border-spacing: 0;
+  border: 1px solid var(--theme-border);
+  background-color: var(--theme-bg-primary);
   width: 100%;
+  border-radius: var(--theme-radius-box);
+  overflow: hidden;
 }
 .kronolith-minical table th,
 .kronolith-minical table td {
@@ -88,7 +94,6 @@ tr.kronolith-minical-nav th {
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
-
 }
 #kronolith-minical-next {
   mask-image: url("graphics/svg/nav-next.svg");
