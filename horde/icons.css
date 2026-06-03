@@ -103,8 +103,13 @@
 #horde-sidebar a.horde-add {
   background-image: none !important;
   position: relative;
-  text-indent: 0;
+  font-size: 0;
   overflow: visible;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  order:1;
+  margin-left:auto;
 }
 #horde-sidebar a.horde-add::before {
   content: '';
@@ -112,8 +117,8 @@
   transform: translateY(-50%);
   width: 16px; height: 16px;
   background-color: var(--theme-icon-secondary);
-  -webkit-mask-image: url("graphics/svg/mbox-create.svg");
-  mask-image: url("graphics/svg/mbox-create.svg");
+  -webkit-mask-image: url("graphics/svg/plus.svg");
+  mask-image: url("graphics/svg/plus.svg");
   -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
   mask-size: contain; mask-repeat: no-repeat; mask-position: center;
 }
@@ -184,4 +189,29 @@
   mask-image: url("graphics/svg/sortdown.svg");
   -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
   mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+
+/* ── Aide (helplink) ── */
+a.helplink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+a.helplink img { display: none; }
+a.helplink::before {
+  content: '';
+  display: block;
+  width: 16px; height: 16px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("graphics/svg/help.svg");
+  mask-image: url("graphics/svg/help.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+  transition: var(--theme-transition);
+}
+a.helplink:hover::before {
+  background-color: var(--theme-icon-primary);
 }

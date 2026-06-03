@@ -73,7 +73,6 @@
   display: inline-block;
   width: 14px;
   height: 14px;
-  margin-right: 4px;
   vertical-align: middle;
   background-color: var(--theme-icon-primary);
   mask-size: contain;
@@ -121,3 +120,35 @@ a#kronolithNavTasks::before    { mask-image: url("graphics/svg/tasks.svg");     
 .kronolith-icon-goto::before   { mask-image: url("graphics/svg/goto.svg");   -webkit-mask-image: url("graphics/svg/goto.svg"); }
 .kronolith-icon-search::before { mask-image: url("graphics/svg/search.svg"); -webkit-mask-image: url("graphics/svg/search.svg"); }
 .kronolith-icon-back::before   { mask-image: url("graphics/svg/back.svg");   -webkit-mask-image: url("graphics/svg/back.svg"); }
+
+/* ── Color picker ── */
+a.kronolithColorPicker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: var(--theme-bg-secondary);
+    padding: var(--theme-spacing-xs);
+    border-radius: var(--theme-radius-field);
+}
+a.kronolithColorPicker img {
+  display: none;
+}
+a.kronolithColorPicker::before {
+  content: '';
+  display: block;
+  width: 18px;
+  height: 18px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("graphics/svg/colorpicker.svg");
+  mask-image: url("graphics/svg/colorpicker.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+a.kronolithColorPicker:hover::before {
+  background-color: var(--theme-icon-primary);
+}

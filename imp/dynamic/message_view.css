@@ -17,6 +17,7 @@
   max-height: 250px;
   overflow-x: hidden;
   overflow-y: auto;
+  z-index:2;
 }
 .msgHeaders a {
   color: var(--theme-text-primary);

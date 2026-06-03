@@ -1,0 +1,115 @@
+/**
+ * Ingo UPJV — Globals
+ * ====================
+ * Scripts, filtres, règles, blacklist, whitelist.
+ */
+
+/* ── Scripts ── */
+.scriptHeader { margin: 0; text-align: center; width: 100%; }
+.scriptHeader form { display: inline; }
+
+/* ── Filtres ── */
+.filtersRow {
+    cursor: move;
+    height: auto;
+    padding: var(--theme-spacing-xs);
+    border: 1px solid var(--theme-border);
+    background: var(--theme-bg-primary);
+    border-radius: var(--theme-radius-box);
+    display: flex;
+    align-items: center;
+    gap: var(--theme-spacing-xs);
+}
+.filtersRow div { display: inline-block; }
+.filtersEdit { width: auto; }
+.filtersEdit img,
+.ruleMatchRowDelete img {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.filtersDisabled a { color: var(--theme-text-danger); }
+
+/* ── Règles ── */
+#rule select { padding: 2px; }
+.ruleAction,
+.ruleCondition { margin: 5px 0 0 20px; }
+.ruleCondition input { vertical-align: middle; }
+.ruleCondition span { margin-right: 20px; }
+.ruleMatch { margin: 10px 0 0 20px; }
+.ruleMatchRow {
+  border: 1px solid var(--theme-border);
+  display: table;
+  padding: 10px;
+  border-radius: var(--theme-radius-box);
+}
+.ruleMatchRowDelete {
+  display: table-cell;
+  padding-left: 12px;
+  vertical-align: middle;
+}
+.ruleMatchRowRules { display: table-cell; }
+.ruleMatchRowRules > div { padding: 2px; }
+.ruleMatchCondition { font-weight: var(--theme-font-weight-bold); margin: 10px 0; }
+.ruleMark ul { margin: 5px 0 0 20px; list-style: none; }
+.ruleMark li { padding-bottom: 8px; }
+.ruleMark input { min-height: auto; vertical-align: middle; }
+.ruleStopChecking input { margin-right: 5px; vertical-align: middle; }
+.ruleStopChecking label { vertical-align: middle; }
+.caseSensitive { margin-left: 5px; vertical-align: middle; }
+.ruleDiv { padding: 5px 5px 8px; }
+
+/* ── Blacklist ── */
+.blacklistAction { list-style: none; margin: 5px 0 8px 15px; }
+.blacklistAction input { vertical-align: middle; }
+.blacklistAction label { padding-left: 3px; }
+.blacklistDiv { padding: 5px; }
+
+/* ── Whitelist ── */
+.whitelistDiv { padding: 5px; }
+
+/* ── Responsive view ── */
+.horde-responsive .rule-status {
+  display: inline-block;
+  margin-left: var(--theme-spacing-md);
+  padding: 2px var(--theme-spacing-xs);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  border-radius: var(--theme-radius-sm);
+}
+.horde-responsive .rule-status-active {
+  background-color: var(--theme-bg-success-light);
+  color: var(--theme-text-success);
+}
+.horde-responsive .rule-status-disabled {
+  background-color: var(--theme-bg-danger-light);
+  color: var(--theme-text-danger);
+}
+.horde-responsive .rule-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: var(--theme-bg-white);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-sm);
+  overflow: hidden;
+}
+.horde-responsive .rule-item {
+  border-bottom: 1px solid var(--theme-border);
+}
+.horde-responsive .rule-item:last-child { border-bottom: none; }
+.horde-responsive .rule-link {
+  display: flex;
+  align-items: center;
+  padding: var(--theme-spacing-sm);
+  text-decoration: none;
+  color: var(--theme-text-primary);
+  transition: var(--theme-transition);
+  gap: var(--theme-spacing-sm);
+}
+.horde-responsive .rule-link:hover { background-color: var(--theme-bg-secondary); }
+.horde-responsive .rule-actions {
+  display: flex;
+  gap: var(--theme-spacing-sm);
+}

@@ -18,6 +18,10 @@
   padding: 0;
 }
 
+#kronolithMinicalDate{
+  font-weight: var(--theme-font-weight-semi-bold);
+}
+
 /* ── Table interne ── */
 .kronolith-minical table {
   border-spacing: 1px;
@@ -33,7 +37,15 @@
   padding: 1px;
   text-align: center;
   vertical-align: middle;
+  font-weight: var(--theme-font-weight-normal);
+  font-size: var(--theme-font-size-xs);
 }
+
+.kronolith-minical table th:has(#kronolith-minical-prev),
+.kronolith-minical table th:has(#kronolith-minical-next) {
+  background-color: var(--theme-bg-action);
+}
+
 .kronolith-minical table th,
 .kronolith-minical table td.kronolith-minical-week {
   background-color: var(--theme-bg-tertiary);
@@ -67,15 +79,16 @@ tr.kronolith-minical-nav th {
   display: block;
   text-indent: -10000px;
   cursor: pointer;
-  width: 20px;
+  width: 100%;
   height: 20px;
-  background-color: var(--theme-icon-secondary);
+  background-color: var(--theme-icon-action);
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
+
 }
 #kronolith-minical-next {
   mask-image: url("graphics/svg/nav-next.svg");

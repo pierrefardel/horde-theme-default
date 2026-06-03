@@ -83,55 +83,75 @@ span.horde-tree-image-16 {
 /* ── Color picker ── */
 #color-picker {
   color: var(--theme-text-primary);
-  background: #000;
-  padding-bottom: 8px;
-  border: 1px solid #111;
-  width: 148px;
-  height: 155px;
+  background: var(--theme-bg-white);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-lg);
+  width: 156px;
+  height: auto;
   z-index: 200;
+  overflow: hidden;
+  position: fixed !important;
 }
 #color-picker .north {
-  background: #111;
-  border-bottom: 1px solid #171717;
-  font-size: 90%;
+  background: var(--theme-bg-primary);
+  border-bottom: 1px solid var(--theme-border);
+  font-size: var(--theme-font-size-xs);
+  padding: var(--theme-spacing-2xs);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 #color-picker .north div {
-  color: var(--theme-text-primary);
+  color: var(--theme-text-secondary);
   float: right;
-  padding: 5px 7px;
+  padding: 4px 8px;
   cursor: pointer;
+  font-size: var(--theme-font-size-xs);
+  line-height: 1;
+  border-radius: var(--theme-radius-sm);
+  transition: var(--theme-transition);
 }
 #color-picker .north div:hover {
-  color: var(--theme-text-on-action);
+  background-color: var(--theme-bg-danger);
+  color: var(--theme-text-btn-danger);
 }
 #color-picker .south {
-  margin: 32px 0 0 10px;
-  cursor: crosshair;
+      height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--theme-spacing-xs);
 }
+
 #color-picker .south img {
   height: 100%;
   width: 100%;
   position: relative;
   top: -8px;
   left: -1px;
+  border-radius: var(--theme-radius-sm);
 }
 #color-picker #color-picker-cursor {
-  background: url("graphics/color-picker-cursor.gif") no-repeat;
-  position: absolute;
-  height: 9px;
-  width: 9px;
-  z-index: 101;
+display: none;
 }
 #color-picker #color-picker-hex {
-  padding: 5px 0 4px 7px;
+  padding: 4px 0 4px 8px;
   cursor: text;
   float: left;
+  font-family: var(--theme-font-family-mono);
+  font-size: var(--theme-font-size-xs);
 }
 #color-picker #color-picker-hex:hover {
-  color: var(--theme-text-on-action);
+  color: var(--theme-text-action);
 }
 #color-picker #color-picker-hex-edit {
   float: left;
+  font-family: var(--theme-font-family-mono);
+  font-size: var(--theme-font-size-xs);
+  width: 60px;
+  padding: 2px 4px;
 }
 #color-picker #color-picker-resize {
   float: right;
@@ -141,15 +161,40 @@ span.horde-tree-image-16 {
   width: 14px;
   cursor: se-resize;
 }
-#color-picker #color-picker-sphere {
-  height: 128px;
-  width: 128px;
-}
+
 .color-picker-palette-src {
   background-image: url("graphics/color-picker-palette.png");
 }
 .color-picker-resize-src {
   background-image: url("graphics/color-picker-resize.gif");
+}
+/* Roue chromatique CSS — masque le PNG et affiche un conic-gradient moderne */
+#color-picker-palette {
+ display: none;
+}
+#color-picker-sphere {
+  position: relative !important;
+  overflow: visible !important;
+}
+#color-picker-sphere::after {
+  content: '';
+  display: block;
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, white 0%, transparent 60%),
+    conic-gradient(
+      hsl(0,100%,50%), hsl(30,100%,50%), hsl(60,100%,50%),
+      hsl(90,100%,50%), hsl(120,100%,50%), hsl(150,100%,50%),
+      hsl(180,100%,50%), hsl(210,100%,50%), hsl(240,100%,50%),
+      hsl(270,100%,50%), hsl(300,100%,50%), hsl(330,100%,50%),
+      hsl(360,100%,50%)
+    );
+  pointer-events: none;
+  z-index: 1;
+  cursor: crosshair;
+  box-shadow: var(--theme-shadow-sm);
 }
 
 /* ── Uploader ── */
@@ -284,6 +329,16 @@ span.horde-tree-image-16 {
 #RB_window > div,
 #RB_window > form {
   padding: var(--theme-spacing-md);
+}
+/* Inputs pleine largeur dans les modales */
+#RB_window input[type="text"],
+#RB_window input[type="email"],
+#RB_window input[type="password"],
+#RB_window input[type="number"],
+#RB_window input[type="url"],
+#RB_window textarea,
+#RB_window select {
+  width: 100%;
 }
 #RB_window p,
 #RB_window ul {

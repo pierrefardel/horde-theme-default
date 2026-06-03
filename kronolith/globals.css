@@ -4,42 +4,89 @@
  * Autocomplete, tags, prefs, free/busy grid, print.
  */
 
-/* ── Toolbar Kronolith — hiérarchie navigation / filtres ── */
+/* ── Toolbar Kronolith — 3 zones distinctes ──
+   [Aujourd'hui]  ......  [< période >]  ......  [filtres de vue]
+   Zone 1 (gauche)  : #kronolithGotoToday
+   Zone 2 (centre)  : kronolithPrev + #kronolithCurrent + kronolithNext
+   Zone 3 (droite)  : li.horde-icon (Jour, Semaine, Mois…)
+*/
+#kronolithHeader .horde-buttonbar ul {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  width: 100%;
+}
 
-/* Filtres de vue poussés à droite */
-.horde-buttonbar li.horde-icon:first-of-type {
+/* Zone droite — le premier filtre de vue (Jour) pousse tout le groupe à droite */
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavDay) {
   margin-left: auto;
+}
+
+#kronolithMenu {
+  background: var(--theme-bg-white);
+  padding: var(--theme-spacing-xs);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
+}
+
+#kronolithMenuCalendars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-2xs);
 }
 
 #kronolithPrintHeader {
   padding: var(--theme-spacing-sm);
   background-color: var(--theme-bg-secondary);
   font-size: var(--theme-font-size-lg);
+  text-transform: capitalize;
 }
 
-#kronolithBody{
+#kronolithMain {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-sm);
   padding: var(--theme-spacing-sm);
 }
 
-/* Bouton Aujourd'hui */
+#kronolithBody {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+/* Bouton Aujourd'hui — style success (raccourci vers la date du jour) */
+.horde-buttonbar li:has(#kronolithGotoToday) {
+  border: none;
+  background: transparent;
+  overflow: visible;
+}
 #kronolithGotoToday {
   font-size: var(--theme-font-size-xs) !important;
   font-weight: var(--theme-font-weight-medium);
-  color: var(--theme-text-action);
-  background-color: var(--theme-bg-btn-secondary);
-  border: 1px solid var(--theme-border-btn-secondary);
+  color: var(--theme-text-btn-success) !important;
+  background-color: var(--theme-bg-success);
+  border: 1px solid var(--theme-border-success);
   border-radius: var(--theme-radius-field);
   padding: 2px 8px;
   white-space: nowrap;
 }
 #kronolithGotoToday:hover {
-  background-color: var(--theme-bg-btn-secondary-hover);
+  background-color: var(--theme-bg-success-hover);
+  border-color: var(--theme-border-success-hover);
+}
+#kronolithGotoToday:active {
+  background-color: var(--theme-bg-success-active);
 }
 
-/* Indicateur de période — texte proéminent */
-.horde-buttonbar li:has(#kronolithCurrent) {
-  padding: 0 var(--theme-spacing-sm) !important;
-  min-width: 140px;
+/* Indicateur de période — texte proéminent, neutralise le style toolbar du li.horde-active */
+#kronolithHeader .horde-buttonbar li:has(#kronolithCurrent) {
+  border: none !important;
+  background: transparent !important;
+  display: flex;
+  align-items: center;
   justify-content: center;
 }
 #kronolithCurrent {
@@ -50,7 +97,13 @@
 }
 
 /* Filtres de vue — style DS UPJV filter component */
-.horde-buttonbar li.horde-icon a {
+/* Le li porte le style toolbar (bordure) ; pour les filtres c'est le <a> qui le porte → neutralise le li */
+#kronolithHeader .horde-buttonbar li.horde-icon {
+  border: none;
+  background: transparent;
+  overflow: visible;
+}
+#kronolithHeader .horde-buttonbar li.horde-icon a {
   display: inline-flex;
   align-items: center;
   gap: var(--theme-spacing-xs);
@@ -66,21 +119,86 @@
   transition: var(--theme-transition);
   text-decoration: none;
 }
-.horde-buttonbar li.horde-icon a:hover {
+#kronolithHeader .horde-buttonbar li.horde-icon a:hover {
   color: var(--theme-text-on-action);
   background: var(--theme-bg-action);
   border-color: var(--theme-bg-action);
 }
-.horde-buttonbar li.horde-icon a:hover::before {
+#kronolithHeader .horde-buttonbar li.horde-icon a:hover::before {
   background-color: var(--theme-text-on-action) !important;
 }
-.horde-buttonbar li.horde-icon.horde-active a {
+#kronolithHeader .horde-buttonbar li.horde-icon.horde-active a {
   color: var(--theme-text-on-action);
   background: var(--theme-bg-action);
   border-color: var(--theme-bg-action);
 }
-.horde-buttonbar li.horde-icon.horde-active a::before {
+#kronolithHeader .horde-buttonbar li.horde-icon.horde-active a::before {
   background-color: var(--theme-text-on-action) !important;
+}
+
+/* ── Modes d'affichage Tâches + Agenda (distincts des filtres temporels) ──
+   Tâches a la classe horde-icon, Agenda non. On les cible par ID.
+   Séparateur vertical avant Tâches pour marquer la rupture conceptuelle. */
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) {
+  position: relative;
+  margin-left: calc(var(--theme-spacing-md) * 2);
+}
+/* Séparateur vertical centré dans l'espace avant Tâches */
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks)::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--theme-spacing-md) * -1);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 18px;
+  background-color: var(--theme-border);
+}
+/* Pas d'icône sur Tâches */
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) a::before {
+  display: none !important;
+}
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) a,
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavAgenda) a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-sm);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-btn-secondary);
+  border: 1px solid var(--theme-border-btn-secondary);
+  border-radius: var(--theme-radius-field);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--theme-transition);
+  text-decoration: none;
+}
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) a:hover,
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavAgenda) a:hover {
+  background: var(--theme-bg-btn-secondary-hover);
+}
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks).horde-active a,
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavAgenda).horde-active a {
+  color: var(--theme-text-on-action);
+  background: var(--theme-bg-action);
+  border-color: var(--theme-bg-action);
+}
+
+/* Cacher les filtres temporels (Jour→Année) quand Tâches ou Agenda est actif —
+   ils n'ont de sens que sur les vues calendaires. */
+#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavTasks)) li:has(#kronolithNavDay),
+#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavTasks)) li:has(#kronolithNavWorkweek),
+#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavTasks)) li:has(#kronolithNavWeek),
+#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavTasks)) li:has(#kronolithNavMonth),
+#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavTasks)) li:has(#kronolithNavYear),
+#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavAgenda)) li:has(#kronolithNavDay),
+#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavAgenda)) li:has(#kronolithNavWorkweek),
+#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavAgenda)) li:has(#kronolithNavWeek),
+#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavAgenda)) li:has(#kronolithNavMonth),
+#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavAgenda)) li:has(#kronolithNavYear) {
+  display: none;
 }
 
 /* ── Autocomplete ── */
@@ -238,4 +356,51 @@ div.fbgrid {
   .kronolith-today {
     background-color: inherit;
   }
+}
+
+/* ── Légende ── */
+#kronolith-legend {
+  display: none;
+}
+#kronolith-legend:has(span) {
+  display: flex;
+  width: fit-content;
+  gap: var(--theme-spacing-xs);
+  align-items: center;
+  padding: var(--theme-spacing-xs);
+  order: -1;
+  background-color: var(--theme-bg-primary);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-sm);
+}
+#kronolith-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px var(--theme-spacing-xs);
+  border-radius: var(--theme-radius-selector);
+  cursor: pointer;
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  transition: opacity 0.15s ease;
+}
+#kronolith-legend span:hover {
+  opacity: 0.8;
+}
+#kronolith-legend span::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-image: url("graphics/svg/close.svg");
+  mask-image: url("graphics/svg/close.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  opacity: 0.7;
 }

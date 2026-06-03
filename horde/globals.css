@@ -60,8 +60,11 @@ a.icon      { display: block; width: 100%; height: 100%; }
     font-size: var(--theme-font-size-lg);
     padding: var(--theme-spacing-xs) var(--theme-spacing-sm);
     min-height: 21px;
-    background: var(--theme-bg-action);
-    color: var(--theme-text-on-action);
+    background: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--theme-spacing-xs);
 }
 .header a:hover, a.header:hover { color: var(--theme-text-primary); }
 .header img { vertical-align: bottom; }

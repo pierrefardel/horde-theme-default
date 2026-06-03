@@ -3,6 +3,11 @@
  * ====================================
  * Inputs, selects, .horde-form, .horde-table, .linedRow, boutons.
  */
+label:has input[type="checkbox"], label:has input[type="radio"] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+}
 
 /* ── Formulaires ── */
 .horde-form table {
@@ -12,8 +17,7 @@
 .horde-form tr { vertical-align: top; }
 .horde-form td { padding-bottom: 5px; }
 .horde-form-buttons {
-  padding: 10px; margin: 10px 0;
-  background-color: var(--theme-bg-primary);
+  padding: 10px;
 }
 .horde-form .horde-form-buttons { padding-left: 15%; }
 .horde-form td.horde-form-label { padding: 5px 9px 0 0; text-align: right; }
@@ -127,7 +131,7 @@ input:focus, textarea:focus, select:focus {
   background-color: var(--theme-bg-input);
 }
 input[type="submit"], input[type="button"], input[type="reset"],
-a.horde-button, a.horde-default, a.horde-create, a.horde-delete {
+a.horde-button, a.horde-default, a.horde-create, a.horde-delete, a.horde-cancel, input.horde-cancel {
   background-image: none;
   background-color: var(--theme-bg-btn-secondary);
   border: 1px solid var(--theme-border-btn-secondary);
