@@ -10,6 +10,7 @@
   box-shadow: var(--theme-shadow-md);
   padding: 5px;
   background: var(--theme-bg-white);
+  border: 1px solid var(--theme-border);
 }
 
 .kronolith-minical td {
@@ -79,6 +80,7 @@
 tr.kronolith-minical-nav,
 tr.kronolith-minical-nav th {
   background-color: var(--theme-bg-secondary);
+  text-transform: capitalize;
 }
 #kronolith-minical-prev,
 #kronolith-minical-next {

@@ -25,6 +25,10 @@ table.kronolith-view th {
   overflow: hidden;
 }
 
+table.kronolith-view-head {
+  height: auto;
+}
+
 /* ── En-tête des colonnes ── */
 .kronolith-view-head table td,
 table.kronolith-view-head td,
@@ -53,13 +57,11 @@ table.kronolith-view-head td div {
 }
 table.kronolith-view td.kronolith-first-col,
 table.kronolith-view th.kronolith-first-col {
-  width: 21px;
+  width: 126px;
   background-color: var(--theme-bg-secondary);
   vertical-align: middle;
 }
-.kronolith-all-day td.kronolith-first-col span {
-  margin-top: 32px;
-}
+
 #kronolith-month-body td.kronolith-first-col {
   vertical-align: top;
   padding-top: 7px;
@@ -74,10 +76,7 @@ table.kronolith-view.kronolith-sidebyside
 }
 .kronolith-first-col span {
   display: block;
-  margin-top: 10px;
   white-space: nowrap;
-  transform: rotate(-90deg);
-  -webkit-transform: rotate(-90deg);
 }
 .kronolithViewMonth.kronolith-sidebyside .kronolith-first-col {
   padding: 7px;
@@ -91,7 +90,23 @@ table.kronolith-view.kronolith-sidebyside
   background-color: var(--theme-bg-white);
 }
 #kronolith-month-body tr {
-  height: 100px;
+  /* Horde fixe height:20% en inline sur chaque semaine → ne pas l'écraser.
+     On garde juste une hauteur mini pour les petits écrans. */
+  min-height: 90px;
+}
+
+/* ── Vue année : grille de 12 mini-calendriers ── */
+.kronolithViewYear {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--theme-spacing-sm);
+}
+/* Le spinner de chargement ne doit pas occuper une cellule de la grille */
+.kronolithViewYear > #kronolithLoadingyear {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* ── Grille mois ── */
@@ -108,6 +123,29 @@ table.monthgrid td {
 table.kronolithViewMonth {
   border: 1px solid var(--theme-border);
   border-top-width: 0;
+}
+
+/* ── La vue mois remplit toute la hauteur disponible ──
+   Chaîne de hauteur : #kronolithViewMonth (flex column) → le head garde sa
+   taille, #kronolithViewMonthContainer prend le reste, la table s'étire à
+   100%, et Horde répartit les semaines via height:20% inline sur les <tr>. */
+#kronolithViewMonth {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+/* L'en-tête des jours garde sa hauteur de contenu (ne pas étirer en flex) */
+#kronolithViewMonth > #kronolithViewMonthHead {
+  flex: 0 0 auto;
+  height: auto;
+}
+#kronolithViewMonthContainer {
+  flex: 1 1 0;
+  min-height: 0;
+}
+#kronolithViewMonthContainer table.kronolithViewMonth {
+  height: 100%;
 }
 
 /* ── Autres mois ── */

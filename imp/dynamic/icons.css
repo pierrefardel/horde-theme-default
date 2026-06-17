@@ -64,6 +64,17 @@ span.infoIcon, span.prefsIcon, span.logoutIcon, span.readonlyImg,
   background-color: var(--theme-icon-primary);
 }
 
+/* Spinner pendant le chargement (.imp-loading injectée/retirée par le JS
+   sur le <a id="checkmaillink">). L'icône est le ::before de ce <a>. */
+@keyframes imp-checkmail-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.horde-buttonbar li a#checkmaillink.imp-loading::before {
+  transform-origin: center;
+  animation: imp-checkmail-spin 1s linear infinite;
+}
+
 /* Neutralise le padding-left du default (réservé pour l'icône PNG) */
 
 
