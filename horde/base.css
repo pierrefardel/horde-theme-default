@@ -47,7 +47,7 @@ body.horde-ajax #horde-body {
   min-height: 0;
   float: none;
   display: grid;
-  grid-template-columns: clamp(var(--theme-sidebar-min-width), var(--horde-sidebar-width, var(--theme-sidebar-min-width)), var(--theme-sidebar-max-width)) 6px 1fr;
+  grid-template-columns: clamp(var(--horde-sidebar-min-width), var(--horde-sidebar-width, var(--horde-sidebar-min-width)), var(--horde-sidebar-max-width)) 6px 1fr;
   grid-template-areas: "sidebar split content";
 }
 

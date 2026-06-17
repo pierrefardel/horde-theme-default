@@ -1,6 +1,6 @@
 {
-    "name": "horde/theme-default-test",
-    "description": "Horde Modern Theme - Autonomous design system derived from a single brand color",
+    "name": "horde/theme-default-new",
+    "description": "Horde Default New Theme - Autonomous design system derived from a single brand color",
     "type": "horde-theme",
     "homepage": "https://www.horde.org",
     "license": "LGPL-2",

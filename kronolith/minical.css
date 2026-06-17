@@ -71,8 +71,8 @@
 .kronolith-minical table tbody td:hover a,
 .kronolith-minical .kronolith-selected:hover,
 #horde-sidebar .kronolith-minical .kronolith-selected:hover a {
-  background-color: var(--theme-bg-selected-hover);
-  color: var(--theme-text-primary);
+  background-color: var(--theme-bg-success-light);
+  color: var(--theme-text-success);
 }
 
 /* ── Navigation ── */
@@ -114,16 +114,17 @@ tr.kronolith-minical-nav th {
 }
 .kronolith-minical .kronolith-selected,
 #horde-sidebar .kronolith-minical .kronolith-selected a {
-  background-color: var(--theme-bg-action);
-  color: var(--theme-text-on-action);
+  background-color: var(--theme-bg-success-light);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-success);
 }
 .kronolith-minical .kronolith-today,
 .kronolith-minical .kronolith-today:hover,
 .kronolith-minical .kronolith-today a,
 .kronolith-minical .kronolith-today:hover a,
 #horde-sidebar .kronolith-minical .kronolith-today a {
-  background-color: var(--theme-bg-calendar-current) !important;
-  color: var(--theme-text-primary);
+  background-color: var(--theme-bg-success-light) !important;
+  color: var(--theme-text-success);
   font-weight: var(--theme-font-weight-bold);
 }
 .kronolith-minical .kronolith-selected.kronolith-today {

@@ -9,9 +9,9 @@
   border-right: none;
   padding-bottom: 0;
   width: clamp(
-    var(--theme-sidebar-min-width),
-    var(--horde-sidebar-width, var(--theme-sidebar-min-width)),
-    var(--theme-sidebar-max-width)
+    var(--horde-sidebar-min-width),
+    var(--horde-sidebar-width, var(--horde-sidebar-min-width)),
+    var(--horde-sidebar-max-width)
   ) !important;
 }
 #horde-sidebar a {
