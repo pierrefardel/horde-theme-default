@@ -243,7 +243,7 @@ input[disabled], input[disabled]:hover, textarea[disabled], option[disabled] {
 }
 
 /* ── Checkbox — style DS UPJV ── */
-input[type="checkbox"]:not(.msCheck) {
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input) {
   appearance: none;
   -webkit-appearance: none;
   margin: 0;
@@ -261,7 +261,7 @@ input[type="checkbox"]:not(.msCheck) {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   vertical-align: middle;
 }
-input[type="checkbox"]:not(.msCheck)::after {
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input)::after {
   content: "";
   display: block;
   width: 60%;
@@ -274,39 +274,39 @@ input[type="checkbox"]:not(.msCheck)::after {
   transform: scale(0) rotate(-45deg);
   transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-input[type="checkbox"]:not(.msCheck):checked {
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):checked {
   background-color: var(--theme-bg-action-active);
   border-color: var(--theme-border-action-active);
   transform: scale(1.05);
   animation: checkboxPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-input[type="checkbox"]:not(.msCheck):checked::after {
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):checked::after {
   opacity: 1;
   transform: scale(1) rotate(0deg);
 }
-input[type="checkbox"]:not(.msCheck):indeterminate {
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):indeterminate {
   background-color: var(--theme-bg-action-active);
   border-color: var(--theme-border-action-active);
 }
-input[type="checkbox"]:not(.msCheck):indeterminate::after {
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):indeterminate::after {
   opacity: 1;
   transform: scale(1) rotate(0deg);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
 }
-input[type="checkbox"]:not(.msCheck):not(:disabled):hover {
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):not(:disabled):hover {
   border-color: var(--theme-border-action-hover);
   transform: scale(1.05);
 }
-input[type="checkbox"]:not(.msCheck):focus-visible {
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):focus-visible {
   outline: 2px solid var(--theme-border-action);
   outline-offset: 2px;
 }
-input[type="checkbox"]:not(.msCheck):disabled {
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):disabled {
   background-color: var(--theme-bg-disabled);
   border-color: var(--theme-border-disabled);
   cursor: not-allowed;
 }
-input[type="checkbox"]:not(.msCheck):disabled:checked::after {
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):disabled:checked::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2395a3b3' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
 }
 @keyframes checkboxPop {

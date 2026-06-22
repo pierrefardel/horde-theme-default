@@ -125,8 +125,8 @@ tr.kronolith-minical-nav th {
 .kronolith-minical .kronolith-today a,
 .kronolith-minical .kronolith-today:hover a,
 #horde-sidebar .kronolith-minical .kronolith-today a {
-  background-color: var(--theme-bg-success-light) !important;
-  color: var(--theme-text-success);
+  background-color: var(--theme-bg-action) !important;
+  color: var(--theme-text-on-action);
   font-weight: var(--theme-font-weight-bold);
 }
 .kronolith-minical .kronolith-selected.kronolith-today {

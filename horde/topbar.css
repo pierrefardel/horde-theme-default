@@ -231,7 +231,7 @@ a.horde-mainnavi-active:active {
   background-color: var(--theme-bg-white);
   border: 1px solid var(--theme-border);
   border-radius: var(--theme-radius-field);
-  height: 32px;
+  height: 34px;
   width: 100%;
   padding: 0 var(--theme-spacing-xs);
   gap: var(--theme-spacing-2xs);
@@ -321,6 +321,7 @@ a.horde-mainnavi-active:active {
   height: auto;
   aspect-ratio: 1 / 1;
 }
+
 #horde-logout a {
   display: flex;
   align-items: center;
@@ -381,4 +382,217 @@ a.horde-mainnavi-active:active {
   font-size: 90%;
   font-weight: bold;
   padding-bottom: 15px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Préférences d'affichage — popover topbar (injecté par display-prefs.js)
+   100 % AUTONOME : aucune classe issue du DS UPJV, pour fonctionner à
+   l'identique sur upjv ET default-new (qui n'a pas le CDN). Tout est en
+   classes .hdp-* et stylé avec les tokens --theme-*.
+   ════════════════════════════════════════════════════════════════ */
+.hdp {
+  position: relative;
+  flex-shrink: 0;
+  order: 1;
+  display: inline-flex;
+}
+/* Sans barre de recherche : c'est le bouton préfs (premier du groupe de droite)
+   qui pousse le groupe à droite — et NON le logout (sinon préfs et logout sont
+   séparés). On déplace donc le margin-left:auto du logout vers .hdp. */
+#horde-head:not(:has(#horde-search)):has(.hdp) #horde-logout {
+  margin-left: 0;
+}
+#horde-head:not(:has(#horde-search)) .hdp {
+  margin-left: auto;
+}
+
+/* Bouton déclencheur (icône palette) */
+.hdp__trigger {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-action);
+  color: var(--theme-text-on-action);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.hdp__trigger:hover {
+  background-color: var(--theme-bg-action-hover);
+}
+
+/* Panneau (popover) — ouverture pilotée en JS via .hdp-open */
+.hdp__panel {
+  position: absolute;
+  top: calc(100% + var(--theme-spacing-2xs));
+  right: 0;
+  z-index: 1000;
+  min-width: 220px;
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-white);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.95);
+  transform-origin: top right;
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+}
+.hdp.hdp-open .hdp__panel {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.hdp__title {
+  margin: 0 0 var(--theme-spacing-sm);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-headings);
+}
+.hdp__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--theme-spacing-sm);
+}
+.hdp__row + .hdp__row {
+  margin-top: var(--theme-spacing-sm);
+}
+.hdp__row--column {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--theme-spacing-2xs);
+}
+.hdp__label {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-primary);
+}
+
+/* ── Switch thème 3 états (autonome, repris du switch-field du DS) ──
+   indeterminate = auto (thumb au milieu, moniteur), unchecked = light (soleil),
+   checked = dark (lune). Track + thumb animés. */
+.hdp-switch {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.hdp-switch__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.hdp-switch__track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 36px;
+  height: 20px;
+  background-color: var(--theme-bg-tertiary);
+  border: 1px solid var(--theme-border-input);
+  border-radius: var(--theme-radius-full);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.hdp-switch__thumb {
+  position: relative;
+  left: 2px;
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  background-color: var(--theme-bg-white);
+  border-radius: var(--theme-radius-full);
+  box-shadow: var(--theme-shadow-sm);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hdp-switch__icon {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  opacity: 0;
+  color: var(--theme-text-primary);
+  transition: opacity 0.2s ease;
+}
+/* Light (unchecked) : track neutre, thumb à gauche, soleil */
+.hdp-switch__icon--sun { opacity: 1; }
+/* Dark (checked) : thumb à droite, lune, track action */
+.hdp-switch__input:checked + .hdp-switch__track {
+  background-color: var(--theme-bg-action);
+  border-color: var(--theme-bg-action);
+}
+.hdp-switch__input:checked + .hdp-switch__track .hdp-switch__thumb {
+  transform: translateX(16px);
+}
+.hdp-switch__input:checked + .hdp-switch__track .hdp-switch__icon--sun  { opacity: 0; }
+.hdp-switch__input:checked + .hdp-switch__track .hdp-switch__icon--moon { opacity: 1; }
+/* Auto (indeterminate) : thumb au milieu, moniteur */
+.hdp-switch__input:indeterminate + .hdp-switch__track .hdp-switch__thumb {
+  transform: translateX(8px);
+}
+.hdp-switch__input:indeterminate + .hdp-switch__track .hdp-switch__icon--sun  { opacity: 0; }
+.hdp-switch__input:indeterminate + .hdp-switch__track .hdp-switch__icon--moon { opacity: 0; }
+.hdp-switch__input:indeterminate + .hdp-switch__track .hdp-switch__icon--auto { opacity: 1; }
+.hdp-switch__input:focus-visible + .hdp-switch__track {
+  outline: 2px solid var(--theme-bg-action);
+  outline-offset: 2px;
+}
+
+/* ── Radio-cards de forme ── */
+.hdp-shape-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--theme-spacing-2xs);
+}
+.hdp-shape-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  padding: var(--theme-spacing-xs) var(--theme-spacing-2xs);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-box);
+  background-color: var(--theme-bg-white);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+/* Radio natif masqué : la card EST le contrôle */
+.hdp-shape-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.hdp-shape-card:hover {
+  background-color: var(--theme-bg-primary);
+}
+/* État sélectionné : bordure d'accent */
+.hdp-shape-card:has(input:checked) {
+  border-color: var(--theme-bg-action);
+  box-shadow: inset 0 0 0 1px var(--theme-bg-action);
+}
+.hdp-shape-card:has(input:focus-visible) {
+  outline: 2px solid var(--theme-bg-action);
+  outline-offset: 2px;
+}
+
+/* Pastille d'aperçu : radius FIXE par preset (montre ce que fait l'option) */
+.hdp-shape-card__preview {
+  width: 22px;
+  height: 22px;
+  background-color: var(--theme-bg-secondary);
+}
+.hdp-shape-card__preview--sharp   { border-radius: var(--theme-radius-none); }
+.hdp-shape-card__preview--soft    { border-radius: var(--theme-radius-md); }
+.hdp-shape-card__preview--rounded { border-radius: var(--theme-radius-full); }
+.hdp-shape-card__label {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-primary);
 }
