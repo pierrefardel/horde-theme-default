@@ -29,6 +29,11 @@ table.kronolith-view-head {
   height: auto;
 }
 
+#kronolithHeader {
+  position: sticky;
+  top: 0;
+}
+
 /* ── En-tête des colonnes ── */
 .kronolith-view-head table td,
 table.kronolith-view-head td,

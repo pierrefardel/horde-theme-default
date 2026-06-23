@@ -35,6 +35,12 @@
   gap: var(--theme-spacing-2xs);
 }
 
+/* Masque le dernier séparateur (orphelin en bas, suivi seulement de sections cachées) */
+#kronolithMenuCalendars
+  > .horde-sidebar-split:not(:has(~ .horde-sidebar-split)) {
+  display: none;
+}
+
 #kronolithPrintHeader {
   padding: var(--theme-spacing-sm);
   background-color: var(--theme-bg-secondary);
@@ -53,8 +59,8 @@
 #kronolithBody {
   flex: 1 1 0;
   min-height: 0;
-  overflow: auto;
-  overflow-x: hidden;
+  border-radius: var(--theme-radius-box);
+  overflow: hidden;
 }
 
 /* Bouton Aujourd'hui — style success (raccourci vers la date du jour) */
@@ -146,7 +152,7 @@
 }
 /* Séparateur vertical centré dans l'espace avant Tâches */
 #kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks)::before {
-  content: '';
+  content: "";
   position: absolute;
   left: calc(var(--theme-spacing-md) * -1);
   top: 50%;
@@ -189,16 +195,46 @@
 
 /* Cacher les filtres temporels (Jour→Année) quand Tâches ou Agenda est actif —
    ils n'ont de sens que sur les vues calendaires. */
-#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavTasks)) li:has(#kronolithNavDay),
-#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavTasks)) li:has(#kronolithNavWorkweek),
-#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavTasks)) li:has(#kronolithNavWeek),
-#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavTasks)) li:has(#kronolithNavMonth),
-#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavTasks)) li:has(#kronolithNavYear),
-#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavAgenda)) li:has(#kronolithNavDay),
-#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavAgenda)) li:has(#kronolithNavWorkweek),
-#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavAgenda)) li:has(#kronolithNavWeek),
-#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavAgenda)) li:has(#kronolithNavMonth),
-#kronolithHeader .horde-buttonbar ul:has(li.horde-active:has(#kronolithNavAgenda)) li:has(#kronolithNavYear) {
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavTasks))
+  li:has(#kronolithNavDay),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavTasks))
+  li:has(#kronolithNavWorkweek),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavTasks))
+  li:has(#kronolithNavWeek),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavTasks))
+  li:has(#kronolithNavMonth),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavTasks))
+  li:has(#kronolithNavYear),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavAgenda))
+  li:has(#kronolithNavDay),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavAgenda))
+  li:has(#kronolithNavWorkweek),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavAgenda))
+  li:has(#kronolithNavWeek),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavAgenda))
+  li:has(#kronolithNavMonth),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavAgenda))
+  li:has(#kronolithNavYear) {
   display: none;
 }
 
@@ -389,7 +425,7 @@ div.fbgrid {
   opacity: 0.8;
 }
 #kronolith-legend span::after {
-  content: '';
+  content: "";
   display: inline-block;
   width: 12px;
   height: 12px;
