@@ -1,0 +1,121 @@
+/**
+ * Kronolith UPJV — Vues Agenda & Tâches (vue dynamique)
+ * =======================================================
+ * Vues en liste (tabulaires). En agenda, les événements repassent en
+ * position:static (annule le position:absolute de la grille).
+ */
+
+#kronolithViewAgenda .tabset,
+#kronolithViewTasks .tabset {
+  margin-bottom: 0;
+}
+#kronolithViewAgenda td,
+#kronolithViewTasksBody td {
+  background-color: var(--theme-bg-white);
+}
+#kronolithViewAgenda .kronolith-view,
+#kronolithViewTasks .kronolith-view {
+  clear: left;
+}
+
+/* ── Vue Agenda ── */
+#kronolithViewAgenda table {
+  border: 1px solid var(--theme-border);
+  border-top-width: 0;
+}
+#kronolithViewAgenda td.kronolith-first-col {
+  width: 80px;
+  padding: 4px;
+  vertical-align: top;
+  text-align: left;
+  cursor: pointer;
+  background-color: var(--theme-bg-tertiary);
+}
+#kronolithViewAgenda .kronolith-event {
+  position: static;
+  padding: 2px 4px;
+}
+#kronolithViewAgenda .kronolith-event .kronolithDate {
+  font-weight: normal;
+  color: var(--theme-text-secondary);
+}
+#kronolithAgendaNoItems td {
+  padding: 4px;
+}
+
+/* ── Vue Tâches ── */
+#kronolithViewTasksBody td {
+  cursor: pointer;
+  padding: 4px;
+}
+#kronolithViewTasksBody #kronolithTasksNoItems td {
+  cursor: default;
+}
+/* Case à cocher tokenisée (remplace checkbox_off/on.png) */
+#kronolithViewTasksBody div.kronolithTaskCheckbox {
+  margin-right: 5px;
+  float: left;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--theme-border);
+  border-radius: var(--theme-radius-sm);
+  background-color: var(--theme-bg-white);
+}
+#kronolithViewTasksBody div.kronolithTaskCheckbox:hover {
+  border-color: var(--theme-bg-success);
+}
+#kronolithViewTasksBody td.kronolithTaskCompleted {
+  color: var(--theme-text-disabled);
+  text-decoration: line-through;
+}
+#kronolithViewTasksBody td.kronolithTaskCompleted div.kronolithTaskCheckbox {
+  position: relative;
+  background-color: var(--theme-bg-success);
+  border-color: var(--theme-bg-success);
+}
+#kronolithViewTasksBody td.kronolithTaskCompleted div.kronolithTaskCheckbox::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--theme-text-btn-success);
+  -webkit-mask-image: url("../graphics/svg/check.svg");
+  mask-image: url("../graphics/svg/check.svg");
+  -webkit-mask-size: 12px;
+  mask-size: 12px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+#kronolithViewTasksBody td.kronolithTaskDue {
+  color: var(--theme-text-danger);
+  font-weight: var(--theme-font-weight-bold);
+}
+#kronolithViewTasks .kronolithInfo {
+  font-style: italic;
+}
+#kronolithViewTasks ul.horde-tags {
+  margin-left: 0.5em;
+}
+
+/* ── Onglets (caption.tabset) des vues Agenda & Tâches ── */
+#kronolithViewTasks caption,
+#kronolithViewAgenda caption {
+  margin-left: 0;
+}
+#kronolithViewTasks caption.tabset,
+#kronolithViewAgenda caption.tabset {
+  float: none;
+  width: auto;
+  background: none;
+}
+#kronolithViewTasks caption.tabset ul,
+#kronolithViewAgenda caption.tabset ul {
+  margin-top: 2px;
+}
+#kronolithViewTasks caption.tabset li a,
+#kronolithViewAgenda caption.tabset li a {
+  padding-top: 0;
+  padding-bottom: 0;
+}

@@ -1,0 +1,114 @@
+/**
+ * Kronolith UPJV — Grille horaire (vue dynamique)
+ * =================================================
+ * Conteneurs de la timeline jour/semaine. Les colonnes .kronolithEventsWeek/
+ * Workweek sont en position:relative → ce sont elles qui servent de référence
+ * aux événements en position:absolute (dynamic/events.css).
+ * Chargé UNIQUEMENT en vue dynamique.
+ */
+
+/* Bandeau "journée entière" */
+.kronolithAllDayContainer {
+  height: 100%;
+  overflow: hidden;
+}
+#kronolithViewDay .kronolithAllDayContainer {
+  overflow: auto;
+}
+
+/* En-tête de vue (aligné avec le corps qui scrolle) */
+.kronolith-view-head {
+  position: relative;
+  overflow-y: scroll;
+  border-left: 1px solid var(--theme-border);
+  border-right: 1px solid var(--theme-border);
+}
+.kronolith-view-head .kronolith-all-day {
+  background-color: var(--theme-bg-white);
+}
+.kronolith-view-head .kronolith-all-day td {
+  padding: 0;
+}
+.kronolith-view-head .kronolithViewDay td {
+  background-color: transparent;
+}
+
+/* Largeur de la colonne des heures. DOIT matcher .kronolith-first-col
+   (views.css, 126px) pour que le conteneur d'événements commence APRÈS les
+   heures — sinon les événements débordent dessus. Ajuster ici si désaligné. */
+#kronolithEventsDay,
+#kronolithEventsWeek,
+#kronolithEventsWorkweek {
+  --kronolith-hours-width: 127px;
+}
+/* Conteneur des événements de la grille (référent absolu) */
+#kronolithEventsDay {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  bottom: 3px;
+  left: var(--kronolith-hours-width);
+}
+#kronolithEventsWeek,
+#kronolithEventsWorkweek {
+  position: absolute;
+  top: 1px;
+  right: 0;
+  bottom: 1px;
+  left: var(--kronolith-hours-width);
+}
+/* Colonnes de jour : référent position:relative des événements */
+.kronolithEventsWeek,
+.kronolithEventsWorkweek {
+  position: relative;
+  float: left;
+  height: 100%;
+}
+.kronolithEventsWeek {
+  width: 14.285714%;
+}
+.kronolithEventsWorkweek {
+  width: 20%;
+}
+.kronolithEventsWeek .kronolith-event,
+.kronolithEventsWorkweek .kronolith-event {
+  margin: 0 1px;
+}
+
+/* Corps scrollable de la vue jour/semaine */
+.kronolithViewBody .kronolith-first-col span {
+  font-weight: normal;
+}
+.kronolithViewBody {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  border: 1px solid var(--theme-border);
+}
+.kronolithViewBodyContainer {
+  position: relative;
+}
+
+/* Ligne de l'heure courante */
+#kronolithTimeMarker {
+  width: 100%;
+  height: 2px;
+  margin-left: 1px;
+  z-index: 2;
+  background-color: var(--theme-bg-danger);
+}
+#kronolithEventsWeek #kronolithTimeMarker {
+  margin-left: 1px;
+}
+#kronolithEventsDay #kronolithTimeMarker {
+  margin-left: 0;
+}
+
+/* Heures de nuit : AUCUN fond volontairement (grille uniforme, comme Google
+   Calendar). Le default mettait `tr.kronolithNight td { background:#f4f4f4 }`,
+   mais un aplat se confond avec un événement → ne pas le rapatrier. */
+
+/* Cellules cliquables */
+.kronolith-day,
+#kronolithViewMonth .kronolith-first-col {
+  cursor: pointer;
+}

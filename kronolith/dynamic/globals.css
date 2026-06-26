@@ -1,0 +1,143 @@
+/**
+ * Kronolith UPJV — Divers vue dynamique
+ * =======================================
+ * Loaders, création rapide (quickEvent/addEvent), titres de vue, séparateurs,
+ * alertes collantes, impression. Complète le rapatriement du dynamic/screen.css.
+ */
+
+html,
+body {
+  height: 100%;
+}
+
+/* ── Titres / séparateurs ── */
+#kronolithToday {
+  font-weight: var(--theme-font-weight-bold);
+}
+.kronolithSeparator {
+  padding-left: 5px;
+  padding-right: 5px;
+  color: var(--theme-text-secondary);
+}
+#kronolithBody caption {
+  position: relative;
+  margin: 2px 2px 0 26px;
+  height: 20px;
+  line-height: 20px;
+  text-align: left;
+  font-weight: var(--theme-font-weight-bold);
+}
+#kronolithBody caption span {
+  padding: 0;
+}
+
+/* ── Spinners de chargement (remplace loading.gif par un spinner CSS) ── */
+.kronolithLoading {
+  position: absolute;
+  left: 0;
+  z-index: 1;
+}
+#kronolithLoadingday,
+#kronolithLoadingmonth,
+#kronolithLoadingweek,
+#kronolithLoadingworkweek {
+  top: 0;
+}
+#kronolithLoadingtasks,
+#kronolithLoadingagenda {
+  display: inline-block;
+  position: relative;
+  top: 5px;
+}
+#kronolithLoadingCalendars {
+  padding-left: 10px;
+}
+#kronolithLoading,
+#kronolithFBLoading {
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  border: 2px solid var(--theme-border);
+  border-top-color: var(--theme-text-action);
+  border-radius: var(--theme-radius-selector);
+  animation: kronolithSpin 0.8s linear infinite;
+}
+#kronolithFBLoading {
+  position: absolute;
+  top: 65px;
+  border-bottom: 2px solid var(--theme-border);
+}
+@keyframes kronolithSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Création rapide ── */
+.horde-new-extra,
+.horde-new-extra a {
+  background: none;
+}
+#kronolithQuickinsert {
+  line-height: 2em;
+}
+
+/* La cellule de jour (vue mois) est cliquable (ouvre la modale d'ajout) :
+   curseur pointer + fond teinté au survol pour signaler l'interactivité. */
+#kronolith-month-body td {
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+}
+#kronolith-month-body td:hover {
+  background-color: var(--theme-bg-primary);
+}
+
+/* ── Cellules cliquables ── */
+.kronolithWeekDay {
+  cursor: pointer;
+}
+#kronolith-month-body td {
+  padding-bottom: 16px;
+}
+.kronolithMore {
+  padding: 0 2px;
+  color: var(--theme-text-secondary);
+  font-style: italic;
+  cursor: pointer;
+}
+
+/* ── Vue plein écran (iframe) ── */
+#kronolithViewIframe iframe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Alerte collante ── */
+#hordeAlerts div.kronolith-sticky {
+  background-color: var(--theme-bg-warning-light);
+  border-color: var(--theme-bg-warning);
+}
+
+/* ── Impression ── */
+@media print {
+  #kronolithMenu,
+  #kronolithBar,
+  #kronolithHeader {
+    display: none;
+  }
+  #kronolithPrintHeader {
+    display: block;
+  }
+  #kronolithBody {
+    position: static;
+  }
+  #kronolith-legend {
+    display: block;
+  }
+}

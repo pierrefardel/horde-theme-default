@@ -1,1 +1,14 @@
-/* Thème UPJV — non utilisé */
+/**
+ * Kronolith UPJV — Vue dynamique : point d'entrée
+ * =================================================
+ * Pur orchestrateur @import. Chargé EN PLUS de ../screen.css uniquement
+ * pour la vue dynamique (calendrier AJAX). Contient ce qui ne doit pas
+ * s'appliquer en vue basic : placement absolu des événements, grille horaire.
+ */
+
+@import "globals.css";
+@import "events.css";
+@import "views.css";
+@import "lists.css";
+@import "forms.css";
+@import "minical.css";

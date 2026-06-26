@@ -323,7 +323,8 @@ display: none;
   box-shadow: var(--theme-shadow-lg);
   min-width: 300px;
   max-width: 90vw;
-  overflow: hidden;
+  /* Pas d'overflow:hidden : le date-picker (#hordeCalendar) est désormais
+     inséré dans #RB_window et doit pouvoir déborder sous l'input. */
 }
 /* Padding général — s'applique à tous les dialogs (IMP, Kronolith, etc.) */
 #RB_window > div,

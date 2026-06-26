@@ -396,35 +396,154 @@ div.modal-form .extras {
   margin: 0.5em 0;
 }
 
-/* ── Calendar popup ── */
+/* ── Calendar popup (date-picker) ── */
 .hordeCalendarPopup {
-  border: 1px solid var(--theme-border-subtle);
+  border: 1px solid var(--theme-border);
   background: var(--theme-bg-white);
-  width: 12em;
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
+  padding: var(--theme-spacing-xs);
+  border-collapse: separate;
+  border-spacing: 2px;
+  width: auto;
+  font-size: var(--theme-font-size-xs);
 }
+
+/* En-tête : navigation (×, année, mois) */
 .hordeCalendarPopup thead {
-  font-weight: bold;
+  font-weight: var(--theme-font-weight-medium);
 }
-.hordeCalendarPopup th {
-  border-bottom: 1px solid var(--theme-border-subtle);
+.hordeCalendarPopup thead td {
+  padding: var(--theme-spacing-2xs);
 }
-.hordeCalendarPopup tbody {
-  text-align: right;
+.hordeCalendarYear,
+.hordeCalendarMonth {
+  text-align: center;
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-headings);
 }
-.hordeCalendarPopup a {
-  color: var(--theme-text-primary);
+/* Flèches de navigation + bouton fermer (icônes Lucide via mask-image) */
+.hordeCalendarPrevYear,
+.hordeCalendarNextYear,
+.hordeCalendarPrevMonth,
+.hordeCalendarNextMonth,
+.hordeCalendarClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--theme-radius-field);
+  text-decoration: none;
+  /* masque le texte « » x */
+  font-size: 0;
+  color: transparent;
+  transition: background-color 0.15s ease;
+}
+.hordeCalendarPrevYear:hover,
+.hordeCalendarNextYear:hover,
+.hordeCalendarPrevMonth:hover,
+.hordeCalendarNextMonth:hover,
+.hordeCalendarClose:hover {
+  background-color: var(--theme-bg-secondary);
+  text-decoration: none;
+}
+/* L'icône via ::before (mask-image recoloré) */
+.hordeCalendarPrevYear::before,
+.hordeCalendarNextYear::before,
+.hordeCalendarPrevMonth::before,
+.hordeCalendarNextMonth::before,
+.hordeCalendarClose::before {
+  content: '';
   display: block;
-  padding: 2px;
+  width: 15px;
+  height: 15px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  transition: background-color 0.15s ease;
+}
+.hordeCalendarPrevYear:hover::before,
+.hordeCalendarNextYear:hover::before,
+.hordeCalendarPrevMonth:hover::before,
+.hordeCalendarNextMonth:hover::before,
+.hordeCalendarClose:hover::before {
+  background-color: var(--theme-icon-primary);
+}
+.hordeCalendarPrevMonth::before {
+  -webkit-mask-image: url("graphics/svg/chevron-left.svg");
+  mask-image: url("graphics/svg/chevron-left.svg");
+}
+.hordeCalendarNextMonth::before {
+  -webkit-mask-image: url("graphics/svg/chevron-right.svg");
+  mask-image: url("graphics/svg/chevron-right.svg");
+}
+.hordeCalendarPrevYear::before {
+  -webkit-mask-image: url("graphics/svg/chevrons-left.svg");
+  mask-image: url("graphics/svg/chevrons-left.svg");
+}
+.hordeCalendarNextYear::before {
+  -webkit-mask-image: url("graphics/svg/chevrons-right.svg");
+  mask-image: url("graphics/svg/chevrons-right.svg");
+}
+.hordeCalendarClose::before {
+  width: 13px;
+  height: 13px;
+  -webkit-mask-image: url("graphics/svg/close.svg");
+  mask-image: url("graphics/svg/close.svg");
+}
+
+/* Initiales des jours de la semaine */
+.hordeCalendarPopup th {
+  padding: var(--theme-spacing-2xs);
+  text-align: center;
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-secondary);
+}
+
+/* Cellules jours */
+.hordeCalendarPopup tbody {
+  text-align: center;
+}
+.hordeCalendarPopup tbody td {
+  padding: 0;
+}
+.hordeCalendarPopup a.hordeCalendarDay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  margin: 0 auto;
+  border-radius: var(--theme-radius-field);
+  color: var(--theme-text-primary);
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 .hordeCalendarPopup tbody a:hover {
-  background: var(--theme-bg-warning-light);
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-action);
+  text-decoration: none;
 }
-.hordeCalendarPopup .hordeCalendarCurrent {
-  font-weight: bold;
-  background: var(--theme-bg-calendar-current);
+.hordeCalendarEmpty {
+  background: transparent;
 }
-.hordeCalendarPopup .hordeCalendarToday {
-  font-weight: bold;
+
+/* Jour sélectionné (date courante du champ) */
+.hordeCalendarPopup .hordeCalendarCurrent a.hordeCalendarDay {
+  background: var(--theme-bg-action);
+  color: var(--theme-text-on-action);
+  font-weight: var(--theme-font-weight-bold);
+}
+/* Aujourd'hui : contour */
+.hordeCalendarPopup .hordeCalendarToday a.hordeCalendarDay {
+  box-shadow: inset 0 0 0 1.5px var(--theme-border-action, var(--theme-bg-action));
+  font-weight: var(--theme-font-weight-bold);
 }
 .hordeCalendarPopup .hordeCalendarWeek {
   background: var(--theme-bg-calendar-week);

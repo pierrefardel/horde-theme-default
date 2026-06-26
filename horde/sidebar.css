@@ -150,6 +150,7 @@
   background-color: var(--theme-bg-white);
   border-radius: var(--theme-radius-box);
   box-shadow: var(--theme-shadow-md);
+  margin-bottom: var(--theme-spacing-sm);
 }
 
 /* Ressources sidebar */

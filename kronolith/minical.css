@@ -68,10 +68,7 @@
 }
 
 /* ── Hover ── */
-.kronolith-minical table tbody td:hover,
-.kronolith-minical table tbody td:hover a,
-.kronolith-minical .kronolith-selected:hover,
-#horde-sidebar .kronolith-minical .kronolith-selected:hover a {
+.kronolith-other-month:hover a {
   background-color: var(--theme-bg-success-light);
   color: var(--theme-text-success);
 }
@@ -112,7 +109,7 @@ tr.kronolith-minical-nav th {
 }
 .kronolith-minical .kronolith-other-month,
 .kronolith-minical .kronolith-other-month a {
-  color: var(--theme-text-disabled);
+  color: var(--theme-text-disabled) !important;
 }
 .kronolith-minical .kronolith-selected,
 #horde-sidebar .kronolith-minical .kronolith-selected a {

@@ -1,0 +1,94 @@
+/**
+ * Kronolith UPJV — Événements (vue dynamique)
+ * =============================================
+ * Placement des événements sur la grille horaire. Le JS calcule
+ * top/height/left/width en inline ; sans position:absolute ces valeurs
+ * n'ont aucun effet → les événements s'empilent en flux normal.
+ * Chargé UNIQUEMENT en vue dynamique (pas en vue basic).
+ */
+
+.kronolith-event {
+  cursor: pointer;
+  position: absolute;
+}
+#kronolithViewDay .kronolith-event,
+#kronolithViewWeek .kronolith-event,
+#kronolithViewWorkweek .kronolith-event {
+  position: absolute;
+}
+
+/* En vue mois et dans les en-têtes (all-day), retour au flux normal */
+#kronolithViewMonth .kronolith-event,
+#kronolithViewDay .kronolith-view-head .kronolith-event,
+#kronolithViewWeek .kronolith-view-head .kronolith-event,
+#kronolithViewWorkweek .kronolith-view-head .kronolith-event {
+  position: relative;
+  width: auto;
+  margin-bottom: 2px;
+}
+#kronolithViewDay .kronolith-view-head .kronolith-event,
+#kronolithViewWeek .kronolith-view-head .kronolith-event,
+#kronolithViewWorkweek .kronolith-view-head .kronolith-event {
+  white-space: nowrap;
+  margin-right: 10px;
+}
+#kronolithViewWeek .kronolith-view-head .kronolith-event,
+#kronolithViewWorkweek .kronolith-view-head .kronolith-event {
+  margin-right: 10%;
+}
+
+/* Le contenu remplit la boîte de l'événement */
+.kronolith-event .kronolith-event-info {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+div.kronolithEditable.kronolithFirst:hover .kronolith-event-info,
+.kronolith-event.kronolithFirst.kronolith-selected .kronolith-event-info {
+  top: 7px;
+}
+div.kronolithEditable.kronolithLast:hover .kronolith-event-info,
+.kronolith-event.kronolithLast.kronolith-selected .kronolith-event-info {
+  bottom: 7px;
+}
+
+/* ── Poignées de redimensionnement (drag) ── */
+.kronolith-event.kronolithEditable {
+  cursor: move;
+}
+.kronolith-event .kronolithDragger {
+  position: absolute;
+  visibility: hidden;
+  left: 0;
+  right: 0;
+  height: 8px;
+}
+.kronolith-event.kronolithEditable .kronolithDragger,
+.kronolithDragger.drag {
+  background: var(--theme-bg-tertiary);
+}
+.kronolith-event.kronolithEditable:hover .kronolithDragger,
+.kronolith-event.kronolithEditable.kronolith-selected .kronolithDragger,
+.kronolithDragger.drag {
+  background-color: var(--theme-text-secondary) !important;
+}
+.kronolith-event .kronolithDragger.kronolithDraggerTop,
+.kronolithDraggerTop.drag {
+  top: 0;
+}
+.kronolith-event .kronolithDragger.kronolithDraggerBottom,
+.kronolithDraggerBottom.drag {
+  bottom: 0;
+}
+.kronolith-event.kronolithEditable .kronolithDragger.kronolithDraggerTop {
+  cursor: n-resize;
+}
+.kronolith-event.kronolithEditable .kronolithDragger.kronolithDraggerBottom {
+  cursor: s-resize;
+}
+div.kronolithEditable:hover .kronolithDragger,
+.kronolith-event.kronolith-selected .kronolithDragger {
+  visibility: inherit;
+}

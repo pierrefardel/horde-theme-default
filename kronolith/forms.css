@@ -51,12 +51,25 @@
   margin-bottom: var(--theme-spacing-xs);
 }
 
-
 .kronolithDialog label {
   font-weight: var(--theme-font-weight-medium);
   color: var(--theme-text-secondary);
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--theme-spacing-xs);
+  gap: 10px;
 }
-.kronolithDialog input { vertical-align: middle; line-height: normal; }
+
+#kronolithEventDiv:has(#kronolithEventAllday:checked) #kronolithEventStartTimeLabel,
+#kronolithEventDiv:has(#kronolithEventAllday:checked) #kronolithEventEndTimeLabel {
+  display: none;
+}
+
+#kronolithEventAllday
+.kronolithDialog input {
+  vertical-align: middle;
+  line-height: normal;
+}
 
 /* Champs pleine largeur */
 .kronolithLongField,
@@ -74,13 +87,19 @@
 }
 
 /* Champs date/heure centrés */
-#kronolithEventStartDate, #kronolithEventStartTime,
-#kronolithEventEndDate, #kronolithEventEndTime,
-#kronolithTaskDueDate, #kronolithTaskDueTime,
+#kronolithEventStartDate,
+#kronolithEventStartTime,
+#kronolithEventEndDate,
+#kronolithEventEndTime,
+#kronolithTaskDueDate,
+#kronolithTaskDueTime,
 .kronolithEventValue {
   text-align: center;
 }
-#kronolithEventLocation { width: 300px; max-width: 100%; }
+#kronolithEventLocation {
+  width: 300px;
+  max-width: 100%;
+}
 
 /* Boutons d'action du formulaire */
 div.kronolithFormActions {
@@ -98,8 +117,15 @@ div.kronolithFormActions {
   min-height: inherit;
   width: auto;
 }
-.kronolithDialog .tabset ul { float: none; margin: 0; display: flex; gap: 2px; }
-.kronolithDialog .tabset li { margin-top: 0; }
+.kronolithDialog .tabset ul {
+  float: none;
+  margin: 0;
+  display: flex;
+  gap: 2px;
+}
+.kronolithDialog .tabset li {
+  margin-top: 0;
+}
 
 /* Zone d'onglet */
 .kronolithTabsOption {
@@ -119,34 +145,55 @@ div.kronolithFormActions {
 }
 
 /* Messages d'info / avertissement dialog */
-.kronolithDialogWarning, .kronolithDialogInfo {
+.kronolithDialogWarning,
+.kronolithDialogInfo {
   padding: var(--theme-spacing-2xs) 0 0 23px;
   min-height: 17px;
   position: relative;
 }
-.kronolithDialogInfo { font-style: italic; color: var(--theme-text-secondary); }
+.kronolithDialogInfo {
+  font-style: italic;
+  color: var(--theme-text-secondary);
+}
 .kronolithDialogWarning::before,
 .kronolithDialogInfo::before {
-  content: '';
+  content: "";
   position: absolute;
-  left: 0; top: 2px;
-  width: 16px; height: 16px;
+  left: 0;
+  top: 2px;
+  width: 16px;
+  height: 16px;
   background-color: var(--theme-icon-warning);
   -webkit-mask-image: url("graphics/svg/warning.svg");
   mask-image: url("graphics/svg/warning.svg");
-  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
-  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
 }
 .kronolithDialogInfo::before {
   background-color: var(--theme-icon-information);
   -webkit-mask-image: url("graphics/svg/info.svg");
   mask-image: url("graphics/svg/info.svg");
 }
-.kronolithDialogWarning strong { color: var(--theme-text-danger); }
+.kronolithDialogWarning strong {
+  color: var(--theme-text-danger);
+}
 
 /* Partage avancé */
-.kronolithCPAdvancedMore { max-height: 300px; overflow-y: auto; }
-.kronolithCPAdvanced th:first-child { width: 220px; }
+.kronolithCPAdvancedMore {
+  max-height: 300px;
+  overflow-y: auto;
+}
+.kronolithCPAdvanced th:first-child {
+  width: 220px;
+}
 
 /* Tags */
-.kronolithTopTags { max-height: 75px; overflow: auto; line-height: 20px; }
+.kronolithTopTags {
+  max-height: 75px;
+  overflow: auto;
+  line-height: 20px;
+}

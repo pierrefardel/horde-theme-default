@@ -1,0 +1,13 @@
+/**
+ * UPJV Theme — Compat reset CDN ↔ Horde
+ * =======================================
+ * Le DS UPJV CDN charge un reset CSS moderne qui entre en conflit
+ * avec les attentes de Horde (HTML legacy, images inline, listes stylées).
+ * Ce fichier corrige UNIQUEMENT ces conflits — il ne remplace pas le reset CDN.
+ *
+ * Chargé APRÈS le CDN dans hooks.php.
+ */
+
+/* Le reset CDN impose img { display: block } — Horde utilise des images inline
+   (icônes MIME dans les pièces jointes, avatars, logos applicatifs, etc.) */
+img { display: inline; }

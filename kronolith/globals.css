@@ -49,7 +49,8 @@
 }
 
 #kronolithMain {
-  height: 100%;
+  /* Base (toutes vues sauf mois) : hauteur naturelle */
+  height: auto;
   display: flex;
   flex-direction: column;
   gap: var(--theme-spacing-sm);
@@ -57,10 +58,33 @@
 }
 
 #kronolithBody {
-  flex: 1 1 0;
+  /* Base (toutes vues sauf mois) : pas d'étirement flex */
+  flex: 0 0 auto;
   min-height: 0;
+}
+
+/* Le radius va sur chaque conteneur de vue (pas sur #kronolithBody), sinon il
+   faudrait overflow:hidden sur le parent — ce qui casserait le scroll/rendu. */
+#kronolithViewMonth,
+#kronolithViewWorkweek,
+#kronolithViewWeek,
+#kronolithViewDay,
+#kronolithViewYear,
+#kronolithViewTasks,
+#kronolithViewAgenda {
   border-radius: var(--theme-radius-box);
   overflow: hidden;
+}
+
+/* ── Vue mois UNIQUEMENT (#kronolithViewMonth non masqué) ──
+   NB : Horde met style="display:none" SANS espace → le :not() matche cette
+   chaîne exacte. En vue mois, #kronolithMain remplit la hauteur et
+   #kronolithBody s'étire pour que la grille remplisse l'écran. */
+#kronolithMain:has(#kronolithViewMonth:not([style*="display:none"])) {
+  height: 100%;
+}
+#kronolithMain:has(#kronolithViewMonth:not([style*="display:none"])) #kronolithBody {
+  flex: 1 1 0;
 }
 
 /* Bouton Aujourd'hui — style success (raccourci vers la date du jour) */
@@ -403,6 +427,7 @@ div.fbgrid {
   display: flex;
   width: fit-content;
   gap: var(--theme-spacing-xs);
+  flex-wrap: wrap;
   align-items: center;
   padding: var(--theme-spacing-xs);
   order: -1;

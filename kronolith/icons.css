@@ -152,3 +152,25 @@ a.kronolithColorPicker::before {
 a.kronolithColorPicker:hover::before {
   background-color: var(--theme-icon-primary);
 }
+
+/* Icône date-picker (remplace picker.png par calendar Lucide) ──
+   L'<img> garde sa taille mais son contenu PNG est masqué par le mask-image
+   et recoloré via background-color. */
+img.kronolithDatePicker {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("graphics/svg/calendar.svg");
+  mask-image: url("graphics/svg/calendar.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+img.kronolithDatePicker:hover {
+  background-color: var(--theme-icon-action, var(--theme-bg-action));
+}

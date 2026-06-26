@@ -1,0 +1,283 @@
+/**
+ * Kronolith UPJV — Formulaire d'événement (vue dynamique)
+ * =========================================================
+ * Onglets du dialog événement/tâche/calendrier : description, participants,
+ * ressources, récurrence, rappel, free/busy, carte, fichiers.
+ */
+
+/* ── Onglets : marges internes ── */
+#kronolithEventTabDescription,
+#kronolithTaskTabDescription,
+#kronolithCalendarinternalTabDescription,
+#kronolithCalendartasklistsTabDescription,
+#kronolithCalendarresourceTabDescription {
+  border: 0;
+  padding: 0;
+}
+#kronolithEventTabMap {
+  padding: 0;
+}
+#kronolithEventTabExport div,
+#kronolithEventTabRecur div,
+#kronolithEventTabReminder div,
+#kronolithTaskTabRecur div,
+#kronolithTaskTabReminder div {
+  margin-bottom: 0;
+}
+
+
+/* ── Champs URL (paramètres calendrier) ── */
+#kronolithEventUrl,
+#kronolithCalendarinternalUrlCaldav,
+#kronolithCalendarinternalUrlAccount,
+#kronolithCalendarinternalUrlWebdav,
+#kronolithCalendarinternalUrlFeed,
+#kronolithCalendarinternalEmbedUrl,
+#kronolithCalendartasklistsUrlCaldav,
+#kronolithCalendartasklistsUrlAccount,
+#kronolithCalendartasklistsUrlWebdav {
+  border-left: 0;
+  border-right: 0;
+  margin: -2px -5px;
+}
+#kronolithEventUrl {
+  border: 0;
+}
+#kronolithCalendartasklistsUrlWebdav {
+  border-bottom: 0;
+}
+
+/* ── ACBox (autocomplete participants/ressources) ── */
+#kronolithUsersACBox,
+#kronolithAttendeesACBox,
+#kronolithResourceACBox,
+#kronolithEventACBox,
+#kronolithTaskACBox,
+#kronolithCalendarinternalACBox {
+  margin: -2px -5px 0;
+  border-left: 0;
+  border-right: 0;
+  line-height: 100%;
+}
+#kronolithEventACBox,
+#kronolithTaskACBox,
+#kronolithCalendarinternalACBox {
+  border-top: 0;
+}
+#kronolithUsersACBox .hordeACItemRemove,
+#kronolithAttendeesACBox .hordeACItemRemove,
+#kronolithResourceACBox .hordeACItemRemove,
+#kronolithEventACBox .hordeACItemRemove,
+#kronolithTaskACBox .hordeACItemRemove,
+#kronolithCalendarinternalACBox .hordeACItemRemove {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+/* ── Tables participants / ressources ── */
+#kronolithEventTabAttendees table,
+#kronolithEventTabResources table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+}
+#kronolithEventTabAttendees td,
+#kronolithEventTabAttendees th,
+#kronolithEventTabResources td,
+#kronolithEventTabResources th {
+  border: 1px solid var(--theme-border);
+  font-size: 85%;
+  padding: 1px;
+  height: 18px;
+  width: 18px;
+}
+#kronolithEventTabAttendees td:first-child,
+#kronolithEventTabAttendees th:first-child,
+#kronolithEventTabResources td:first-child,
+#kronolithEventTabResources th:first-child {
+  width: auto;
+  overflow: hidden;
+  text-align: left;
+}
+#kronolithEventTabAttendees th,
+#kronolithEventTabResources th {
+  text-align: center;
+}
+#kronolithEventTabAttendees th.night,
+#kronolithEventTabResources th.night {
+  background-color: var(--theme-bg-secondary);
+}
+#kronolithEventAttendeesList,
+#kronolithEventResourcesList {
+  max-height: 150px;
+  overflow-y: auto;
+}
+#kronolithEventTabAttendees td div,
+#kronolithEventTabResources td div {
+  margin: 0;
+  height: 100%;
+}
+
+/* ── Statuts de participation : pastilles colorées sémantiques ── */
+#kronolithEventTabAttendees td.kronolithAttendeeNone,
+#kronolithEventTabResources td.kronolithAttendeeNone,
+#kronolithEventTabAttendees td.kronolithAttendeeAccepted,
+#kronolithEventTabResources td.kronolithAttendeeAccepted,
+#kronolithEventTabAttendees td.kronolithAttendeeDeclined,
+#kronolithEventTabResources td.kronolithAttendeeDeclined,
+#kronolithEventTabAttendees td.kronolithAttendeeTentative,
+#kronolithEventTabAttendees td.kronolithAttendeeOrganizer {
+  position: relative;
+  padding-left: 21px;
+}
+#kronolithEventTabAttendees td[class*="kronolithAttendee"]::before,
+#kronolithEventTabResources td[class*="kronolithAttendee"]::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 9px;
+  height: 9px;
+  border-radius: var(--theme-radius-selector);
+}
+#kronolithEventTabAttendees td.kronolithAttendeeNone::before,
+#kronolithEventTabResources td.kronolithAttendeeNone::before {
+  background-color: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border);
+}
+#kronolithEventTabAttendees td.kronolithAttendeeAccepted::before,
+#kronolithEventTabResources td.kronolithAttendeeAccepted::before {
+  background-color: var(--theme-bg-success);
+}
+#kronolithEventTabAttendees td.kronolithAttendeeDeclined,
+#kronolithEventTabResources td.kronolithAttendeeDeclined {
+  text-decoration: line-through;
+}
+#kronolithEventTabAttendees td.kronolithAttendeeDeclined::before,
+#kronolithEventTabResources td.kronolithAttendeeDeclined::before {
+  background-color: var(--theme-bg-danger);
+}
+#kronolithEventTabAttendees td.kronolithAttendeeTentative::before {
+  background-color: var(--theme-bg-warning);
+}
+#kronolithEventTabAttendees td.kronolithAttendeeOrganizer::before {
+  background-color: var(--theme-bg-information);
+}
+
+/* ── Free / Busy ── */
+.kronolithFBFree {
+  position: relative;
+}
+.kronolithFBBusy {
+  position: absolute;
+}
+#kronolithFBDatePrev,
+#kronolithResourceFBDatePrev,
+#kronolithFBDateNext,
+#kronolithResourceFBDateNext {
+  box-sizing: content-box;
+  cursor: pointer;
+  text-indent: -10000px;
+  padding: 8px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-size: 16px 16px;
+  mask-size: 16px 16px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+#kronolithFBDatePrev,
+#kronolithResourceFBDatePrev {
+  float: left;
+  -webkit-mask-image: url("../graphics/svg/nav-prev.svg");
+  mask-image: url("../graphics/svg/nav-prev.svg");
+}
+#kronolithFBDateNext,
+#kronolithResourceFBDateNext {
+  float: right;
+  -webkit-mask-image: url("../graphics/svg/nav-next.svg");
+  mask-image: url("../graphics/svg/nav-next.svg");
+}
+#kronolithFBDate,
+#kronolithResourceFBDate {
+  text-align: center;
+  float: left;
+  width: 90%;
+}
+
+/* ── Carte ── */
+#kronolithEventMap {
+  height: 300px;
+  width: 100%;
+}
+#kronolithEventMap_OpenLayers_ViewPort div,
+.olMapViewPort div {
+  margin-bottom: 0;
+}
+.olControlLayerSwitcher div {
+  line-height: normal;
+  margin-bottom: 0;
+}
+
+/* ── Liste de fichiers joints + upload ── */
+#kronolithEventFileList {
+  list-style: none;
+  max-height: 125px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#kronolithEventFileList canvas {
+  margin-bottom: -4px;
+  padding-right: 4px;
+}
+#kronolithEventFileList img {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+#kronolithEventFileList li {
+  padding: 5px 0 1px;
+}
+#kronolithEventFileList div.fileName.a {
+  color: var(--theme-text-action);
+  cursor: pointer;
+}
+#kronolithEventFileList div.fileName:hover {
+  color: var(--theme-text-danger);
+}
+#kronolithEventFileList span.file_upload_text {
+  display: inline-block;
+  font-weight: var(--theme-font-weight-bold);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#kronolithEventFileList span.file_upload_text span {
+  padding-left: 5px;
+}
+#kronolithEventFileList span.file_upload_text_progress {
+  max-width: 290px;
+  margin-right: 8px;
+}
+#kronolithEventFileList span.file_upload_progress {
+  background-color: var(--theme-bg-tertiary);
+  border-radius: var(--theme-radius-selector);
+  bottom: 4px;
+  display: inline-block;
+  height: 6px;
+  padding: 2px;
+  position: relative;
+  width: 200px;
+}
+#kronolithEventFileList span.file_upload_progress span {
+  background-color: var(--theme-bg-information);
+  border-radius: var(--theme-radius-selector);
+  display: inline-block;
+  height: 100%;
+  transition: width 0.2s ease-in-out 0s;
+}
