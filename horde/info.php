@@ -1,5 +1,6 @@
 <?php
-$theme_name = _("UPJV");
-/* Thème autonome : ne charge PAS le CSS du thème default en fallback.
-   Lu par Horde_Themes_Cache (patch _inheritsDefault). */
-$theme_inherits = false;
+$theme_name = _("Default New");
+/* Standalone theme: it fully covers the Horde shell and these apps, so the
+   default-theme CSS fallback is skipped for them. Apps not listed keep their
+   own default CSS. Read by Horde_Themes_Cache (_coveredApps). */
+$theme_covers = array('horde', 'imp', 'kronolith', 'turba', 'ingo', 'nag', 'mnemo');

@@ -129,10 +129,7 @@ table.monthgrid td {
   border-right: 1px solid var(--theme-border);
   border-bottom: 1px solid var(--theme-border);
 }
-table.kronolithViewMonth {
-  border: 1px solid var(--theme-border);
-  border-top-width: 0;
-}
+
 
 /* ── La vue mois remplit toute la hauteur disponible ──
    Chaîne de hauteur : #kronolithViewMonth (flex column) → le head garde sa

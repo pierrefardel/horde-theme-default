@@ -39,9 +39,26 @@ img.kronolithEventIcon {
   margin-left: 2px;
   color: var(--theme-text-secondary);
 }
-.kronolith-event img {
-  padding-top: 3px;
-  vertical-align: top;
+/* Icône de récurrence (recur-*.png) → repeat Lucide en mask-image.
+   Le <span> qui entoure l'<img> porte le mask ; l'<img> est masqué. */
+.kronolith-event span:has(> img[src*="recur"]) {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 3px;
+  vertical-align: middle;
+  background-color: currentColor;
+  -webkit-mask-image: url("graphics/svg/repeat.svg");
+  mask-image: url("graphics/svg/repeat.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+.kronolith-event span:has(> img[src*="recur"]) img {
+  display: none;
 }
 
 /* ── Événements vue mois et all-day ── */

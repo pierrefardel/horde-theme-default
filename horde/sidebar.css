@@ -159,6 +159,10 @@
   display: grid;
   gap: var(--theme-spacing-xs);
 }
+
+#horde-sidebar div.horde-resources:empty {
+  display: none;
+}
 #horde-sidebar div.horde-resources > div {
   border-radius: var(--theme-radius-box);
   display: flex;
@@ -181,6 +185,7 @@
   background-image: none;
   position: relative;
   font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
 }
 
 
@@ -225,7 +230,9 @@
 #horde-sidebar div.horde-resources .horde-resource-edit-000,
 #horde-sidebar div.horde-resources .horde-resource-edit-fff,
 #horde-sidebar div.horde-resources .horde-resource-refresh-000,
-#horde-sidebar div.horde-resources .horde-resource-refresh-fff {
+#horde-sidebar div.horde-resources .horde-resource-refresh-fff,
+#horde-sidebar div.horde-resources .horde-resource-share-000,
+#horde-sidebar div.horde-resources .horde-resource-share-fff {
   float: right;
   display: block;
   width: 14px;
@@ -233,18 +240,25 @@
   margin-left: var(--theme-spacing-2xs);
   flex-shrink: 0;
   cursor: pointer;
-  background-color: var(--theme-icon-primary) !important;
-  color: unset !important;
+  /* currentColor = le color inline cal.fg posé par le JS (noir/blanc calculé
+     pour contraster avec le fond du calendrier) → icône toujours lisible,
+     quel que soit le thème ou la couleur de l'agenda. */
+  background-color: currentColor !important;
   background-image: none !important;
   text-indent: 0;
   font-size:0;
-  overflow: visible;
+  overflow: hidden;
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
+}
+/* L'icône share contient un <img> (attendees-000.png) à masquer */
+#horde-sidebar div.horde-resources .horde-resource-share-000 img,
+#horde-sidebar div.horde-resources .horde-resource-share-fff img {
+  display: none;
 }
 #horde-sidebar div.horde-resources .horde-resource-edit-000,
 #horde-sidebar div.horde-resources .horde-resource-edit-fff {
@@ -256,12 +270,53 @@
   -webkit-mask-image: url("graphics/svg/refresh.svg");
   mask-image: url("graphics/svg/refresh.svg");
 }
+#horde-sidebar div.horde-resources .horde-resource-share-000,
+#horde-sidebar div.horde-resources .horde-resource-share-fff {
+  -webkit-mask-image: url("graphics/svg/users.svg");
+  mask-image: url("graphics/svg/users.svg");
+}
+
+/* ── Icônes d'ACTION (refresh, edit) cachées par défaut, apparition au hover ──
+   Désencombre la sidebar. Au survol du wrapper, elles apparaissent une par une
+   (stagger). Le share (.horde-resource-share-*) est EXCLU : c'est une icône
+   informative (partagé), pas une action → toujours visible, pas de pointer. */
+#horde-sidebar div.horde-resources [class*="horde-resource-refresh-"],
+#horde-sidebar div.horde-resources [class*="horde-resource-edit-"] {
+  opacity: 0;
+  transform: translateX(4px) scale(0.85);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+}
+/* Au hover (ou focus clavier) de l'item ressource → révélation */
+#horde-sidebar div.horde-resources > div:hover [class*="horde-resource-refresh-"],
+#horde-sidebar div.horde-resources > div:hover [class*="horde-resource-edit-"],
+#horde-sidebar div.horde-resources > div:focus-within [class*="horde-resource-refresh-"],
+#horde-sidebar div.horde-resources > div:focus-within [class*="horde-resource-edit-"] {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+/* Stagger : edit puis refresh */
+#horde-sidebar div.horde-resources > div:hover [class*="horde-resource-edit-"],
+#horde-sidebar div.horde-resources > div:focus-within [class*="horde-resource-edit-"] {
+  transition-delay: 0s;
+}
+#horde-sidebar div.horde-resources > div:hover [class*="horde-resource-refresh-"],
+#horde-sidebar div.horde-resources > div:focus-within [class*="horde-resource-refresh-"] {
+  transition-delay: 0.05s;
+}
+
+/* Icône share : informative (partagé) → toujours visible, pas cliquable */
+#horde-sidebar div.horde-resources [class*="horde-resource-share-"] {
+  cursor: default;
+}
+
 #horde-sidebar div.horde-resources div a {
   color: inherit;
 }
 #horde-sidebar .horde-info {
   font-style: italic;
-  padding: 10px 0 0 36px;
+  padding: 10px 0 0 26px;
 }
 
 /* Collapse/expand */

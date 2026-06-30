@@ -27,6 +27,7 @@
   padding: var(--theme-spacing-xs);
   border-radius: var(--theme-radius-box);
   box-shadow: var(--theme-shadow-md);
+  margin-bottom: var(--theme-spacing-sm);
 }
 
 #kronolithMenuCalendars {

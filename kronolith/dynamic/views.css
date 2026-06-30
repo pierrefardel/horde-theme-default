@@ -19,9 +19,7 @@
 /* En-tête de vue (aligné avec le corps qui scrolle) */
 .kronolith-view-head {
   position: relative;
-  overflow-y: scroll;
-  border-left: 1px solid var(--theme-border);
-  border-right: 1px solid var(--theme-border);
+  overflow-y: auto;
 }
 .kronolith-view-head .kronolith-all-day {
   background-color: var(--theme-bg-white);
@@ -81,8 +79,8 @@
 }
 .kronolithViewBody {
   overflow-x: hidden;
-  overflow-y: scroll;
-  border: 1px solid var(--theme-border);
+  overflow-y: auto;
+  margin-top:-1px
 }
 .kronolithViewBodyContainer {
   position: relative;

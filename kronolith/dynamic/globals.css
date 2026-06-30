@@ -84,12 +84,12 @@ body {
 
 /* La cellule de jour (vue mois) est cliquable (ouvre la modale d'ajout) :
    curseur pointer + fond teinté au survol pour signaler l'interactivité. */
-#kronolith-month-body td {
+#kronolith-month-body .kronolithMonthDay {
   cursor: pointer;
-  transition: background-color 0.1s ease;
+  transition: all 0.1s ease;
 }
-#kronolith-month-body td:hover {
-  background-color: var(--theme-bg-primary);
+#kronolith-month-body .kronolithMonthDay:hover {
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1) inset;
 }
 
 /* ── Cellules cliquables ── */
@@ -104,6 +104,7 @@ body {
   color: var(--theme-text-secondary);
   font-style: italic;
   cursor: pointer;
+  font-size: var(--theme-font-size-sm);
 }
 
 /* ── Vue plein écran (iframe) ── */

@@ -10,6 +10,7 @@
 .kronolith-event {
   cursor: pointer;
   position: absolute;
+  
 }
 #kronolithViewDay .kronolith-event,
 #kronolithViewWeek .kronolith-event,
