@@ -291,3 +291,18 @@ html.shape-sharp {
   --theme-radius-field:    var(--theme-radius-none);
   --theme-radius-selector: var(--theme-radius-none);
 }
+
+/* ── Presets de taille de texte (piloté par classe sur <html>) ──
+   Même échelle que le thème UPJV (découplée du DS). standard = défaut. */
+html.ui-text-compact {
+  --theme-font-size-base: 12px;
+  --theme-font-size-sm:   11px;
+  --theme-font-size-xs:   10px;
+  --theme-font-size-lg:   14px;
+}
+html.ui-text-comfort {
+  --theme-font-size-base: 15px;
+  --theme-font-size-sm:   14px;
+  --theme-font-size-xs:   13px;
+  --theme-font-size-lg:   17px;
+}

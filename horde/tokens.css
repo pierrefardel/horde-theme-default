@@ -101,10 +101,13 @@
   /* ── Typographie ── */
   --theme-font-family:         var(--font-family-primary);
   --theme-font-family-mono:    var(--font-family-mono);
-  --theme-font-size-base:      var(--font-size-body-sm);
-  --theme-font-size-sm:        var(--font-size-body-sm);
-  --theme-font-size-xs:        var(--font-size-body-x-sm);
-  --theme-font-size-lg:        var(--font-size-body-lg);
+  /* Tailles fixes (découplées du DS) : Horde est une app dense (mail/agenda),
+     densité constante type webmail. Échelle identique au thème UPJV pour un
+     rendu cohérent entre les deux. Presets compact/comfort : ui-text-* plus bas. */
+  --theme-font-size-base:      13px;
+  --theme-font-size-sm:        12px;
+  --theme-font-size-xs:        11px;
+  --theme-font-size-lg:        15px;
   --theme-font-weight-light:      var(--font-weight-light);
   --theme-font-weight-normal:     var(--font-weight-regular);
   --theme-font-weight-medium:     var(--font-weight-medium);

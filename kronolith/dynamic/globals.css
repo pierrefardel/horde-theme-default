@@ -102,9 +102,8 @@ body {
 .kronolithMore {
   padding: 0 2px;
   color: var(--theme-text-secondary);
-  font-style: italic;
   cursor: pointer;
-  font-size: var(--theme-font-size-sm);
+  font-size: var(--theme-font-size-xs);
 }
 
 /* ── Vue plein écran (iframe) ── */

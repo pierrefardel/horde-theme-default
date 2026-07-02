@@ -1,12 +1,12 @@
 {
-    "name": "horde/theme-default-new",
-    "description": "Horde Default New Theme - Autonomous design system derived from a single brand color",
+    "name": "horde/theme-upjv",
+    "description": "Horde UPJV Theme - Design System Université de Picardie Jules Verne",
     "type": "horde-theme",
-    "homepage": "https://www.horde.org",
+    "homepage": "https://www.u-picardie.fr",
     "license": "LGPL-2",
     "authors": [
         {
-            "name": "Pierre Fardel",
+            "name": "UPJV DiSI",
             "email": "pierre.fardel@u-picardie.fr",
             "role": "lead"
         }

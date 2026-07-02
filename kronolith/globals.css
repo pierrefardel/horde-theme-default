@@ -27,7 +27,6 @@
   padding: var(--theme-spacing-xs);
   border-radius: var(--theme-radius-box);
   box-shadow: var(--theme-shadow-md);
-  margin-bottom: var(--theme-spacing-sm);
 }
 
 #kronolithMenuCalendars {
@@ -142,7 +141,6 @@
   padding: var(--theme-spacing-2xs) var(--theme-spacing-sm);
   font-size: var(--theme-font-size-sm);
   font-weight: var(--theme-font-weight-medium);
-  color: var(--theme-text-action);
   background: var(--theme-bg-white);
   border: 1px solid var(--theme-border);
   border-radius: var(--theme-radius-field);
@@ -427,23 +425,30 @@ div.fbgrid {
 #kronolith-legend:has(span) {
   display: flex;
   width: fit-content;
-  gap: var(--theme-spacing-xs);
   flex-wrap: wrap;
   align-items: center;
+  gap: var(--theme-spacing-xs);
   padding: var(--theme-spacing-xs);
   order: -1;
   background-color: var(--theme-bg-primary);
   border-radius: var(--theme-radius-box);
   box-shadow: var(--theme-shadow-sm);
+  /* Masque le nœud texte "Legend:" (injecté nu, non wrappé) : font-size:0 +
+     line-height:0 lui donnent des dimensions nulles, donc l'item flex anonyme
+     n'occupe plus d'espace (et le gap ne le décale plus). Le gap est conservé
+     pour un wrap propre entre les badges. */
+  font-size: 0;
+  line-height: 0;
 }
 #kronolith-legend span {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px var(--theme-spacing-xs);
+  padding: 4px 6px;
   border-radius: var(--theme-radius-selector);
   cursor: pointer;
   font-size: var(--theme-font-size-xs);
+  line-height: normal;
   font-weight: var(--theme-font-weight-medium);
   transition: opacity 0.15s ease;
 }

@@ -318,7 +318,7 @@ div.flagUnseen {
 }
 div.flagDeleted * {
   text-decoration: line-through;
-  color: var(--theme-text-disabled);
+  color: var(--theme-text-secondary);
 }
 
 /* Indicateurs de message non lu — point bleu style Gmail */
@@ -432,6 +432,7 @@ div.vpRow.flagDeleted {
   color: var(--theme-text-disabled) !important;
   font-style: normal !important;
   box-shadow: none !important;
+  opacity: 1;
 }
 div.vpRow.flagDeleted * {
   text-decoration: line-through;
@@ -945,7 +946,7 @@ div.vpRowVert div.msgFrom {
 div.vpRowVert div.msgDate {
   flex-shrink: 0;
   font-size: var(--theme-font-size-xs);
-  color: var(--theme-text-disabled);
+  color: var(--theme-text-secondary);
   white-space: nowrap;
   margin-left: 0px;
   order: 1;

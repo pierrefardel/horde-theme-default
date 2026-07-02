@@ -310,21 +310,42 @@ display: none;
   #RB_loading::before { animation: none; border-top-color: var(--theme-border-action); border-right-color: var(--theme-border-action); }
 }
 
+/* Centrage du modal via le parent overlay en grid (PAS de transform sur
+   #RB_window). Un transform y créerait un nouveau référentiel de position,
+   ce qui décale les popups positionnés en coords page (ex: le date-picker
+   #hordeCalendar via cumulativeOffset). Le date-picker natif se positionne
+   alors correctement, sans patch JS core. */
+#RB_redbox {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+/* Modal fermé : RedBox met display:none inline sur #RB_window (fade). Sans ça,
+   #RB_redbox (inset:0) resterait en place et bloquerait les clics sur l'UI.
+   On retire son inset (position:unset) plutôt que display:none, sinon on
+   masquerait aussi #RB_loading (le spinner de chargement, enfant de #RB_redbox
+   affiché AVANT que #RB_window soit rempli). */
+#RB_redbox:has(> #RB_window[style*="display: none"]),
+#RB_redbox:has(> #RB_window[style*="display:none"]) {
+  position: unset;
+}
 #RB_window {
   z-index: 102;
   background-color: var(--theme-bg-white);
   text-align: left;
-  top: 50% !important;
-  left: 50% !important;
-  margin-left: 0 !important;
-  margin-top: 0 !important;
-  transform: translate(-50%, -50%);
+  /* Neutralise le positionnement absolu inline de RedBox : le centrage est
+     assuré par le grid du parent. En position:static, les top/left inline
+     n'ont plus d'effet, on ne neutralise donc que position + margin. */
+  position: static !important;
+  margin: 0 !important;
   border-radius: var(--theme-radius-box);
   box-shadow: var(--theme-shadow-lg);
   min-width: 300px;
   max-width: 90vw;
-  /* Pas d'overflow:hidden : le date-picker (#hordeCalendar) est désormais
-     inséré dans #RB_window et doit pouvoir déborder sous l'input. */
+  /* Grands dialogs (form événement haut) : ne pas déborder de l'écran */
+  max-height: 90vh;
+  overflow: auto;
 }
 /* Padding général — s'applique à tous les dialogs (IMP, Kronolith, etc.) */
 #RB_window > div,
@@ -679,14 +700,71 @@ body.help_entry {
 }
 
 /* ── Preferences ── */
+/* Le .header global est en flex (align-items:center). Le HTML de cette page
+   compte sur des float:right (rightFloat) + <br class="clear"> qui sont
+   ignorés en flex → tout s'empile. On reproduit la mise en page attendue en
+   restant en flex : libellé « Preferences for » à gauche, les rightFloat à
+   droite. */
+#services_prefs .header {
+  flex-wrap: wrap;
+}
+/* Le span sans classe (« Preferences for … ») repasse à gauche, en premier */
+#services_prefs .header > span:not([class]) {
+  order: -1;
+  margin-right: auto;
+}
+/* Le <br class="clear"> n'a plus de rôle en flex */
+#services_prefs .header > br.clear {
+  display: none;
+}
 #services_prefs .header ul {
-  float: right;
+  float: none;
+  order: 1;
+  margin-left: auto;
   text-align: right;
   font-size: 80%;
+  list-style: none;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+/* Navigation précédent/suivant entre groupes de préférences :
+   remplace les <img> nav/left.png & nav/right.png par des chevrons Lucide.
+   On masque l'img d'origine et on pose un chevron en mask-image. */
+#services_prefs .header ul a img[src*="/nav/left"],
+#services_prefs .header ul a img[src*="/nav/right"] {
+  display: none;
+}
+#services_prefs .header ul a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  text-decoration: none;
+}
+#services_prefs .header ul a:has(img[src*="/nav/left"])::before,
+#services_prefs .header ul a:has(img[src*="/nav/right"])::after {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+#services_prefs .header ul a:has(img[src*="/nav/left"])::before {
+  -webkit-mask-image: url("graphics/svg/chevron-left.svg");
+  mask-image: url("graphics/svg/chevron-left.svg");
+}
+#services_prefs .header ul a:has(img[src*="/nav/right"])::after {
+  -webkit-mask-image: url("graphics/svg/chevron-right.svg");
+  mask-image: url("graphics/svg/chevron-right.svg");
 }
 #services_prefs .header li {
   list-style: none;
-  display: inline;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  flex-wrap: wrap;
 }
 #services_prefs .header img {
   vertical-align: middle;

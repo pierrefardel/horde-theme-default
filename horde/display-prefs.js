@@ -64,9 +64,35 @@
     applyShape(id);
   }
 
+  /* ════════════ TAILLE DU TEXTE ════════════ */
+  /* standard = défaut (aucune classe). compact/comfort = classe explicite. */
+  var TEXTSIZE_KEY = 'ui-text-size';
+  var TEXTSIZE_CLASSES = { compact: 'ui-text-compact', comfort: 'ui-text-comfort' };
+  var TEXTSIZE_LABELS = { compact: 'Compact', standard: 'Standard', comfort: 'Confort' };
+
+  function getTextSize() {
+    try {
+      var s = localStorage.getItem(TEXTSIZE_KEY);
+      return (s === 'compact' || s === 'comfort') ? s : 'standard';
+    } catch (e) { return 'standard'; }
+  }
+  function applyTextSize(id) {
+    var h = document.documentElement;
+    h.classList.remove('ui-text-compact', 'ui-text-comfort');
+    if (TEXTSIZE_CLASSES[id]) h.classList.add(TEXTSIZE_CLASSES[id]);
+  }
+  function setTextSize(id) {
+    try {
+      if (id === 'standard') localStorage.removeItem(TEXTSIZE_KEY);
+      else localStorage.setItem(TEXTSIZE_KEY, id);
+    } catch (e) {}
+    applyTextSize(id);
+  }
+
   /* ── Anti-FOUC : applique le plus tôt possible ── */
   applyTheme(getTheme());
   applyShape(getShape());
+  applyTextSize(getTextSize());
 
   /* ════════════ ICÔNES ════════════ */
   var I = {
@@ -97,12 +123,27 @@
     }).join('');
   }
 
+  /* Radio-cards pour la taille du texte : un « A » dont la taille reflète le
+     preset (petit / moyen / grand) sert d'aperçu vivant. */
+  function buildTextSizeCards(current) {
+    var order = ['compact', 'standard', 'comfort'];
+    return order.map(function (id) {
+      var checked = id === current ? ' checked' : '';
+      return '<label class="hdp-textsize-card" data-textsize="' + id + '">' +
+        '<input type="radio" name="hdp-textsize" value="' + id + '"' + checked + '>' +
+        '<span class="hdp-textsize-card__preview hdp-textsize-card__preview--' + id + '">A</span>' +
+        '<span class="hdp-textsize-card__label">' + TEXTSIZE_LABELS[id] + '</span>' +
+        '</label>';
+    }).join('');
+  }
+
   function build() {
     var head = document.getElementById('horde-head');
     if (!head || document.getElementById('horde-display-prefs')) return;
 
     var curTheme = getTheme();
     var curShape = getShape();
+    var curTextSize = getTextSize();
 
     var pop = document.createElement('div');
     pop.className = 'hdp';
@@ -128,6 +169,12 @@
             buildShapeCards(curShape) +
           '</div>' +
         '</div>' +
+        '<div class="hdp__row hdp__row--column">' +
+          '<span class="hdp__label">Taille du texte</span>' +
+          '<div class="hdp-textsize-cards" id="hdp-textsize" role="radiogroup" aria-label="Taille du texte">' +
+            buildTextSizeCards(curTextSize) +
+          '</div>' +
+        '</div>' +
       '</div>';
 
     // Insérer dans le topbar, avant le logout
@@ -139,6 +186,7 @@
     wirePopover(pop);
     wireTheme(pop);
     wireShape(pop);
+    wireTextSize(pop);
   }
 
   /* ── Ouverture/fermeture du popover pilotée en JS (classe .hdp-open) ──
@@ -196,6 +244,16 @@
     root.addEventListener('change', function (e) {
       var t = e.target;
       if (t && t.name === 'hdp-shape') setShape(t.value);
+    });
+  }
+
+  /* ── Taille du texte : radio-cards ── */
+  function wireTextSize(pop) {
+    var root = pop.querySelector('#hdp-textsize');
+    if (!root) return;
+    root.addEventListener('change', function (e) {
+      var t = e.target;
+      if (t && t.name === 'hdp-textsize') setTextSize(t.value);
     });
   }
 

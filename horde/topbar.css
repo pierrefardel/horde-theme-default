@@ -216,6 +216,21 @@ a.horde-mainnavi-active:active {
   color: var(--theme-text-headings) !important;
 }
 
+/* Entrée parente non-cliquable (ex. « Administration ») : le libellé est un
+   texte brut dans .horde-drowdown-str, sans <a.horde-mainnavi>. On lui applique
+   le même padding/typo que les liens pour un rendu homogène dans le dropdown. */
+.horde-drowdown-str:not(:has(a.horde-mainnavi)) {
+  padding: 7px 16px;
+  color: var(--theme-text-primary);
+  font-weight: var(--theme-font-weight-normal);
+  font-size: var(--theme-font-size-sm);
+}
+/* Même retour visuel au survol que les liens (le survol ouvre le sous-menu) */
+.horde-dropdown li:hover > .horde-drowdown-str:not(:has(a.horde-mainnavi)) {
+  background-color: var(--theme-bg-secondary);
+  color: var(--theme-text-headings);
+}
+
 /* Recherche */
 #horde-search {
   float: none;
@@ -441,6 +456,9 @@ a.horde-mainnavi-active:active {
   transform: scale(0.95);
   transform-origin: top right;
   transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-sm);
 }
 .hdp.hdp-open .hdp__panel {
   opacity: 1;
@@ -449,7 +467,7 @@ a.horde-mainnavi-active:active {
 }
 
 .hdp__title {
-  margin: 0 0 var(--theme-spacing-sm);
+  margin: 0;
   font-size: var(--theme-font-size-sm);
   font-weight: var(--theme-font-weight-bold);
   color: var(--theme-text-headings);
@@ -459,9 +477,6 @@ a.horde-mainnavi-active:active {
   align-items: center;
   justify-content: space-between;
   gap: var(--theme-spacing-sm);
-}
-.hdp__row + .hdp__row {
-  margin-top: var(--theme-spacing-sm);
 }
 .hdp__row--column {
   flex-direction: column;
@@ -593,6 +608,62 @@ a.horde-mainnavi-active:active {
 .hdp-shape-card__preview--soft    { border-radius: var(--theme-radius-md); }
 .hdp-shape-card__preview--rounded { border-radius: var(--theme-radius-full); }
 .hdp-shape-card__label {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-primary);
+}
+
+/* ── Taille du texte : radio-cards (même modèle que l'Aspect) ── */
+.hdp-textsize-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--theme-spacing-2xs);
+}
+.hdp-textsize-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  padding: var(--theme-spacing-xs) var(--theme-spacing-2xs);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-box);
+  background-color: var(--theme-bg-white);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.hdp-textsize-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.hdp-textsize-card:hover {
+  background-color: var(--theme-bg-primary);
+}
+.hdp-textsize-card:has(input:checked) {
+  border-color: var(--theme-bg-action);
+  box-shadow: inset 0 0 0 1px var(--theme-bg-action);
+}
+.hdp-textsize-card:has(input:focus-visible) {
+  outline: 2px solid var(--theme-bg-action);
+  outline-offset: 2px;
+}
+/* Aperçu : un « A » à taille FIXE par preset (montre l'effet de l'option).
+   Valeurs alignées sur --theme-font-size-base de chaque preset. */
+.hdp-textsize-card__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-headings);
+  line-height: 1;
+}
+.hdp-textsize-card__preview--compact  { font-size: 12px; }
+.hdp-textsize-card__preview--standard { font-size: 15px; }
+.hdp-textsize-card__preview--comfort  { font-size: 18px; }
+.hdp-textsize-card__label {
   font-size: var(--theme-font-size-xs);
   color: var(--theme-text-primary);
 }

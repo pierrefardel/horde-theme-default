@@ -130,6 +130,15 @@ table.monthgrid td {
   border-bottom: 1px solid var(--theme-border);
 }
 
+.kronolith-event {
+transition: all 0.1s ease;
+}
+
+.kronolith-event.drag {
+ height : auto !important;
+ opacity: 0.6;
+ border: 1px dashed currentColor !important;
+}
 
 /* ── La vue mois remplit toute la hauteur disponible ──
    Chaîne de hauteur : #kronolithViewMonth (flex column) → le head garde sa
@@ -182,7 +191,7 @@ table.monthgrid td {
 }
 .kronolith-today .kronolith-day,
 .kronolith-today .kronolith-day a {
-  color: var(--theme-text-btn-success);
+  color: var(--theme-text-success);
   font-weight: var(--theme-font-weight-bold);
 }
 

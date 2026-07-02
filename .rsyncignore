@@ -1,6 +1,8 @@
 .git
 .claude/
 scripts/
+upstream/
 webmail-dev.u-picardie.fr/
 theme-upjv-source.css
 CLAUDE.md
+horde/tokens-horde-default.css
