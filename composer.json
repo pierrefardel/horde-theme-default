@@ -1,8 +1,8 @@
 {
-    "name": "horde/theme-upjv",
-    "description": "Horde UPJV Theme - Design System Université de Picardie Jules Verne",
+    "name": "horde/theme-default-new",
+    "description": "Horde Default New Theme - reworked default theme with design tokens",
     "type": "horde-theme",
-    "homepage": "https://www.u-picardie.fr",
+    "homepage": "https://www.horde.org",
     "license": "LGPL-2",
     "authors": [
         {

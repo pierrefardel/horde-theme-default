@@ -1,12 +1,12 @@
-id: theme-upjv
-name: theme-upjv
-full: Horde UPJV Theme
+id: theme-default-new
+name: theme-default-new
+full: Horde Default New Theme
 description: >-
-  Thème officiel de l'Université de Picardie Jules Verne.
-  Basé sur le Design System UPJV. Moderne, accessible, conforme à l'identité visuelle UPJV.
+  Reworked Horde default theme built on a design-token architecture.
+  Standalone (no external CDN), modern and accessible.
 list: ~
 type: horde-theme
-homepage: https://www.u-picardie.fr
+homepage: https://www.horde.org
 authors:
   -
     name: UPJV DiSI
