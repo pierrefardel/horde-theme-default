@@ -150,16 +150,48 @@
    étiquette au-dessus, puis [input] + picker à droite sur la ligne 2. */
 .kronolithCalendarDiv label:has(.kronolithColorPicker) {
   display: grid;
+  /* [input 1fr] [picker]. Le texte « Couleur: » est un nœud texte anonyme
+     (non ciblable en CSS) : il occupe la ligne 1. */
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: var(--theme-spacing-2xs) var(--theme-spacing-xs);
   width: 100%;
 }
+/* Champ couleur en « badge » : pastille de la couleur + valeur hex, dans un
+   conteneur clair. --cal-color est posé sur le label par footer.js (JS du
+   thème — aucun patch de Kronolith, donc rien à upstreamer ni à rejouer après
+   une mise à jour du cœur). La pastille est le ::after du label ; l'input perd
+   son fond coloré inline et n'affiche plus que le hex. */
 .kronolithCalendarDiv label:has(.kronolithColorPicker) > input {
   grid-row: 2;
   grid-column: 1;
   width: 100%;
   box-sizing: border-box;
+  /* Neutralise le background-color / color inline posé par le JS Kronolith */
+  background-color: var(--theme-bg-white) !important;
+  color: var(--theme-text-primary) !important;
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-selector);
+  font-family: var(--theme-font-family-mono);
+  letter-spacing: 0.03em;
+  /* Place laissée à la pastille, dessinée par le ::after du label */
+  padding-left: calc(var(--theme-spacing-sm) + 24px);
+}
+/* Pastille : couleur réelle. Placée comme un item de la grille (ligne 2,
+   colonne 1, même cellule que l'input) puis décalée à gauche dans le padding
+   réservé — ainsi elle est centrée sur la hauteur du champ, pas du label. */
+.kronolithCalendarDiv label:has(.kronolithColorPicker)::after {
+  content: "";
+  grid-row: 2;
+  grid-column: 1;
+  justify-self: start;
+  align-self: center;
+  margin-left: var(--theme-spacing-sm);
+  width: 16px;
+  height: 16px;
+  background-color: var(--cal-color, var(--theme-bg-secondary));
+  border-radius: var(--theme-radius-selector);
+  pointer-events: none;
 }
 .kronolithCalendarDiv label:has(.kronolithColorPicker) > .kronolithColorPicker {
   grid-row: 2;

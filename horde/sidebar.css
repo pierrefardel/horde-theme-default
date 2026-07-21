@@ -14,6 +14,24 @@
     var(--horde-sidebar-max-width)
   ) !important;
   margin-bottom: var(--theme-spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-sm);
+}
+
+/* ── Carte de contenu de la sidebar ──
+   Kronolith encapsule le contenu de sa sidebar dans #kronolithMenu. Les autres
+   apps (turba, nag, mnemo, ingo…) n'ont aucun wrapper : h3, splits et blocs sont
+   des enfants directs de #horde-sidebar, à plat. sidebar-menu.js reconstitue ce
+   conteneur (#horde-sidebar-menu) en y déplaçant tout ce qui suit .horde-new.
+   Les deux reçoivent donc le même aspect carte. */
+#horde-sidebar-menu,
+#kronolithMenu,
+#foldersSidebar {
+  background: var(--theme-bg-white);
+  padding: var(--theme-spacing-xs);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
 }
 #horde-sidebar a {
   color: var(--theme-text-primary);
@@ -144,12 +162,12 @@
   gap: var(--theme-spacing-xs);
 }
 
+/* imp : #foldersSidebar est son propre conteneur de contenu (le wrapper JS le
+   détecte et ne double donc pas la carte). L'aspect carte est factorisé plus
+   haut avec #horde-sidebar-menu / #kronolithMenu ; ici seules ses spécificités. */
 #foldersSidebar {
   height: fit-content;
   overflow: auto;
-  background-color: var(--theme-bg-white);
-  border-radius: var(--theme-radius-box);
-  box-shadow: var(--theme-shadow-md);
 }
 
 

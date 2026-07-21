@@ -77,9 +77,139 @@
     reveal(footer);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', flushPending);
-  } else {
+  /* ── Wrapper de contenu (#horde-sidebar-menu) ──
+     Kronolith encapsule le contenu de sa sidebar dans #kronolithMenu, ce qui
+     permet de lui donner un aspect « carte » en CSS. Les autres applications
+     (turba, nag, mnemo, ingo…) n'ont AUCUN wrapper : leurs <h3>,
+     .horde-sidebar-split et blocs de contenu sont des enfants directs de
+     #horde-sidebar, à plat — impossible de cibler un conteneur commun en CSS.
+
+     On reconstitue donc ce conteneur : tout ce qui suit .horde-new est déplacé
+     dans un <div id="horde-sidebar-menu">, que sidebar.css style à l'identique
+     de #kronolithMenu.
+
+     No-op si la sidebar est absente, si le wrapper existe déjà, ou si l'app
+     fournit déjà le sien (#kronolithMenu). Doit tourner AVANT flushPending()
+     pour que le footer ne soit pas happé dans le wrapper. */
+  function wrapSidebarContent() {
+    var sidebar = getSidebar();
+    if (!sidebar ||
+        document.getElementById('horde-sidebar-menu') ||
+        // Apps fournissant déjà leur propre conteneur de contenu.
+        document.getElementById('kronolithMenu') ||
+        document.getElementById('foldersSidebar')) {
+      return;
+    }
+
+    var newBtn = sidebar.querySelector(':scope > .horde-new');
+    var node = newBtn ? newBtn.nextSibling : sidebar.firstChild;
+    if (!node) return;
+
+    var wrapper = document.createElement('div');
+    wrapper.id = 'horde-sidebar-menu';
+
+    var next;
+    while (node) {
+      next = node.nextSibling;
+      wrapper.appendChild(node);
+      node = next;
+    }
+
+    // Rien de significatif à envelopper : on remet tout en place.
+    if (!wrapper.querySelector('*')) {
+      while (wrapper.firstChild) {
+        sidebar.appendChild(wrapper.firstChild);
+      }
+      return;
+    }
+
+    sidebar.appendChild(wrapper);
+  }
+
+  /* ── Champ couleur du dialog calendrier (Kronolith) ──
+     Le champ affiche la couleur choisie via un background-color inline, écrit
+     par Kronolith (setColor) puis en direct par le ColorPicker. Cette couleur
+     n'est pas lisible depuis le CSS : on la recopie donc dans une custom
+     property --cal-color sur le <label> parent, ce qui permet de rendre le champ
+     comme un badge « pastille + valeur hex » (voir kronolith/forms.css).
+
+     Fait ici, dans le JS du THÈME : aucun patch de Kronolith à maintenir, rien
+     qui saute lors des mises à jour du cœur. La PR upstream #73 pose --cal-color
+     sur les events / la légende / la sidebar, mais pas sur ce champ de saisie. */
+  function syncColorFields() {
+    if (!window.MutationObserver) return;
+
+    var fields = document.querySelectorAll('input[id$="Color"][name="color"]');
+    Array.prototype.forEach.call(fields, function (input) {
+      if (input.getAttribute('data-cal-color-synced')) return;
+      input.setAttribute('data-cal-color-synced', '1');
+
+      var label = input.closest ? input.closest('label') : null;
+
+      /* La valeur saisie prime : quand l'utilisateur tape un hex, c'est elle
+         qui fait foi (le background-color inline n'est mis à jour que par
+         Kronolith, au moment du setColor). On retombe sur le background-color
+         quand la saisie n'est pas une couleur valide (frappe en cours). */
+      function sync() {
+        var typed = (input.value || '').trim();
+        var c = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(typed)
+          ? typed
+          : input.style.backgroundColor;
+        if (!c) return;
+        input.style.setProperty('--cal-color', c);
+        if (label) label.style.setProperty('--cal-color', c);
+      }
+
+      new MutationObserver(sync).observe(input, {
+        attributes: true,
+        attributeFilter: ['style', 'value']
+      });
+      input.addEventListener('input', sync);
+      input.addEventListener('change', sync);
+      sync();
+    });
+  }
+
+  function init() {
+    wrapSidebarContent();
     flushPending();
+    syncColorFields();
+    /* Le dialog calendrier est injecté à la demande (chunkContent) : on guette
+       son apparition pour brancher le champ couleur créé après coup. */
+    if (window.MutationObserver) {
+      new MutationObserver(function () {
+        syncColorFields();
+      }).observe(document.body || document.documentElement, {
+        childList: true,
+        subtree: true
+      });
+    }
+  }
+
+  /* Anti-FOUC : on enveloppe le plus tôt possible. Si la sidebar est déjà dans
+     le DOM au moment où ce script s'exécute (cas courant : script en fin de
+     page), on agit immédiatement — sans attendre DOMContentLoaded, sinon la
+     sidebar s'affiche brièvement sans son style de carte. Sinon on observe le
+     DOM et on agit dès qu'elle apparaît, avec DOMContentLoaded en filet. */
+  if (getSidebar()) {
+    init();
+  } else if (document.readyState === 'loading') {
+    if (window.MutationObserver) {
+      var observer = new MutationObserver(function () {
+        if (getSidebar()) {
+          observer.disconnect();
+          init();
+        }
+      });
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+      document.addEventListener('DOMContentLoaded', function () {
+        observer.disconnect();
+        init();
+      });
+    } else {
+      document.addEventListener('DOMContentLoaded', init);
+    }
+  } else {
+    init();
   }
 })();

@@ -22,12 +22,9 @@
   margin-left: auto;
 }
 
-#kronolithMenu {
-  background: var(--theme-bg-white);
-  padding: var(--theme-spacing-xs);
-  border-radius: var(--theme-radius-box);
-  box-shadow: var(--theme-shadow-md);
-}
+/* NB : l'aspect « carte » de #kronolithMenu est factorisé dans
+   horde/sidebar.css, avec #horde-sidebar-menu (wrapper JS des autres apps) et
+   #foldersSidebar (imp). Ne pas le redéfinir ici. */
 
 #kronolithMenuCalendars {
   display: flex;
