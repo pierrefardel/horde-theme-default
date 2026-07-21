@@ -163,17 +163,47 @@
 #horde-sidebar div.horde-resources:empty {
   display: none;
 }
+/* Ligne de calendrier/tasklist en sidebar : pill clair teinté (comme events/
+   légende) via --cal-color posé par le JS de Kronolith.
+   SCOPE : conteneurs Kronolith (id kronolith* : MyCalendars, MyTasklists,
+   SharedTasklists, SystemCalendars…), car seul Kronolith pose --cal-color. Les
+   autres apps (nag, mnemo…) ont aussi des .horde-resources mais SANS
+   --cal-color → color-mix serait invalide. On les distingue par l'id kronolith*
+   (nag a .horde-resources SANS id kronolith). */
+#horde-sidebar [id^="kronolith"].horde-resources > div {
+  background-color: color-mix(in srgb, var(--cal-color) 14%, var(--theme-bg-white)) !important;
+  color: color-mix(in srgb, var(--cal-color) 72%, black) !important;
+}
+/* Layout de base (radius, flex) : commun à toutes les apps, pas de --cal-color */
 #horde-sidebar div.horde-resources > div {
   border-radius: var(--theme-radius-box);
   display: flex;
   align-items: center;
   padding: var(--theme-spacing-2xs) var(--theme-spacing-xs);
+  cursor: pointer;
 }
 .horde-resource-link {
   overflow: hidden;
   order: -1;
   flex-grow: 1;
   display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+}
+/* Pastille de couleur À GAUCHE du nom, qui remplace la checkbox : elle porte
+   l'état de sélection. Pleine = calendrier visible, contour seul = masqué
+   (pattern Google Calendar). Radius pilotable via --theme-radius-selector.
+   SCOPE Kronolith uniquement (dépend de --cal-color). */
+[id^="kronolith"] .horde-resource-link::before {
+  content: "";
+  display: inline-block;
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--theme-radius-selector);
+  border: 2px solid var(--cal-color);
+  background-color: var(--cal-color);
+  transition: background-color 0.15s ease;
 }
 .horde-resource-on,
 .horde-resource-off,
@@ -188,7 +218,8 @@
   font-weight: var(--theme-font-weight-medium);
 }
 
-/* Carré de base — ::before */
+/* Checkbox (case + coche) — RÈGLE GLOBALE, pour toutes les apps (nag, mnemo…).
+   Kronolith la masque plus bas (remplacée par la pastille de couleur). */
 .horde-resource-on::before,
 .horde-resource-off::before,
 .horde-resource-none::before {
@@ -209,8 +240,6 @@
 .horde-resource-off:hover::before {
   border-color: var(--theme-border-action-hover);
 }
-
-/* Coche SVG — ::after (état coché uniquement) */
 .horde-resource-on::after {
   content: "";
   position: absolute;
@@ -228,6 +257,24 @@
   mask-position: center;
   pointer-events: none;
 }
+
+/* Sur KRONOLITH uniquement, la checkbox est masquée (remplacée par la pastille
+   de couleur). Les autres apps GARDENT leur checkbox ci-dessus. */
+[id^="kronolith"] .horde-resource-on::before,
+[id^="kronolith"] .horde-resource-off::before,
+[id^="kronolith"] .horde-resource-none::before,
+[id^="kronolith"] .horde-resource-on::after {
+  display: none;
+}
+
+/* État MASQUÉ (calendrier décoché) : pastille en contour seul (fond transparent)
+   + ligne légèrement estompée. Scope Kronolith. */
+[id^="kronolith"] .horde-resource-link:has(.horde-resource-off)::before {
+  background-color: transparent;
+}
+#horde-sidebar [id^="kronolith"].horde-resources > div:has(.horde-resource-off) {
+  opacity: 0.7;
+}
 #horde-sidebar div.horde-resources .horde-resource-edit-000,
 #horde-sidebar div.horde-resources .horde-resource-edit-fff,
 #horde-sidebar div.horde-resources .horde-resource-refresh-000,
@@ -241,10 +288,11 @@
   margin-left: var(--theme-spacing-2xs);
   flex-shrink: 0;
   cursor: pointer;
-  /* currentColor = le color inline cal.fg posé par le JS (noir/blanc calculé
-     pour contraster avec le fond du calendrier) → icône toujours lisible,
-     quel que soit le thème ou la couleur de l'agenda. */
-  background-color: currentColor !important;
+  /* Fond pill clair → les icônes prennent la couleur du calendrier (--cal-color,
+     posée par le JS sur le conteneur, héritée ici) au lieu du currentColor
+     blanc/noir qui disparaîtrait sur le fond clair. Fallback currentColor si
+     --cal-color absent. */
+  background-color: var(--cal-color, currentColor) !important;
   background-image: none !important;
   text-indent: 0;
   font-size: 0;

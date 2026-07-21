@@ -440,17 +440,35 @@ div.fbgrid {
   font-size: 0;
   line-height: 0;
 }
+/* Pills de légende (filtres calendriers en haut) : même traitement que les
+   events (fond clair teinté + texte foncé via --cal-color posé par le JS), mais
+   SANS bordure gauche. Une pastille ronde de la couleur du calendrier précède
+   le nom (::before). Le radius de la pastille suit --theme-radius-selector
+   (pilotable globalement). */
 #kronolith-legend span {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 6px;
+  padding: 4px 8px;
   border-radius: var(--theme-radius-selector);
   cursor: pointer;
   font-size: var(--theme-font-size-xs);
   line-height: normal;
   font-weight: var(--theme-font-weight-medium);
   transition: opacity 0.15s ease;
+  background-color: color-mix(in srgb, var(--cal-color) 14%, var(--theme-bg-white)) !important;
+  color: color-mix(in srgb, var(--cal-color) 72%, black) !important;
+  border: 1px solid color-mix(in srgb, var(--cal-color) 30%, var(--theme-bg-white));
+}
+/* Pastille ronde de couleur, avant le nom */
+#kronolith-legend span::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: var(--theme-radius-selector);
+  background-color: var(--cal-color);
 }
 #kronolith-legend span:hover {
   opacity: 0.8;

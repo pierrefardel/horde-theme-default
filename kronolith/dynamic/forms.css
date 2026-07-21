@@ -26,27 +26,6 @@
 }
 
 
-/* ── Champs URL (paramètres calendrier) ── */
-#kronolithEventUrl,
-#kronolithCalendarinternalUrlCaldav,
-#kronolithCalendarinternalUrlAccount,
-#kronolithCalendarinternalUrlWebdav,
-#kronolithCalendarinternalUrlFeed,
-#kronolithCalendarinternalEmbedUrl,
-#kronolithCalendartasklistsUrlCaldav,
-#kronolithCalendartasklistsUrlAccount,
-#kronolithCalendartasklistsUrlWebdav {
-  border-left: 0;
-  border-right: 0;
-  margin: -2px -5px;
-}
-#kronolithEventUrl {
-  border: 0;
-}
-#kronolithCalendartasklistsUrlWebdav {
-  border-bottom: 0;
-}
-
 /* ── ACBox (autocomplete participants/ressources) ── */
 #kronolithUsersACBox,
 #kronolithAttendeesACBox,

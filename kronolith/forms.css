@@ -51,13 +51,46 @@
   margin-bottom: var(--theme-spacing-xs);
 }
 
+/* Le HTML legacy de Kronolith met souvent PLUSIEURS éléments à aligner DANS un
+   même <label> (« De <input> <img picker> », « <input checkbox> Dure toute la
+   journée »). On aligne donc le contenu interne du label avec inline-flex +
+   align-items:center. inline-flex (et non flex) est clé : le label ne prend pas
+   toute la largeur, donc plusieurs labels/champs cohabitent sur une même ligne
+   (dates début/fin, radios d'alerte…) sans passer en bloc.
+   Cas « étiquette + <br> + champ » (Titre:) : le <br> force le retour à la ligne
+   à l'intérieur du inline-flex, l'input passe dessous — OK aussi. */
 .kronolithDialog label {
   font-weight: var(--theme-font-weight-medium);
   color: var(--theme-text-secondary);
-  display: flex;
+}
+/* Un label qui ENGLOBE un input (« ☑ Pas d'alerte ») : inline-flex pour aligner
+   son contenu interne (input + texte) sur la ligne. */
+.kronolithDialog label:has(input) {
+  display: inline-flex;
   align-items: center;
-  margin-bottom: var(--theme-spacing-xs);
-  gap: 10px;
+  gap: var(--theme-spacing-2xs);
+  vertical-align: middle;
+}
+/* Un label SANS input (juste du texte, « Inline », « Courriel »… dont la
+   checkbox est un frère AVANT le label) : reste inline simple pour rester sur la
+   même ligne que la checkbox qui le précède. On l'aligne juste verticalement. */
+.kronolithDialog label:not(:has(input)) {
+  vertical-align: middle;
+}
+/* Cas « étiquette + <br> + champ » (Titre:, Lieu:, Ajouter à:…) : le label
+   contient un <br> → il doit être un BLOC pour que le champ (souvent pleine
+   largeur) passe proprement dessous. inline-flex ignorerait le <br>. */
+.kronolithDialog label:has(br) {
+  display: block;
+}
+.kronolithDialog label:has(br) br {
+  margin-bottom: var(--theme-spacing-2xs);
+}
+
+.kronolithDialog input,
+.kronolithDialog select {
+  vertical-align: middle;
+  line-height: normal;
 }
 
 #kronolithEventDiv:has(#kronolithEventAllday:checked) #kronolithEventStartTimeLabel,
@@ -65,10 +98,72 @@
   display: none;
 }
 
-#kronolithEventAllday
-.kronolithDialog input {
+/* Les <p> de CHAMPS (div sans classe : EventDates, EventDates2, EventBasics…)
+   passent en grid : un champ par ligne, disposition maîtrisée. On EXCLUT les
+   onglets .kronolithTabsOption, dont les <p> sont des phrases avec radios/
+   checkbox/inputs inline (ex. Rappel : « Pas d'alerte ou [x] [15] minutes… »)
+   qui doivent rester en flux. Les <p> de messages (à classe) sont déjà exclus. */
+#kronolithEventDiv > div:not([class]) > p:not([class]) {
+  display: grid;
+}
+
+/* Onglets (.kronolithTabsOption) : flux de phrase. On garde l'inline mais on
+   aligne chaque radio/checkbox avec le texte/label qui le suit, sur la ligne. */
+.kronolithTabsOption input[type="radio"],
+.kronolithTabsOption input[type="checkbox"] {
   vertical-align: middle;
-  line-height: normal;
+  margin: 0 var(--theme-spacing-2xs) 0 0;
+}
+.kronolithTabsOption label {
+  vertical-align: middle;
+}
+/* Chaque label (GRID, pleine largeur) : « De »/« à » sur la ligne 1, puis sur
+   la ligne 2 l'input prend toute la largeur (1fr) et le picker (auto) est poussé
+   à droite. Sans picker (labels heure), l'input occupe 100% seul. */
+#kronolithEventDates label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--theme-spacing-2xs) var(--theme-spacing-xs);
+  width: 100%;
+}
+#kronolithEventDates label > input {
+  grid-row: 2;
+  grid-column: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+#kronolithEventDates label > img.kronolithDatePicker {
+  grid-row: 2;
+  grid-column: 2;
+}
+
+/* ── Modale calendrier (.kronolithCalendarDiv) ── */
+/* Les <p> de champs (Titre, Couleur, Système…) passent en grid, un champ par
+   ligne. Ils sont dans un <div> wrapper intermédiaire (.kronolithCalendarDiv >
+   div > p), pas enfants directs. Les onglets .kronolithTabsOption restent en flux
+   (ils ne sont pas dans ces <div> wrappers). */
+.kronolithCalendarDiv > div > p:not([class]) {
+  display: grid;
+}
+/* Label « Couleur: <input> <a><img picker></a> » : même logique que les dates —
+   étiquette au-dessus, puis [input] + picker à droite sur la ligne 2. */
+.kronolithCalendarDiv label:has(.kronolithColorPicker) {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--theme-spacing-2xs) var(--theme-spacing-xs);
+  width: 100%;
+}
+.kronolithCalendarDiv label:has(.kronolithColorPicker) > input {
+  grid-row: 2;
+  grid-column: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+.kronolithCalendarDiv label:has(.kronolithColorPicker) > .kronolithColorPicker {
+  grid-row: 2;
+  grid-column: 2;
 }
 
 /* Champs pleine largeur */
@@ -181,6 +276,35 @@ div.kronolithFormActions {
 }
 .kronolithDialogWarning strong {
   color: var(--theme-text-danger);
+}
+
+/* ── Partage standard (PBasic) — alignement checkbox/radio + label ──
+   Le HTML mêle input (radio/checkbox), <label> et texte libre sur une même
+   ligne (« Partager avec tout le monde (public) et [x] et rendre consultable »).
+   La règle globale .kronolithDialog label { display:flex } casserait le flux :
+   ici on remet les labels en inline pour qu'ils suivent le texte, et on aligne
+   verticalement les inputs sur le milieu de la ligne. */
+[id$="PBasic"] p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  line-height: 1.6;
+}
+[id$="PBasic"] label {
+  display: inline;
+  margin-bottom: 0;
+  font-weight: var(--theme-font-weight-normal);
+  color: var(--theme-text-primary);
+}
+[id$="PBasic"] input[type="radio"],
+[id$="PBasic"] input[type="checkbox"] {
+  margin: 0;
+  vertical-align: middle;
+}
+/* Le textarea "utilisateurs" passe pleine largeur sous sa ligne */
+[id$="PBasic"] textarea {
+  width: 100%;
 }
 
 /* Partage avancé */

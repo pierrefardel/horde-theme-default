@@ -312,7 +312,12 @@ div.GrowlerNoticeExit:hover {
   color: var(--theme-text-on-warning);
 }
 
-/* ── KeyNavList ── */
+/* ── KeyNavList (liste déroulante de sélection d'heure) ── */
+/* Le JS positionne cette liste via des coords document (left/top inline calculés
+   par cumulativeOffset du champ). En position:absolute, son offsetParent est
+   #RB_redbox (absolute, plein écran) → les coords se retrouvent décalées et la
+   liste atterrit en haut-gauche de l'écran. En position:fixed, elle se réfère au
+   viewport, ce qui correspond aux coords document calculées (hors scroll). */
 .KeyNavList {
   background: var(--theme-bg-primary);
   border: 1px solid var(--theme-border);
@@ -321,7 +326,7 @@ div.GrowlerNoticeExit:hover {
   border-radius: var(--theme-radius-box);
   overflow-x: hidden;
   overflow-y: auto;
-  position: absolute;
+  position: fixed;
   z-index: 10000;
 }
 .KeyNavList ul {

@@ -37,7 +37,7 @@
 #kronolithEventsDay,
 #kronolithEventsWeek,
 #kronolithEventsWorkweek {
-  --kronolith-hours-width: 127px;
+  --kronolith-hours-width: 80px;
 }
 /* Conteneur des événements de la grille (référent absolu) */
 #kronolithEventsDay {

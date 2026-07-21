@@ -3,7 +3,7 @@
  * ====================================
  * Inputs, selects, .horde-form, .horde-table, .linedRow, boutons.
  */
-label:has input[type="checkbox"], label:has input[type="radio"] {
+label:has(input[type="checkbox"]), label:has(input[type="radio"]) {
   display: inline-flex;
   align-items: center;
   gap: var(--theme-spacing-xs);
@@ -34,6 +34,10 @@ input, select, textarea {
 select { padding: 2px 0 0 2px; }
 
 /* ── Champs texte — style DS UPJV ── */
+/* NB : `input:not([type])` couvre le HTML legacy de Horde qui omet l'attribut
+   type (ex. <input id="id" name="id" size="30">). Ces champs sont des text
+   inputs par défaut mais n'étaient pas capturés par input[type="text"]. */
+input:not([type]),
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -70,6 +74,7 @@ select {
   padding-right: calc(var(--theme-spacing-xs) * 2 + 16px);
   cursor: pointer;
 }
+input:not([type])::placeholder,
 input[type="text"]::placeholder,
 input[type="email"]::placeholder,
 input[type="password"]::placeholder,
@@ -78,6 +83,7 @@ textarea::placeholder {
   color: var(--theme-text-placeholder);
   opacity: 0.7;
 }
+input:not([type]):not(:disabled):hover,
 input[type="text"]:not(:disabled):hover,
 input[type="email"]:not(:disabled):hover,
 input[type="password"]:not(:disabled):hover,
@@ -89,6 +95,7 @@ textarea:not(:disabled):hover,
 select:not(:disabled):hover {
   border-color: var(--theme-border-action-hover);
 }
+input:not([type]):focus,
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
@@ -101,6 +108,7 @@ select:focus {
   border-color: var(--theme-border-action);
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--theme-bg-action) 15%, transparent);
 }
+input:not([type]):disabled,
 input[type="text"]:disabled,
 input[type="email"]:disabled,
 input[type="password"]:disabled,
@@ -115,6 +123,7 @@ select:disabled {
   color: var(--theme-text-disabled);
   cursor: not-allowed;
 }
+input:not([type]):read-only,
 input[type="text"]:read-only,
 input[type="email"]:read-only,
 textarea:read-only {
@@ -315,7 +324,76 @@ input[type="checkbox"]:not(.msCheck):not(.switch-field__input):disabled:checked:
   100% { transform: scale(1); }
 }
 
+/* ── Radios : repris du composant radio du DS UPJV (.radio__input) ──
+   Le HTML legacy de Kronolith a des <input type="radio"> nus (sans classe DS),
+   on applique donc le style DS directement sur le sélecteur d'attribut, en
+   traduisant les tokens colors/spacing du DS vers nos --theme-. */
+input[type="radio"]:not(.msCheck) {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  width: var(--theme-spacing-sm);
+  height: var(--theme-spacing-sm);
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--theme-border);
+  border-radius: var(--theme-radius-full);
+  background-color: var(--theme-bg-white);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  position: relative;
+  vertical-align: middle;
+}
+input[type="radio"]:not(.msCheck)::after {
+  content: "";
+  display: block;
+  width: 50%;
+  height: 50%;
+  border-radius: var(--theme-radius-full);
+  background-color: var(--theme-bg-white);
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+input[type="radio"]:not(.msCheck):checked {
+  background-color: var(--theme-bg-action-active);
+  border-color: var(--theme-border-action-active);
+  animation: radioPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+input[type="radio"]:not(.msCheck):checked::after {
+  opacity: 1;
+  transform: scale(1);
+}
+input[type="radio"]:not(.msCheck):focus-visible {
+  outline: 2px solid var(--theme-border-action);
+  outline-offset: 2px;
+}
+input[type="radio"]:not(.msCheck):not(:disabled):hover {
+  border-color: var(--theme-border-action-hover);
+  transform: scale(1.05);
+}
+input[type="radio"]:not(.msCheck):disabled {
+  background-color: var(--theme-bg-disabled);
+  border-color: var(--theme-border-disabled);
+  cursor: not-allowed;
+}
+input[type="radio"]:not(.msCheck):disabled:checked {
+  background-color: var(--theme-bg-disabled);
+  border-color: var(--theme-border-disabled);
+}
+input[type="radio"]:not(.msCheck):disabled:checked::after {
+  background-color: var(--theme-icon-secondary, var(--theme-text-disabled));
+}
+@keyframes radioPop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
 /* Inputs pleine largeur dans les contextes formulaire */
+.horde-form td.control input:not([type]),
 .horde-form td.control input[type="text"],
 .horde-form td.control input[type="email"],
 .horde-form td.control input[type="password"],
@@ -411,6 +489,7 @@ table.horde-table thead .horde-split-right.sortdown {
 .horde-form .optional { color: var(--theme-text-secondary); font-weight: normal; font-size: 85%; }
 
 .horde-form td.control { padding: 3px 0; }
+.horde-form td.control input:not([type]),
 .horde-form td.control input[type="text"],
 .horde-form td.control input[type="email"],
 .horde-form td.control input[type="number"],

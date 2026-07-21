@@ -365,8 +365,6 @@ display: none;
 #RB_window p,
 #RB_window ul {
   margin-bottom: 3px;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .RB_confirm {
   background: var(--theme-bg-white);
@@ -796,11 +794,26 @@ div.prefsContainer {
 div.prefsContainer > div {
   padding-bottom: 3px;
 }
+/* Lignes « checkbox + label » : ici le HTML fournit un <div> wrapper autour de
+   l'input et du label → on peut les aligner proprement en flex (contrairement
+   aux zones legacy où input et label sont des frères sans parent commun).
+   align-items:start (et non center) pour que la case reste alignée sur la
+   PREMIÈRE ligne des libellés longs, qui passent souvent sur 2-3 lignes. */
+div.prefsContainer > div:has(> input.checkbox) {
+  display: flex;
+  align-items: start;
+  gap: var(--theme-spacing-xs);
+}
+div.prefsContainer > div:has(> input.checkbox) > label {
+  flex: 1;
+  cursor: pointer;
+}
 div.prefsContainer p {
   padding-top: 1em;
 }
 div.prefsContainer input.checkbox {
   vertical-align: middle;
+  flex-shrink: 0;
 }
 img.prefsLinkImg {
   padding-right: 1px;

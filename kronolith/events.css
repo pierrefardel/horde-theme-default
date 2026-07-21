@@ -13,20 +13,20 @@
   height: auto;
 }
 .kronolith-event .kronolith-event-info {
-  padding: 3px 5px 4px;
+  padding: 3px 5px;
   overflow: hidden;
   line-height: 16px;
   text-overflow: ellipsis;
   text-decoration: inherit;
+  font-weight: var(--theme-font-weight-semi-bold);
 }
 img.kronolithEventIcon {
   float: left;
   margin: 0 2px 2px 0;
 }
 .kronolith-event .kronolith-time {
-  font-weight: var(--theme-font-weight-bold);
-  margin-right: 2px;
-  white-space: nowrap;
+  font-weight: var(--theme-font-weight-normal);
+  order: 1;
 }
 .kronolith-event-tentative {
   font-style: italic;
@@ -56,6 +56,9 @@ img.kronolithEventIcon {
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
+  position: absolute;
+  right: var(--theme-spacing-2xs);
+  top: var(--theme-spacing-2xs);
 }
 .kronolith-event span:has(> img[src*="recur"]) img {
   display: none;
@@ -65,7 +68,43 @@ img.kronolithEventIcon {
 #kronolithViewMonth .kronolith-event,
 .kronolithViewDay .kronolith-all-day .kronolith-event {
   line-height: 15px;
-  padding: 5px 10px;
+  padding: 5px;
+  font-weight: var(--theme-font-weight-semi-bold);
+}
+
+/* ── Style "pill" : fond clair teinté + texte foncé + bordure de la couleur ──
+   Le JS pose --cal-color (couleur brute du calendrier) sur l'événement, en plus
+   du background-color/color inline. On dérive 3 tons via color-mix() et on bat
+   l'inline avec !important. Rendu type Google Calendar / Untitled UI.
+   S'applique à toutes les vues (mois, semaine, jour, agenda) via l'attribut.
+   C'est l'identité visuelle du thème UPJV (pas une option) : la vue événement
+   officielle. Le patch JS qui pose --cal-color est générique/inoffensif (donc
+   upstreamable) ; ce style pill reste propre à theme-upjv. */
+.kronolith-event[style*="--cal-color"] {
+  background-color: color-mix(in srgb, var(--cal-color) 14%, var(--theme-bg-white)) !important;
+  color: color-mix(in srgb, var(--cal-color) 72%, black) !important;
+  border: 1px solid color-mix(in srgb, var(--cal-color) 30%, var(--theme-bg-white)) !important;
+  border-left: 3px solid var(--cal-color) !important;
+  overflow: hidden;
+}
+/* Vue semaine/jour : le fond coloré est porté par .kronolith-event-info (enfant),
+   pas par .kronolith-event. --cal-color est hérité du parent → on applique le
+   même traitement pill à cet enfant, et on rend les draggers transparents pour
+   ne pas réafficher le fond plein. */
+.kronolith-event[style*="--cal-color"] .kronolith-event-info {
+  background-color: transparent !important;
+  color: color-mix(in srgb, var(--cal-color) 72%, black) !important;
+}
+/* Draggers (poignées resize) en contexte pill : teintés de la couleur du
+   calendrier au lieu du fond plein inline. Cachés par défaut (visibility gérée
+   ailleurs), visibles au hover/select — on garde une teinte cohérente. */
+.kronolith-event[style*="--cal-color"] .kronolithDragger {
+  background-color: color-mix(in srgb, var(--cal-color) 30%, var(--theme-bg-white)) !important;
+}
+.kronolith-event[style*="--cal-color"].kronolithEditable:hover .kronolithDragger,
+.kronolith-event[style*="--cal-color"].kronolith-selected .kronolithDragger,
+.kronolith-event[style*="--cal-color"] .kronolithDragger.drag {
+  background-color: var(--cal-color) !important;
 }
 
 .kronolithViewDay .kronolith-event {

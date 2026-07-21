@@ -8,7 +8,7 @@
   border-radius: var(--theme-radius-box);
   overflow: hidden;
   box-shadow: var(--theme-shadow-md);
-  padding: 5px;
+  padding: 4px;
   background: var(--theme-bg-white);
   border: 1px solid var(--theme-border);
 }
@@ -29,9 +29,8 @@
 
 /* ── Table interne ── */
 .kronolith-minical table {
-  border-spacing: 0;
-  border: 1px solid var(--theme-border);
-  background-color: var(--theme-bg-primary);
+  border-spacing: 0.5px;
+  background-color: var(--theme-border);
   width: 100%;
   border-radius: var(--theme-radius-box);
   overflow: hidden;
@@ -39,9 +38,9 @@
 .kronolith-minical table th,
 .kronolith-minical table td {
   background-color: var(--theme-bg-white);
-  height: 22px;
-  width: 22px;
-  padding: 1px;
+  height: 24px;
+  width: 18px;
+  padding: 0px;
   text-align: center;
   vertical-align: middle;
   font-weight: var(--theme-font-weight-normal);
@@ -53,16 +52,22 @@
   background-color: var(--theme-bg-action);
 }
 
-.kronolith-minical table th,
+.kronolith-minical table th {
+  background-color: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
+}
+
 .kronolith-minical table td.kronolith-minical-week {
-  background-color: var(--theme-bg-tertiary);
+  background-color: var(--theme-bg-white);
   color: var(--theme-text-primary);
 }
 .kronolith-minical table tbody td {
   empty-cells: show;
 }
 .kronolith-minical table tbody td a {
-  display: block;
+  display: grid;
+  place-items: center;
+  height: 100%;
   color: var(--theme-text-primary);
   text-decoration: none;
 }

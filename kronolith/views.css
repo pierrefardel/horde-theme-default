@@ -15,9 +15,7 @@ table.kronolith-view {
 table.kronolith-view.kronolith-sidebyside {
   width: auto;
 }
-table.kronolith-view tr {
-  background-color: var(--theme-bg-secondary);
-}
+
 table.kronolith-view td,
 table.kronolith-view th {
   padding: 0;
@@ -63,13 +61,12 @@ table.kronolith-view-head td div {
 }
 table.kronolith-view td.kronolith-first-col,
 table.kronolith-view th.kronolith-first-col {
-  width: 126px;
-  background-color: var(--theme-bg-secondary);
+  width: 80px;
   vertical-align: middle;
 }
 
 #kronolith-month-body td.kronolith-first-col {
-  vertical-align: top;
+  vertical-align: middle;
   padding-top: 7px;
 }
 table.kronolith-view.kronolith-sidebyside td.kronolith-first-col {
@@ -82,7 +79,6 @@ table.kronolith-view.kronolith-sidebyside
 }
 .kronolith-first-col span {
   display: block;
-  white-space: nowrap;
 }
 .kronolithViewMonth.kronolith-sidebyside .kronolith-first-col {
   padding: 7px;
@@ -169,7 +165,7 @@ transition: all 0.1s ease;
 }
 .kronolith-other-month .kronolith-day {
   border-color: transparent;
-  color: var(--theme-text-disabled);
+  color: var(--theme-text-secondary);
 }
 
 /* ── Week-end ── */
@@ -185,14 +181,13 @@ transition: all 0.1s ease;
 }
 
 /* ── Aujourd'hui ── */
-.kronolith-today,
-.kronolithViewDay .kronolith-today {
-  background-color: var(--theme-bg-success-light);
-}
+
 .kronolith-today .kronolith-day,
 .kronolith-today .kronolith-day a {
-  color: var(--theme-text-success);
-  font-weight: var(--theme-font-weight-bold);
+    color: var(--theme-text-on-action);
+    font-weight: var(--theme-font-weight-bold);
+    background-color: var(--theme-bg-action);
+    margin-bottom:var(--theme-spacing-2xs);
 }
 
 /* ── Cellules jour ── */
@@ -200,8 +195,13 @@ transition: all 0.1s ease;
   padding: 0.5em;
 }
 .kronolith-day {
-  height: auto;
-  padding: 5px 0 0 10px;
+    height: 28px;
+    width: fit-content;
+    display: grid;
+    aspect-ratio: 1 / 1;
+    place-items: center;
+    line-height: 100%;
+    border-radius: var(--border-radius-full);
 }
 .kronolithViewDay td {
   height: 40px;
