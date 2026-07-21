@@ -154,6 +154,7 @@ transition: all 0.1s ease;
 #kronolithViewMonthContainer {
   flex: 1 1 0;
   min-height: 0;
+  overflow: scroll;
 }
 #kronolithViewMonthContainer table.kronolithViewMonth {
   height: 100%;
