@@ -112,7 +112,7 @@
   padding: 6px 8px;
   height: auto;
   margin: 0;
-  border-radius: 0;
+  border-radius: var(--theme-radius-field);
   transition: all 0.3s ease;
   cursor: pointer;
 }
@@ -162,6 +162,72 @@
   gap: var(--theme-spacing-xs);
 }
 
+/* ── Bouton "+" d'ajout des titres de section : révélé au survol ──
+   Même logique que les icônes d'action des lignes de calendrier (plus bas) :
+   on désencombre la sidebar, l'action n'apparaît que sur sa section.
+   On masque par `opacity` et NON par `display:none` → le lien reste dans
+   l'ordre de tabulation, et `:focus-within` le révèle donc au clavier. */
+#horde-sidebar h3 .horde-add {
+  opacity: 0;
+  transform: translateX(4px) scale(0.85);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+  pointer-events: none;
+}
+#horde-sidebar h3:hover .horde-add,
+#horde-sidebar h3:focus-within .horde-add {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+/* ── Bouton « Ajouter… », dernier élément de la liste (créé par footer.js) ──
+   Action explicite, à la fin des entrées, là où l'œil arrive après les avoir
+   parcourues. Placé DANS .horde-resources : il hérite du gap du grid parent
+   (donc pas de margin ici) et se replie avec la section. Discret au repos
+   (texte secondaire, fond transparent) pour ne pas concurrencer les calendriers,
+   franc au survol. Le libellé vient du title du lien d'origine, déjà traduit. */
+.horde-add-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  width: 100%;
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-xs);
+  border: none;
+  background: transparent;
+  border-radius: var(--theme-radius-box);
+  color: var(--theme-text-secondary);
+  font-family: inherit;
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+.horde-add-btn::before {
+  content: "";
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  -webkit-mask-image: url("graphics/svg/plus.svg");
+  mask-image: url("graphics/svg/plus.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+.horde-add-btn:hover,
+.horde-add-btn:focus-visible {
+  background-color: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+}
+
 /* imp : #foldersSidebar est son propre conteneur de contenu (le wrapper JS le
    détecte et ne double donc pas la carte). L'aspect carte est factorisé plus
    haut avec #horde-sidebar-menu / #kronolithMenu ; ici seules ses spécificités. */
@@ -190,7 +256,7 @@
    (nag a .horde-resources SANS id kronolith). */
 #horde-sidebar [id^="kronolith"].horde-resources > div {
   background-color: color-mix(in srgb, var(--cal-color) 14%, var(--theme-bg-white)) !important;
-  color: color-mix(in srgb, var(--cal-color) 72%, black) !important;
+  color: var(--cal-text) !important;
 }
 /* Layout de base (radius, flex) : commun à toutes les apps, pas de --cal-color */
 #horde-sidebar div.horde-resources > div {
@@ -220,7 +286,7 @@
   height: 12px;
   border-radius: var(--theme-radius-selector);
   border: 2px solid var(--cal-color);
-  background-color: var(--cal-color);
+  background-color: var(--cal-dot);
   transition: background-color 0.15s ease;
 }
 .horde-resource-on,
@@ -286,12 +352,16 @@
 }
 
 /* État MASQUÉ (calendrier décoché) : pastille en contour seul (fond transparent)
-   + ligne légèrement estompée. Scope Kronolith. */
+   + ligne très légèrement estompée. Scope Kronolith.
+   L'opacité reste HAUTE volontairement : l'état masqué est déjà signalé par la
+   pastille en contour, et c'est précisément cette ligne qu'on doit pouvoir lire
+   pour la recocher. Trop l'estomper rendait illisibles les entrées sans couleur
+   choisie (les ressources tombent sur #dddddd) — cumul couleur pâle × opacité. */
 [id^="kronolith"] .horde-resource-link:has(.horde-resource-off)::before {
   background-color: transparent;
 }
 #horde-sidebar [id^="kronolith"].horde-resources > div:has(.horde-resource-off) {
-  opacity: 0.7;
+  opacity: 0.85;
 }
 #horde-sidebar div.horde-resources .horde-resource-edit-000,
 #horde-sidebar div.horde-resources .horde-resource-edit-fff,
@@ -402,8 +472,8 @@
   color: inherit;
 }
 #horde-sidebar .horde-info {
-  font-style: italic;
   padding: 10px 0 0 26px;
+  color:var(--theme-text-secondary)
 }
 
 /* Collapse/expand */

@@ -137,7 +137,6 @@
   gap: var(--theme-spacing-xs);
   padding: var(--theme-spacing-2xs) var(--theme-spacing-sm);
   font-size: var(--theme-font-size-sm);
-  font-weight: var(--theme-font-weight-medium);
   background: var(--theme-bg-white);
   border: 1px solid var(--theme-border);
   border-radius: var(--theme-radius-field);
@@ -158,6 +157,7 @@
   color: var(--theme-text-on-action);
   background: var(--theme-bg-action);
   border-color: var(--theme-bg-action);
+  font-weight: var(--theme-font-weight-medium);
 }
 #kronolithHeader .horde-buttonbar li.horde-icon.horde-active a::before {
   background-color: var(--theme-text-on-action) !important;
@@ -442,6 +442,17 @@ div.fbgrid {
    SANS bordure gauche. Une pastille ronde de la couleur du calendrier précède
    le nom (::before). Le radius de la pastille suit --theme-radius-selector
    (pilotable globalement). */
+/* Apparition animée des pills : le JS (addCalendarLegend) INSÈRE le <span>
+   dans le DOM, donc une animation CSS se déclenche d'elle-même à l'insertion.
+   La disparition n'est PAS animable en CSS : deleteCalendarLegend fait un
+   `legend.remove()` sec (l'élément n'existe déjà plus quand on voudrait
+   l'animer). */
+@keyframes kronolithLegendIn {
+  from {
+    opacity: 0;
+    transform: translateY(-3px) scale(0.96);
+  }
+}
 #kronolith-legend span {
   display: inline-flex;
   align-items: center;
@@ -453,9 +464,10 @@ div.fbgrid {
   line-height: normal;
   font-weight: var(--theme-font-weight-medium);
   transition: opacity 0.15s ease;
+  animation: kronolithLegendIn 0.2s ease-out;
   background-color: color-mix(in srgb, var(--cal-color) 14%, var(--theme-bg-white)) !important;
-  color: color-mix(in srgb, var(--cal-color) 72%, black) !important;
-  border: 1px solid color-mix(in srgb, var(--cal-color) 30%, var(--theme-bg-white));
+  color: var(--cal-text) !important;
+  border: 1px solid var(--cal-border);
 }
 /* Pastille ronde de couleur, avant le nom */
 #kronolith-legend span::before {
@@ -465,10 +477,15 @@ div.fbgrid {
   height: 10px;
   flex-shrink: 0;
   border-radius: var(--theme-radius-selector);
-  background-color: var(--cal-color);
+  background-color: var(--cal-dot);
 }
 #kronolith-legend span:hover {
   opacity: 0.8;
+}
+@media (prefers-reduced-motion: reduce) {
+  #kronolith-legend span {
+    animation: none;
+  }
 }
 #kronolith-legend span::after {
   content: "";

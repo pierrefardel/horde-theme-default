@@ -170,15 +170,78 @@
     });
   }
 
+  /* ── Bouton « Ajouter… » en bas de chaque section de la sidebar ──
+     Horde ne propose qu'un « + » discret dans le <h3> de section, peu lisible
+     comme action. On ajoute APRÈS la liste un bouton explicite, dont le libellé
+     reprend l'attribut title du lien d'origine : il est déjà traduit et propre
+     à chaque section (« Nouvel Calendrier », « Ajout de calendriers distants »…)
+     — donc aucun texte en dur ni i18n à gérer ici.
+
+     On ne DÉPLACE pas le lien d'origine (il reste dans le titre) : ce bouton est
+     un simple relais qui déclenche son clic. Cela évite de dupliquer un id et de
+     perdre les gestionnaires d'événements attachés par l'application. */
+  function addSectionAddButtons() {
+    var sidebar = getSidebar();
+    if (!sidebar) return;
+
+    var lists = sidebar.querySelectorAll('.horde-resources');
+    Array.prototype.forEach.call(lists, function (list) {
+      /* Rejoué à chaque mutation du DOM. Le bouton peut déjà exister MAIS ne
+         plus être en dernier : Kronolith peuple ses listes après nous et fait
+         appendChild, ce qui repousse notre bouton vers le haut. On le cherche
+         donc n'importe où dans la liste et on le REMET en dernier — sinon on en
+         créerait un second à chaque re-render (bouton en double).
+         Ce retour anticipé évite aussi de boucler avec le MutationObserver. */
+      var existing = list.querySelector(':scope > .horde-add-btn');
+      if (existing) {
+        if (existing !== list.lastElementChild) list.appendChild(existing);
+        return;
+      }
+
+      /* Remonte jusqu'à la section portant le <h3> qui contient le lien. */
+      var link = null, node = list, h3;
+      while (node && node !== sidebar && !link) {
+        node = node.parentElement;
+        if (!node) break;
+        h3 = node.querySelector(':scope > h3');
+        if (h3) link = h3.querySelector('.horde-add');
+      }
+      if (!link) return;
+
+      var label = link.getAttribute('title');
+      if (!label) return;
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'horde-add-btn';
+      btn.textContent = label;
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        link.click();
+      });
+
+      /* DANS la liste (dernier enfant), pas après : .horde-resources est un
+         grid avec gap, le bouton hérite donc de l'alignement et de l'espacement
+         des entrées, se replie avec la section, et rend le conteneur non vide
+         (la règle .horde-resources:empty ne le masque plus quand il n'y a
+         aucun calendrier — c'est justement là qu'on veut proposer l'ajout). */
+      list.appendChild(btn);
+    });
+  }
+
   function init() {
     wrapSidebarContent();
     flushPending();
     syncColorFields();
+    addSectionAddButtons();
     /* Le dialog calendrier est injecté à la demande (chunkContent) : on guette
-       son apparition pour brancher le champ couleur créé après coup. */
+       son apparition pour brancher le champ couleur créé après coup. Kronolith
+       re-rend aussi ses listes de calendriers (ajout/suppression) : on replace
+       donc les boutons au passage (no-op s'ils sont déjà là). */
     if (window.MutationObserver) {
       new MutationObserver(function () {
         syncColorFields();
+        addSectionAddButtons();
       }).observe(document.body || document.documentElement, {
         childList: true,
         subtree: true

@@ -7,9 +7,25 @@
  * Chargé UNIQUEMENT en vue dynamique (pas en vue basic).
  */
 
+/* Apparition en fondu : le JS insère les événements dans le DOM, l'animation
+   se déclenche donc d'elle-même à l'insertion (même principe que les pills de
+   légende). Fondu SEUL et très court : les événements sont recréés à chaque
+   navigation (mois suivant, jour↔semaine) et peuvent être nombreux — un
+   déplacement ou une durée plus longue deviendrait vite fatigant. */
+@keyframes kronolithEventIn {
+  from {
+    opacity: 0;
+  }
+}
 .kronolith-event {
   cursor: pointer;
   position: absolute;
+  animation: kronolithEventIn 0.15s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kronolith-event {
+    animation: none;
+  }
 }
 #kronolithViewDay .kronolith-event,
 #kronolithViewWeek .kronolith-event,

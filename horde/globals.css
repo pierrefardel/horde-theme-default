@@ -5,6 +5,50 @@
  * contenu email (citations, signature), alternance de lignes.
  */
 
+/* ── Couleurs de calendrier : plancher de lisibilité ──────────────────────
+   Le JS pose `--cal-color` (couleur brute du calendrier) en inline. Le style
+   "pill" en dérive le texte et la pastille. Problème : certaines entrées n'ont
+   PAS de couleur choisie (les ressources tombent sur #dddddd) → le texte dérivé
+   devient gris pâle et illisible, alors que Horde avait justement calculé un
+   `color` contrasté (contrastColor, cf. nos PR WCAG) qu'on écrasait.
+
+   Solution : on garde le mélange existant, puis on BORNE la luminosité en oklch
+   (teinte et chroma préservés). La borne dépend de la SATURATION (c) : une
+   couleur neutre/grise n'a aucune identité à préserver → on la pousse
+   franchement vers le contraste ; une couleur vive en a une → sa borne se
+   décale avec le chroma et la laisse intacte.
+
+   SYMÉTRIE CLAIR / SOMBRE — c'est le point clé :
+   - en clair, le fond du pill est très clair  → on PLAFONNE (min) : forcer FONCÉ
+   - en sombre, le fond du pill est sombre     → on PLANCHÉISE (max) : forcer CLAIR
+   Et le mélange de base s'inverse aussi (avec black en clair, avec white en
+   sombre). Sans ça, le dark hérite de textes foncés sur fond sombre = illisible.
+   On passe par light-dark(), mécanisme déjà utilisé par les tokens du thème.
+   Ces variables sont héritées par les enfants (custom properties). */
+[style*="--cal-color"] {
+  --cal-text: light-dark(
+    oklch(from color-mix(in srgb, var(--cal-color) 72%, black) min(l, calc(0.28 + c * 2)) c h),
+    oklch(from color-mix(in srgb, var(--cal-color) 72%, white) max(l, calc(0.78 - c * 1)) c h)
+  );
+  --cal-dot: light-dark(
+    oklch(from var(--cal-color) min(l, calc(0.55 + c * 1.5)) c h),
+    oklch(from var(--cal-color) max(l, calc(0.45 + c * 0.5)) c h)
+  );
+  /* Bordure du pill : même principe. Sans borne, une couleur neutre donne une
+     bordure quasi invisible sur le fond (blanc en clair, sombre en dark),
+     contrairement aux pills colorés. Borne discrète, décalée par le chroma. */
+  --cal-border: light-dark(
+    oklch(
+      from color-mix(in srgb, var(--cal-color) 30%, var(--theme-bg-white))
+        min(l, calc(0.78 + c * 2)) c h
+    ),
+    oklch(
+      from color-mix(in srgb, var(--cal-color) 30%, var(--theme-bg-white))
+        max(l, calc(0.38 + c * 1)) c h
+    )
+  );
+}
+
 /* ── View Transitions — uniquement #horde-body, header/sub restent fixes ── */
 @view-transition {
   navigation: auto;

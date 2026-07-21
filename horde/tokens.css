@@ -139,7 +139,6 @@
 
   /* ── Ombres ── */
   --theme-shadow-xs:           var(--shadow-xs-bottom);
-  --theme-shadow-xs:           var(--shadow-xs-bottom);
   --theme-shadow-sm:           var(--shadow-sm-bottom);
   --theme-shadow-md:           var(--shadow-md-bottom);
   --theme-shadow-lg:           var(--shadow-lg-bottom);
