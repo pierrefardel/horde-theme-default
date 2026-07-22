@@ -50,8 +50,6 @@
   height: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--theme-spacing-sm);
-  padding: var(--theme-spacing-sm);
 }
 
 #kronolithBody {
@@ -69,7 +67,6 @@
 #kronolithViewYear,
 #kronolithViewTasks,
 #kronolithViewAgenda {
-  border-radius: var(--theme-radius-box);
   overflow: hidden;
 }
 
@@ -80,7 +77,8 @@
 #kronolithMain:has(#kronolithViewMonth:not([style*="display:none"])) {
   height: 100%;
 }
-#kronolithMain:has(#kronolithViewMonth:not([style*="display:none"])) #kronolithBody {
+#kronolithMain:has(#kronolithViewMonth:not([style*="display:none"]))
+  #kronolithBody {
   flex: 1 1 0;
 }
 
@@ -427,13 +425,6 @@ div.fbgrid {
   gap: var(--theme-spacing-xs);
   padding: var(--theme-spacing-xs);
   order: -1;
-  background-color: var(--theme-bg-primary);
-  border-radius: var(--theme-radius-box);
-  box-shadow: var(--theme-shadow-sm);
-  /* Masque le nœud texte "Legend:" (injecté nu, non wrappé) : font-size:0 +
-     line-height:0 lui donnent des dimensions nulles, donc l'item flex anonyme
-     n'occupe plus d'espace (et le gap ne le décale plus). Le gap est conservé
-     pour un wrap propre entre les badges. */
   font-size: 0;
   line-height: 0;
 }
@@ -465,7 +456,11 @@ div.fbgrid {
   font-weight: var(--theme-font-weight-medium);
   transition: opacity 0.15s ease;
   animation: kronolithLegendIn 0.2s ease-out;
-  background-color: color-mix(in srgb, var(--cal-color) 14%, var(--theme-bg-white)) !important;
+  background-color: color-mix(
+    in srgb,
+    var(--cal-color) 14%,
+    var(--theme-bg-white)
+  ) !important;
   color: var(--cal-text) !important;
   border: 1px solid var(--cal-border);
 }

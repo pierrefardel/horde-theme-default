@@ -45,7 +45,6 @@
   padding: 0 !important;
   background-image: none !important;
   background-color: var(--theme-bg-btn-secondary);
-  border: 1px solid var(--theme-border-btn-secondary);
   border-radius: var(--theme-radius-field);
   overflow: hidden;
   transition: background-color 0.15s ease, border-color 0.15s ease;

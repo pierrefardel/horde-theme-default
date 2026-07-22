@@ -49,8 +49,8 @@ img.kronolithEventIcon {
   margin-left: 3px;
   vertical-align: middle;
   background-color: currentColor;
-  -webkit-mask-image: url("graphics/svg/repeat.svg");
-  mask-image: url("graphics/svg/repeat.svg");
+  -webkit-mask-image: url("graphics/svg/repeat-2.svg");
+  mask-image: url("graphics/svg/repeat-2.svg");
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;

@@ -48,12 +48,8 @@
 #kronolithViewWeek .kronolith-view-head .kronolith-event,
 #kronolithViewWorkweek .kronolith-view-head .kronolith-event {
   white-space: nowrap;
-  margin-right: 10px;
 }
-#kronolithViewWeek .kronolith-view-head .kronolith-event,
-#kronolithViewWorkweek .kronolith-view-head .kronolith-event {
-  margin-right: 10%;
-}
+
 
 /* Le contenu remplit la boîte de l'événement */
 .kronolith-event .kronolith-event-info {
@@ -75,13 +71,21 @@ div.kronolithEditable.kronolithLast:hover .kronolith-event-info,
 .kronolith-event.kronolithEditable {
   cursor: move;
 }
+/* Les poignées gardent une hauteur CONSTANTE et n'apparaissent qu'en opacité :
+   animer leur hauteur (ou celle de l'événement) fausserait les heures, car le JS
+   relit la géométrie en direct pendant le resize et lirait des valeurs
+   intermédiaires. `pointer-events: none` au repos pour qu'elles ne captent pas
+   le clic tant qu'elles sont invisibles. */
 .kronolith-event .kronolithDragger {
   position: absolute;
-  visibility: hidden;
   left: 0;
   right: 0;
-  height: 0px;
-  transition: all 0.2s ease;
+  height: 5px;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.18s ease,
+    background-color 0.18s ease;
 }
 .kronolith-event.kronolithEditable .kronolithDragger,
 .kronolithDragger.drag {
@@ -106,8 +110,11 @@ div.kronolithEditable.kronolithLast:hover .kronolith-event-info,
 .kronolith-event.kronolithEditable .kronolithDragger.kronolithDraggerBottom {
   cursor: s-resize;
 }
+/* Apparition en fondu (opacité seule — la hauteur ne bouge pas, cf. plus haut).
+   Les poignées redeviennent cliquables une fois visibles. */
 div.kronolithEditable:hover .kronolithDragger,
-.kronolith-event.kronolith-selected .kronolithDragger {
-  visibility: visible;
-  height: 5px;
+.kronolith-event.kronolith-selected .kronolithDragger,
+.kronolithDragger.drag {
+  opacity: 1;
+  pointer-events: auto;
 }

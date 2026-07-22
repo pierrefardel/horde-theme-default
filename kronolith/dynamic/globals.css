@@ -82,15 +82,50 @@ body {
   line-height: 2em;
 }
 
-/* La cellule de jour (vue mois) est cliquable (ouvre la modale d'ajout) :
-   curseur pointer + fond teinté au survol pour signaler l'interactivité. */
+/* ── Curseur d'ajout (cellule de jour, vue mois) ──
+   Un curseur `url()` charge une image EXTERNE : le SVG n'a donc aucun accès au
+   CSS de la page, et `var(--theme-*)` n'y fonctionne pas — les couleurs doivent
+   être en dur dans le fichier. On fournit donc deux fichiers (tracé sombre pour
+   fond clair, tracé clair pour fond sombre) et on bascule par une variable, ce
+   qui garde UN seul point de réglage et vaut pour les deux thèmes.
+   Valeurs calées sur --theme-text-primary (≈ neutral-700 / neutral-50 du DS). */
+:root {
+  --kronolith-add-cursor: url("../graphics/svg/cursor-calendar-plus.svg") 4 4;
+}
+@media (prefers-color-scheme: dark) {
+  html:not(.theme-light) {
+    --kronolith-add-cursor: url("../graphics/svg/cursor-calendar-plus-dark.svg") 4 4;
+  }
+}
+html.theme-dark {
+  --kronolith-add-cursor: url("../graphics/svg/cursor-calendar-plus-dark.svg") 4 4;
+}
+html.theme-light {
+  --kronolith-add-cursor: url("../graphics/svg/cursor-calendar-plus.svg") 4 4;
+}
+
+/* La cellule ouvre la modale d'AJOUT au clic → curseur « calendrier + » (Lucide
+   calendar-plus), explicite sur l'action. Il se distingue du `pointer` des
+   événements (qui, eux, s'ÉDITENT au clic) : le curseur change en passant du
+   vide à un événement, ce qui lève l'ambiguïté créer / éditer.
+   Le « 4 4 » est le hotspot (point de clic réel) ; `copy` sert de repli si
+   l'image ne charge pas. */
 #kronolith-month-body .kronolithMonthDay {
-  cursor: pointer;
-  transition: all 0.1s ease;
-  padding:5px;
+  cursor: var(--kronolith-add-cursor), copy;
+  transition: all 0.2s ease;
+  padding: 5px;
 }
 #kronolith-month-body .kronolithMonthDay:hover {
   box-shadow: var(--theme-shadow-xs) inset;
+  background-color: var(--theme-bg-primary);
+}
+/* Pendant le DÉPLACEMENT d'un événement, le pointeur survole les cellules : sans
+   ça, le curseur d'ajout reprendrait le dessus alors qu'on est en train de
+   déplacer. Tant qu'un événement porte .drag, les cellules (et tout ce qu'elles
+   contiennent) gardent donc le curseur `move`. */
+#kronolith-month-body:has(.kronolith-event.drag) .kronolithMonthDay,
+#kronolith-month-body:has(.kronolith-event.drag) .kronolithMonthDay * {
+  cursor: move !important;
 }
 
 /* ── Cellules cliquables ── */

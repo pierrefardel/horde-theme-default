@@ -32,7 +32,7 @@
   background-color: var(--theme-bg-tertiary);
 }
 #kronolithViewAgenda .kronolith-event {
-  position: static;
+  position: relative;
   padding: 2px 4px;
   display: flex;
   flex-direction: column;

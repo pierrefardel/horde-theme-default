@@ -31,6 +31,7 @@ table.kronolith-view-head {
   position: sticky;
   top: 0;
   z-index: 2;
+  box-shadow: var(--theme-shadow-xs);
 }
 
 /* ── En-tête des colonnes ── */
@@ -67,7 +68,6 @@ table.kronolith-view th.kronolith-first-col {
 
 #kronolith-month-body td.kronolith-first-col {
   vertical-align: middle;
-  padding-top: 7px;
 }
 table.kronolith-view.kronolith-sidebyside td.kronolith-first-col {
   padding-top: 3px;
@@ -91,11 +91,9 @@ table.kronolith-view.kronolith-sidebyside
 #kronolith-month-body tr {
   background-color: var(--theme-bg-white);
 }
-#kronolith-month-body tr {
-  /* Horde fixe height:20% en inline sur chaque semaine → ne pas l'écraser.
-     On garde juste une hauteur mini pour les petits écrans. */
-  min-height: 90px;
-}
+/* Horde fixe height:20% en inline sur chaque semaine → ne pas l'écraser : c'est
+   ce qui permet aux semaines de se répartir la hauteur et donc à la grille de
+   tenir dans la vue, sans scroll (cf. #kronolithViewMonthContainer). */
 
 
 
@@ -106,6 +104,7 @@ table.kronolith-view.kronolith-sidebyside
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: var(--theme-spacing-sm);
   overflow: unset !important;
+  padding: 0 var(--spacing-sm);
 }
 /* Le spinner de chargement ne doit pas occuper une cellule de la grille */
 .kronolithViewYear > #kronolithLoadingyear {
@@ -126,14 +125,38 @@ table.monthgrid td {
   border-bottom: 1px solid var(--theme-border);
 }
 
+/* NE JAMAIS animer height / top / left ici : pendant un drag ou un resize, le JS
+   écrit la hauteur puis relit aussitôt `div.offsetHeight` pour recalculer les
+   heures de l'événement. Avec une transition, il relit une valeur INTERMÉDIAIRE
+   (animation en cours) et l'erreur s'accumule à chaque frame → les heures
+   affichées et enregistrées deviennent fausses.
+   On n'anime donc que les propriétés purement visuelles. */
 .kronolith-event {
-transition: all 0.1s ease;
+  transition:
+    background-color 0.1s ease,
+    border-color 0.1s ease,
+    color 0.1s ease,
+    opacity 0.1s ease,
+    box-shadow 0.1s ease;
 }
 
-.kronolith-event.drag {
- height : auto !important;
- opacity: 0.6;
- border: 1px dashed currentColor !important;
+/* Événement en cours de DÉPLACEMENT : « décollé » de sa place — bordure en
+   pointillés sur tout le contour et légère transparence.
+   Le sélecteur doit être au moins aussi spécifique que la règle pill
+   (`.kronolith-event[style*="--cal-color"]`, qui pose un border + border-left
+   en !important), sinon la bordure pleine reprendrait le dessus et on ne
+   verrait que l'opacité. */
+.kronolith-event.drag,
+.kronolith-event[style*="--cal-color"].drag {
+  opacity: 0.65;
+  border: 1px dashed var(--cal-color, currentColor) !important;
+}
+/* `height: auto` UNIQUEMENT en vue mois, où les événements ont une hauteur
+   naturelle. En vue jour/semaine la hauteur est calculée par le JS d'après la
+   durée (height inline) : la forcer à auto ferait s'effondrer l'événement
+   pendant le déplacement — on ne verrait plus que le contour en pointillés. */
+#kronolith-month-body .kronolith-event.drag {
+  height: auto !important;
 }
 
 /* ── La vue mois remplit toute la hauteur disponible ──
@@ -151,10 +174,15 @@ transition: all 0.1s ease;
   flex: 0 0 auto;
   height: auto;
 }
+/* Le scroll est nécessaire : sur un mois chargé, les semaines ne tiennent pas
+   toutes dans la hauteur et `overflow: hidden` tronquerait les derniers jours.
+   NB : pendant un déplacement d'événement, Scriptaculous ne recalcule pas la
+   position du fantôme quand la vue défile — d'où un décalage si l'on scrolle en
+   maintenant le clic (voir footer.js, qui compense). */
 #kronolithViewMonthContainer {
   flex: 1 1 0;
   min-height: 0;
-  overflow: scroll;
+  overflow-y: auto;
 }
 #kronolithViewMonthContainer table.kronolithViewMonth {
   height: 100%;
