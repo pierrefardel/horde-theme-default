@@ -170,52 +170,11 @@
     });
   }
 
-  /* ── Vue mois : suivi du fantôme de drag pendant le défilement ──
-     Scriptaculous positionne le fantôme d'un événement déplacé au moment du
-     mousedown, puis ne le repositionne qu'aux mouvements de souris. Si la vue
-     défile pendant le maintien (molette), le fantôme reste calé sur ses anciennes
-     coordonnées : il se décale du curseur et le dépôt tombe sur le mauvais jour.
-
-     Kronolith gère ce cas pour le RESIZE (il compare scrollTop à chaque appel)
-     mais pas pour le déplacement en vue mois. Comme la grille du mois est
-     scrollable dans ce thème (elle ne l'est pas dans le thème d'origine, où tout
-     tient dans la vue), on compense ici : à chaque défilement pendant un drag, on
-     décale le fantôme de la distance parcourue.
-
-     Fait dans le JS du thème : aucun patch de Kronolith à maintenir. */
-  function trackMonthDragScroll() {
-    var container = document.getElementById('kronolithViewMonthContainer');
-    if (!container || container.getAttribute('data-drag-scroll-tracked')) return;
-    container.setAttribute('data-drag-scroll-tracked', '1');
-
-    var lastScrollTop = container.scrollTop;
-
-    container.addEventListener('scroll', function () {
-      var delta = container.scrollTop - lastScrollTop;
-      lastScrollTop = container.scrollTop;
-      if (!delta || !window.DragDrop || !DragDrop.Drags) return;
-
-      /* Le fantôme est repositionné à chaque mouvement de souris par
-         dragdrop2 (_position), à partir d'offsets figés au mousedown. Écrire
-         `style.top` ne servirait donc à rien : ce serait écrasé au mouvement
-         suivant. On corrige l'offset MÉMORISÉ (xy_top / y_top), pour que tous
-         les calculs ultérieurs tiennent compte du défilement. */
-      var el = container.querySelector('.kronolith-event.drag');
-      if (!el) return;
-
-      var drag = DragDrop.Drags.getDrag(el);
-      if (!drag) return;
-
-      ['ghost', 'caption'].forEach(function (key) {
-        var ob = drag[key];
-        if (!ob) return;
-        if (typeof ob.xy_top === 'number') ob.xy_top -= delta;
-        if (typeof ob.y_top === 'number') ob.y_top -= delta;
-        if (typeof ob.y_bottom === 'number') ob.y_bottom -= delta;
-      });
-      if (typeof drag.startTop === 'number') drag.startTop -= delta;
-    }, { passive: true });
-  }
+  /* NB — le décalage du fantôme lors d'un défilement en cours de déplacement
+     (horde/kronolith#74) n'est pas corrigeable depuis le thème : il vient de la
+     vieille lib de drag (Scriptaculous/dragdrop2). Réglé en amont par sa
+     réécriture en Pointer Events (horde/Core#211 + horde/kronolith#76), testée
+     et validée ici le 2026-07-23 — en attente de merge. Rien à faire côté thème. */
 
   /* ── Bouton « Ajouter… » en bas de chaque section de la sidebar ──
      Horde ne propose qu'un « + » discret dans le <h3> de section, peu lisible
@@ -285,14 +244,10 @@
        son apparition pour brancher le champ couleur créé après coup. Kronolith
        re-rend aussi ses listes de calendriers (ajout/suppression) : on replace
        donc les boutons au passage (no-op s'ils sont déjà là). */
-    trackMonthDragScroll();
     if (window.MutationObserver) {
       new MutationObserver(function () {
         syncColorFields();
         addSectionAddButtons();
-        /* La vue mois est (re)construite au changement de vue ou de mois :
-           on rebranche le suivi du scroll (no-op s'il l'est déjà). */
-        trackMonthDragScroll();
       }).observe(document.body || document.documentElement, {
         childList: true,
         subtree: true
