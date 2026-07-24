@@ -40,17 +40,19 @@ img.kronolithEventIcon {
   margin-left: 2px;
   color: var(--theme-text-secondary);
 }
-/* Icône de récurrence (recur-*.png) → repeat Lucide en mask-image.
-   Le <span> qui entoure l'<img> porte le mask ; l'<img> est masqué. */
-.kronolith-event span:has(> img[src*="recur"]) {
+/* Icônes d'état d'un événement (récurrence, exception…) → icône Lucide en
+   mask-image. Kronolith les rend sous la forme <span><img src="…-000.png"></span>.
+   Règle GÉNÉRIQUE : tout <span> contenant un <img> devient une pastille masquée,
+   positionnée en absolu à droite ; l'<img> d'origine est caché. Le mask-image
+   (quelle icône) est choisi par les règles spécifiques ci-dessous selon la
+   source. Le positionnement s'applique donc à toute icône, pas seulement recur. */
+.kronolith-event span:has(> img) {
   display: inline-block;
   width: 12px;
   height: 12px;
   margin-left: 3px;
   vertical-align: middle;
   background-color: currentColor;
-  -webkit-mask-image: url("graphics/svg/repeat-2.svg");
-  mask-image: url("graphics/svg/repeat-2.svg");
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
@@ -61,8 +63,17 @@ img.kronolithEventIcon {
   right: var(--theme-spacing-2xs);
   top: var(--theme-spacing-2xs);
 }
-.kronolith-event span:has(> img[src*="recur"]) img {
+.kronolith-event span:has(> img) img {
   display: none;
+}
+/* Icône spécifique selon la source du PNG remplacé. */
+.kronolith-event span:has(> img[src*="recur"]) {
+  -webkit-mask-image: url("graphics/svg/repeat-2.svg");
+  mask-image: url("graphics/svg/repeat-2.svg");
+}
+.kronolith-event span:has(> img[src*="exception"]) {
+  -webkit-mask-image: url("graphics/svg/repeat-off.svg");
+  mask-image: url("graphics/svg/repeat-off.svg");
 }
 
 /* ── Événements vue mois et all-day ── */
