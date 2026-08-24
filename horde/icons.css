@@ -215,3 +215,28 @@ a.helplink::before {
 a.helplink:hover::before {
   background-color: var(--theme-icon-primary);
 }
+
+/* ── Importer/Exporter (sous-navigation) ──
+   `horde-data` est une classe du CŒUR Horde, partagée par la sous-navigation
+   des apps (Nag, Turba…) et par l'écran d'administration — d'où sa place ici
+   et non dans un module. Les PNG d'origine (globals.css et widgets.css) sont
+   neutralisés au profit d'un mask, pour que la couleur suive le thème. */
+.horde-subnavi-icon.horde-data,
+.horde-admin-data {
+  background-image: none;
+}
+.horde-subnavi-icon.horde-data::before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("graphics/svg/data.svg");
+  mask-image: url("graphics/svg/data.svg");
+  -webkit-mask-size: 16px;
+  mask-size: 16px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}

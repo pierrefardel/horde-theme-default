@@ -68,7 +68,7 @@
 /* ── Utilitaires ── */
 .hidden     { display: none; }
 .nowrap     { white-space: nowrap; }
-.clear      { clear: both; line-height: 0; height: 0; }
+.clear      { clear: both; line-height: 0; height: 0; display: none; }
 .leftAlign  { text-align: left; }
 .rightAlign { text-align: right; }
 .leftFloat  { float: left; }

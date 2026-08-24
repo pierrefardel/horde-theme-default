@@ -1,0 +1,276 @@
+/**
+ * Nag UPJV — Icônes
+ * ===================
+ * Les PNG du thème d'origine sont remplacés par des SVG Lucide en
+ * `mask-image` : la couleur suit alors le thème (clair/sombre, états) au lieu
+ * d'être cuite dans l'image.
+ *
+ * Technique : `::before` sur l'élément, JAMAIS `mask-image` directement sur un
+ * `<a>` — le mask masquerait aussi le texte du lien. Voir feedback_workflow.
+ */
+
+/* Géométrie commune des icônes de menu et d'action. */
+.nag-list::before,
+.nag-search::before,
+.nag-new::before,
+.nag-complete::before,
+.nag-edit::before,
+.nag-delete::before,
+.horde-new-extra a::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  vertical-align: text-bottom;
+  background-color: currentColor;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* Neutralise les PNG d'origine (background-image sur l'élément lui-même). */
+.nag-list,
+.nag-search,
+.nag-new,
+.nag-complete,
+.nag-edit,
+.nag-delete,
+.horde-new-extra,
+.horde-new-extra a {
+  background-image: none;
+}
+
+/* ── Navigation ── */
+.nag-list::before {
+  -webkit-mask-image: url("graphics/svg/nag.svg");
+  mask-image: url("graphics/svg/nag.svg");
+}
+.nag-search::before {
+  -webkit-mask-image: url("graphics/svg/search.svg");
+  mask-image: url("graphics/svg/search.svg");
+}
+
+/* ── Actions sur une tâche ── */
+.nag-new::before,
+.horde-new-extra a::before {
+  -webkit-mask-image: url("graphics/svg/add.svg");
+  mask-image: url("graphics/svg/add.svg");
+}
+.nag-complete::before {
+  -webkit-mask-image: url("graphics/svg/complete.svg");
+  mask-image: url("graphics/svg/complete.svg");
+}
+.nag-edit::before {
+  -webkit-mask-image: url("graphics/svg/edit.svg");
+  mask-image: url("graphics/svg/edit.svg");
+}
+.nag-delete::before {
+  -webkit-mask-image: url("graphics/svg/delete.svg");
+  mask-image: url("graphics/svg/delete.svg");
+}
+
+/* ── Loupe de la recherche rapide ──
+   Le champ portait l'icône en background-image (neutralisée dans globals.css).
+   On la repose sur le conteneur, en absolu par-dessus le padding réservé. */
+#quicksearch {
+  position: relative;
+}
+#quicksearch::before {
+  content: "";
+  position: absolute;
+  left: var(--theme-spacing-2xs);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/search.svg");
+  mask-image: url("graphics/svg/search.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* ── Statut d'un assigné (fiche de tâche) ──
+   `nag-status-N` est posé sur le <td> qui contient déjà le nom : le PNG était
+   un background décalé par un padding-left. Même principe, en mask coloré
+   sémantiquement — la couleur double l'icône, elle ne la remplace pas. */
+.nag-status-1,
+.nag-status-2,
+.nag-status-3 {
+  position: relative;
+  padding-left: 20px !important;
+  background-image: none;
+}
+.nag-status-1::before,
+.nag-status-2::before,
+.nag-status-3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+/* Aucune réponse */
+.nag-status-1::before {
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/status-none.svg");
+  mask-image: url("graphics/svg/status-none.svg");
+}
+/* Accepté */
+.nag-status-2::before {
+  background-color: var(--theme-bg-success);
+  -webkit-mask-image: url("graphics/svg/status-accepted.svg");
+  mask-image: url("graphics/svg/status-accepted.svg");
+}
+/* Refusé */
+.nag-status-3::before {
+  background-color: var(--theme-bg-danger);
+  -webkit-mask-image: url("graphics/svg/status-declined.svg");
+  mask-image: url("graphics/svg/status-declined.svg");
+}
+
+/* ── Loupe d'ouverture de la recherche rapide (en-tête de liste) ──
+   `#quicksearchL` est un lien qui ne contient qu'une <img> : on masque celle-ci
+   et on pose l'icône sur le lien via ::before (jamais de mask sur le <a>
+   lui-même, il masquerait tout son contenu).
+   Les SVG sont pris dans le module (nag/graphics/svg/) et non dans horde/ :
+   un chemin relatif inter-modules devrait nommer le thème en dur
+   (../../horde/upjv/…), ce qui casserait sur default-new, qui reçoit le même
+   fichier. */
+#quicksearchL img {
+  display: none;
+}
+#quicksearchL {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  margin-left: var(--theme-spacing-2xs);
+}
+#quicksearchL::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("graphics/svg/search.svg");
+  mask-image: url("graphics/svg/search.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+/* Fermeture de la recherche : le « X » textuel devient une croix. */
+#quicksearch small a[title] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+  text-indent: -999px;
+  vertical-align: middle;
+}
+#quicksearch small a[title]::before {
+  content: "";
+  display: block;
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  text-indent: 0;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/close.svg");
+  mask-image: url("graphics/svg/close.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* ── Icône de la barre de tags ──
+   `tags.png` (suggestions) et `filter.png` (filtres actifs), tous deux du
+   thème horde.
+
+   IMPORTANT — on CACHE l'<img> et on pose l'icône en ::before sur le
+   conteneur. Poser le mask sur l'<img> elle-même ne suffit pas : le pixmap
+   reste visible sous le masque (`content: ""` n'est pas fiable sur un élément
+   remplacé). Même conclusion que pour l'icône de récurrence de Kronolith. */
+.nag-tags-related > img,
+.nag-tags-browsing > img {
+  display: none;
+}
+.nag-tags-related::before,
+.nag-tags-browsing::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+.nag-tags-related::before {
+  -webkit-mask-image: url("graphics/svg/tags.svg");
+  mask-image: url("graphics/svg/tags.svg");
+}
+.nag-tags-browsing::before {
+  -webkit-mask-image: url("graphics/svg/filter.svg");
+  mask-image: url("graphics/svg/filter.svg");
+}
+
+/* ── Croix de retrait d'un filtre actif ──
+   `<li>test<a><img delete-small.png></a></li>` : la croix suit le libellé du
+   tag. Le lien reste cliquable, seule l'image devient un mask. */
+.nag-tags-browsing .horde-tags li img {
+  display: none;
+}
+.nag-tags-browsing .horde-tags li a:has(img) {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.nag-tags-browsing .horde-tags li a:has(img)::before {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  background-color: currentColor;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+  -webkit-mask-image: url("graphics/svg/close.svg");
+  mask-image: url("graphics/svg/close.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+.nag-tags-browsing .horde-tags li a:hover::before {
+  opacity: 1;
+}

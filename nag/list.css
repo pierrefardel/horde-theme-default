@@ -1,0 +1,358 @@
+/**
+ * Nag UPJV — Liste des tâches
+ * =============================
+ * Nag peint chaque <tr> avec la couleur de la liste, en inline
+ * (`style="background-color:#d98dff;color:#000"`) : un aplat saturé sur toute
+ * la largeur du tableau, illisible et sans rapport avec le reste du thème.
+ *
+ * On garde la STRUCTURE de tableau — c'est elle qui porte le tri par colonne et
+ * l'alignement vertical — mais chaque ligne devient une CARTE : fond
+ * légèrement teinté, filet vertical de la couleur de la liste, coins arrondis
+ * et lignes espacées. Même vocabulaire que les tâches dans Kronolith
+ * (kronolith/dynamic/lists.css) et que les events.
+ *
+ * La couleur est récupérée par footer.js, qui la recopie du fond inline vers
+ * `--cal-color` : les dérivés à plancher de lisibilité (--cal-text,
+ * --cal-border, horde/globals.css) deviennent alors utilisables ici.
+ */
+
+/* ── Le tableau n'est plus une grille pleine ── */
+#tasks.horde-table {
+  border-collapse: separate;
+  border-spacing: 0 var(--theme-spacing-2xs);
+  background-color: transparent;
+  border: 0;
+}
+/* En-têtes : au-dessus des cartes, discrets.
+   IMPORTANT — horde/forms.css met `display: flex` sur `table.horde-table th`
+   et `thead tr` (utile pour les tableaux d'administration, où l'en-tête porte
+   un libellé et une flèche de tri à ses extrémités). Ici c'est nuisible : un
+   <tr>/<th> en flex sort du modèle tabulaire, donc l'en-tête ne s'aligne plus
+   sur les colonnes du <tbody> et le tableau ne prend plus toute la largeur.
+   On rétablit table-row / table-cell. */
+#tasks thead tr {
+  display: table-row;
+}
+#tasks thead th {
+  display: table-cell;
+  background-color: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--theme-border);
+  color: var(--theme-text-secondary);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-2xs);
+}
+/* Les icônes d'en-tête (terminée, modifier, note, alarme) : PNG → SVG masqués.
+   On CACHE l'<img> et on pose l'icône en ::before sur le <th> — poser le mask
+   sur l'<img> laisse le pixmap visible dessous (`content: ""` n'est pas fiable
+   sur un élément remplacé). */
+#tasks thead th img {
+  display: none;
+}
+#tasks thead th:has(img)::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+#tasks thead th:has(img[src*="checked"])::before {
+  -webkit-mask-image: url("graphics/svg/complete.svg");
+  mask-image: url("graphics/svg/complete.svg");
+}
+#tasks thead th:has(img[src*="note"])::before {
+  -webkit-mask-image: url("graphics/svg/note.svg");
+  mask-image: url("graphics/svg/note.svg");
+}
+#tasks thead th:has(img[src*="alarm"])::before {
+  -webkit-mask-image: url("graphics/svg/alarm.svg");
+  mask-image: url("graphics/svg/alarm.svg");
+}
+#tasks thead th:has(img[src*="edit"])::before {
+  -webkit-mask-image: url("graphics/svg/edit.svg");
+  mask-image: url("graphics/svg/edit.svg");
+}
+/* Colonnes vides du template (largeurs 2% figées) : on les laisse se réduire
+   à leur contenu plutôt que de réserver une colonne pour rien. */
+#tasks th[width="2%"] {
+  width: 1%;
+  white-space: nowrap;
+}
+
+/* Affordance de tri.
+   Les classes `sortup`/`sortdown` (chevron dans horde/icons.css) ne sont posées
+   que sur la colonne ACTUELLEMENT triée — une seule trie à la fois. Rien
+   n'indique alors que les autres sont triables : on révèle un chevron discret
+   au survol des en-têtes cliquables. */
+#tasks thead th:has(.sortlink):not(.sortup):not(.sortdown)::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/sortdown.svg");
+  mask-image: url("graphics/svg/sortdown.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+#tasks thead th:has(.sortlink):hover::after,
+#tasks thead th:has(.sortlink):focus-within::after {
+  opacity: 0.55;
+}
+
+/* ── Une ligne = une carte ──
+   On RESTE en modèle tabulaire : les colonnes doivent s'aligner d'une ligne à
+   l'autre et sous les en-têtes de tri. Passer le <tr> en flex donnait de
+   belles cartes mais faisait perdre cet alignement (essayé puis abandonné).
+
+   Le fond, les bordures et les arrondis sont donc portés par les CELLULES : un
+   radius ou une bordure posés sur un <tr> ne sont pas rendus. */
+#tasks-body tr[style*="--cal-color"] > td {
+  background-color: color-mix(
+    in srgb,
+    var(--cal-color) 7%,
+    var(--theme-bg-white)
+  ) !important;
+  color: var(--cal-text) !important;
+  border: 0;
+  border-top: 1px solid var(--cal-border);
+  border-bottom: 1px solid var(--cal-border);
+  padding: var(--theme-spacing-xs) var(--theme-spacing-2xs);
+  vertical-align: middle;
+}
+/* Extrémités de la carte : filet de couleur à gauche, arrondis aux deux bouts. */
+#tasks-body tr[style*="--cal-color"] > td:first-child {
+  border-left: 3px solid var(--cal-color);
+  border-top-left-radius: var(--theme-radius-box);
+  border-bottom-left-radius: var(--theme-radius-box);
+  padding-left: var(--theme-spacing-xs);
+}
+#tasks-body tr[style*="--cal-color"] > td:last-child {
+  border-right: 1px solid var(--cal-border);
+  border-top-right-radius: var(--theme-radius-box);
+  border-bottom-right-radius: var(--theme-radius-box);
+  padding-right: var(--theme-spacing-sm);
+}
+#tasks-body tr[style*="--cal-color"]:hover > td {
+  background-color: color-mix(
+    in srgb,
+    var(--cal-color) 14%,
+    var(--theme-bg-white)
+  ) !important;
+}
+
+/* ── Nom de la tâche ──
+   Le lien porte une couleur INLINE calculée par Nag pour contraster avec
+   l'ancien fond saturé (`color:#000` ou `color:#fff` selon la liste). Sur
+   notre carte claire, le blanc devient invisible : il faut donc la battre.
+
+   On ne peut PAS cibler `a[nicetitle]` : cet attribut n'est posé que si la
+   tâche a une description (Horde::linkTooltip). Un lien sans description n'a
+   pas l'attribut et gardait sa couleur inline. On vise donc tout lien vers
+   `view.php`, qui est le lien de nom quelle que soit la tâche. */
+#tasks-body tr[style*="--cal-color"] td a[href*="view.php"] {
+  color: var(--cal-text) !important;
+  font-weight: var(--theme-font-weight-semi-bold);
+  text-decoration: none;
+}
+#tasks-body tr[style*="--cal-color"] td a[href*="view.php"]:hover {
+  text-decoration: underline;
+}
+/* Tags : sur la même ligne que le nom (ils le qualifient), en badges — pas
+   empilés dessous, ce qui creusait la ligne. */
+#tasks-body td .horde-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 0 0 0 var(--theme-spacing-2xs);
+  vertical-align: middle;
+}
+#tasks-body td .horde-tags li {
+  padding: 0 var(--theme-spacing-xs);
+  font-size: var(--theme-font-size-xs);
+  line-height: 1.6;
+  color: var(--cal-text);
+  background-color: var(--theme-bg-white);
+  border: 1px solid var(--cal-border);
+  border-radius: var(--theme-radius-selector);
+}
+
+/* ── Indicateurs (note, alarme) ──
+   PNG remplacés par des SVG masqués : la couleur suit alors le thème. Le
+   <img> est caché, c'est le lien ou la cellule qui porte le mask. */
+#tasks-body td img[src*="note"],
+#tasks-body td img[src*="alarm"] {
+  display: none;
+}
+#tasks-body td:has(> img[src*="note"])::before,
+#tasks-body td:has(> img[src*="alarm"])::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+#tasks-body td:has(> img[src*="note"])::before {
+  -webkit-mask-image: url("graphics/svg/note.svg");
+  mask-image: url("graphics/svg/note.svg");
+}
+#tasks-body td:has(> img[src*="alarm"])::before {
+  -webkit-mask-image: url("graphics/svg/alarm.svg");
+  mask-image: url("graphics/svg/alarm.svg");
+}
+
+/* ── Actions (terminer, modifier) ──
+   Discrètes au repos, révélées au survol de la ligne. On joue sur l'opacité et
+   non sur `display`, pour que les liens restent atteignables au clavier
+   (:focus-within les révèle). */
+#tasks-body td a[href*="actionID=modify_task"] img {
+  display: none;
+}
+#tasks-body td a[href*="actionID=modify_task"]::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/edit.svg");
+  mask-image: url("graphics/svg/edit.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+#tasks-body tr td a[href*="actionID=modify_task"] {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+#tasks-body tr:hover td a[href*="actionID=modify_task"],
+#tasks-body tr:focus-within td a[href*="actionID=modify_task"] {
+  opacity: 1;
+}
+
+/* ── Case à cocher ──
+   `unchecked.png` / `checked.png` remplacés par la checkbox du DS. Ce n'est pas
+   un <input> (comme dans Kronolith) : c'est un LIEN, et l'état se lit dans son
+   href — `/t/complete` = à faire, `/t/uncomplete` = terminée.
+
+   ATTENTION — l'état ne se lit PAS dans l'href : le template utilise le MÊME
+   lien (`$task->complete_link`) dans les deux cas, seule l'IMAGE change
+   (`unchecked.png` / `checked.png`). C'est donc `img[src]` qui porte l'état,
+   et le <a> qu'on style via :has().
+
+   L'<img> est cachée et c'est le <a> qui DEVIENT la case : poser le style sur
+   l'<img> laisserait le PNG visible sous la bordure. Voir feedback_workflow. */
+#tasks-body td img[src*="checked"] {
+  display: none;
+}
+/* La case : tout <a> qui contient une image d'état (checked/unchecked). */
+#tasks-body td a:has(> img[src*="checked"]) {
+  display: inline-grid;
+  place-items: center;
+  width: var(--theme-spacing-sm);
+  height: var(--theme-spacing-sm);
+  box-sizing: border-box;
+  border: 2px solid var(--theme-border-input);
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-white);
+  cursor: pointer;
+  vertical-align: middle;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#tasks-body td a:has(> img[src*="checked"]):hover {
+  border-color: var(--theme-border-action-hover);
+  transform: scale(1.05);
+}
+/* Coche : présente dans les deux états, révélée seulement quand la tâche est
+   terminée — c'est ce qui donne la même transition que la checkbox du DS. */
+#tasks-body td a:has(> img[src*="checked"])::before {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 60%;
+  background-color: var(--theme-text-btn-action);
+  -webkit-mask-image: url("graphics/svg/complete.svg");
+  mask-image: url("graphics/svg/complete.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  opacity: 0;
+  transform: scale(0) rotate(-45deg);
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+/* Tâche TERMINÉE : l'image servie est `checked.png`. Le :not() écarte
+   `unchecked.png`, dont le nom contient aussi « checked ». */
+#tasks-body td a:has(> img[src*="checked"]:not([src*="unchecked"])) {
+  background-color: var(--theme-bg-action-active);
+  border-color: var(--theme-border-action-active);
+}
+#tasks-body td a:has(> img[src*="checked"]:not([src*="unchecked"]))::before {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+/* Case NON cliquable : le template rend l'image SANS lien quand l'action est
+   impossible (sous-tâches à terminer d'abord, ou tâche parente déjà terminée).
+   La cellule tient alors lieu de case, en désactivé — sans quoi l'image cachée
+   ne laisserait rien à voir. */
+#tasks-body td:has(> img[src*="checked"])::before {
+  content: "";
+  display: inline-grid;
+  place-items: center;
+  width: var(--theme-spacing-sm);
+  height: var(--theme-spacing-sm);
+  box-sizing: border-box;
+  border: 2px solid var(--theme-border-disabled);
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-disabled);
+  vertical-align: middle;
+  cursor: not-allowed;
+}
+
+/* ── Échéance ── */
+#tasks-body td.nowrap[sortval] {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-secondary);
+  white-space: nowrap;
+}
+
+/* ── États ──
+   `overdue` et `closed` sont posés sur le <tr> par le template. Ils doivent
+   primer sur la teinte de la liste : une échéance dépassée est l'information
+   la plus importante de la ligne. */
+#tasks-body tr.overdue td.nowrap[sortval] {
+  color: var(--theme-text-danger) !important;
+  font-weight: var(--theme-font-weight-medium);
+}
+/* Terminée : le barré signale l'état, la couleur de la liste est conservée
+   (l'appartenance ne change pas parce que la tâche est faite). */
+#tasks-body tr.closed td a[href*="view.php"] {
+  text-decoration: line-through;
+}

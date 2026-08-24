@@ -183,7 +183,7 @@
   height: auto;
 }
 .horde-buttonbar li option { padding: 0; }
-.horde-buttonbar li span.accessKey { padding: 0; }
+.horde-buttonbar li span.accessKey { padding: 0; margin-right:-4px; }
 
 .horde-buttonbar .rightFloat li.horde-nobutton { margin-right: 5px; }
 .horde-buttonbar .rightFloat li.horde-active { background-color: var(--theme-bg-btn-secondary-hover); }

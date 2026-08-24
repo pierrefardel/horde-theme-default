@@ -248,13 +248,13 @@
   display: none;
 }
 /* Ligne de calendrier/tasklist en sidebar : pill clair teinté (comme events/
-   légende) via --cal-color posé par le JS de Kronolith.
-   SCOPE : conteneurs Kronolith (id kronolith* : MyCalendars, MyTasklists,
-   SharedTasklists, SystemCalendars…), car seul Kronolith pose --cal-color. Les
-   autres apps (nag, mnemo…) ont aussi des .horde-resources mais SANS
-   --cal-color → color-mix serait invalide. On les distingue par l'id kronolith*
-   (nag a .horde-resources SANS id kronolith). */
-#horde-sidebar [id^="kronolith"].horde-resources > div {
+   légende) via --cal-color.
+   SCOPE : toute ligne QUI PORTE --cal-color, quelle que soit l'app. Kronolith
+   la pose lui-même (notre PR upstream #73) ; pour les autres (nag, mnemo…),
+   qui enferment la couleur dans un background-color inline, footer.js la
+   recopie dans la même variable (syncListColors). L'attribut garantit que
+   color-mix a bien une couleur à consommer — sans lui il serait invalide. */
+#horde-sidebar .horde-resources > div[style*="--cal-color"] {
   background-color: color-mix(in srgb, var(--cal-color) 14%, var(--theme-bg-white)) !important;
   color: var(--cal-text) !important;
 }
@@ -277,8 +277,9 @@
 /* Pastille de couleur À GAUCHE du nom, qui remplace la checkbox : elle porte
    l'état de sélection. Pleine = calendrier visible, contour seul = masqué
    (pattern Google Calendar). Radius pilotable via --theme-radius-selector.
-   SCOPE Kronolith uniquement (dépend de --cal-color). */
-[id^="kronolith"] .horde-resource-link::before {
+   SCOPE : toute ligne portant --cal-color (voir ci-dessus). */
+[style*="--cal-color"] > .horde-resource-link::before,
+[style*="--cal-color"] .horde-resource-link::before {
   content: "";
   display: inline-block;
   flex-shrink: 0;
@@ -342,25 +343,28 @@
   pointer-events: none;
 }
 
-/* Sur KRONOLITH uniquement, la checkbox est masquée (remplacée par la pastille
-   de couleur). Les autres apps GARDENT leur checkbox ci-dessus. */
-[id^="kronolith"] .horde-resource-on::before,
-[id^="kronolith"] .horde-resource-off::before,
-[id^="kronolith"] .horde-resource-none::before,
-[id^="kronolith"] .horde-resource-on::after {
+/* Là où une ligne porte --cal-color, la pastille de couleur remplace la
+   checkbox : on masque donc cette dernière (sinon les deux coexistent).
+   SCOPE : l'attribut, pas l'app — Kronolith pose --cal-color lui-même, Nag et
+   Mnemo l'obtiennent via footer.js (syncListColors). Une app sans couleur de
+   liste garde sa checkbox. */
+[style*="--cal-color"] .horde-resource-on::before,
+[style*="--cal-color"] .horde-resource-off::before,
+[style*="--cal-color"] .horde-resource-none::before,
+[style*="--cal-color"] .horde-resource-on::after {
   display: none;
 }
 
 /* État MASQUÉ (calendrier décoché) : pastille en contour seul (fond transparent)
-   + ligne très légèrement estompée. Scope Kronolith.
+   + ligne très légèrement estompée. Scope : toute ligne portant --cal-color.
    L'opacité reste HAUTE volontairement : l'état masqué est déjà signalé par la
    pastille en contour, et c'est précisément cette ligne qu'on doit pouvoir lire
    pour la recocher. Trop l'estomper rendait illisibles les entrées sans couleur
    choisie (les ressources tombent sur #dddddd) — cumul couleur pâle × opacité. */
-[id^="kronolith"] .horde-resource-link:has(.horde-resource-off)::before {
+[style*="--cal-color"] .horde-resource-link:has(.horde-resource-off)::before {
   background-color: transparent;
 }
-#horde-sidebar [id^="kronolith"].horde-resources > div:has(.horde-resource-off) {
+#horde-sidebar .horde-resources > div[style*="--cal-color"]:has(.horde-resource-off) {
   opacity: 0.85;
 }
 #horde-sidebar div.horde-resources .horde-resource-edit-000,

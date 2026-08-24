@@ -419,7 +419,7 @@ div.fbgrid {
 }
 #kronolith-legend:has(span) {
   display: flex;
-  width: fit-content;
+  width: 100%;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--theme-spacing-xs);
@@ -427,6 +427,7 @@ div.fbgrid {
   order: -1;
   font-size: 0;
   line-height: 0;
+  border-bottom: 1px solid var(--theme-border);
 }
 /* Pills de légende (filtres calendriers en haut) : même traitement que les
    events (fond clair teinté + texte foncé via --cal-color posé par le JS), mais

@@ -36,20 +36,36 @@
   margin-left: 30px;
 }
 
-/* ── Tooltip ── */
+/* ── Tooltip ──
+   `div#toolTip.nicetitle` est créé par `js/horde/tooltips.js` et inséré dans
+   le <body> ; il se déclenche sur l'attribut `nicetitle` d'un élément (posé
+   par Horde::linkTooltip), pas sur un `title` natif. Son contenu est enveloppé
+   dans un <pre> par le JS. */
 .tooltip,
 div.nicetitle {
   color: var(--theme-text-primary);
-  padding: 5px;
+  padding: var(--theme-spacing-xs) var(--theme-spacing-sm);
   z-index: 1001;
   background: var(--theme-bg-primary);
   border: 1px solid var(--theme-border);
   box-shadow: var(--theme-shadow-md);
   border-radius: var(--theme-radius-box);
+  font-size: var(--theme-font-size-xs);
+  line-height: 1.5;
 }
 div.nicetitle {
   position: absolute;
   overflow: hidden;
+  max-width: 360px;
+}
+/* Le <pre> du JS hérite d'une chasse fixe et ne se replie pas : on le ramène à
+   du texte courant, sans quoi une longue description sort du tooltip. */
+div.nicetitle pre {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 /* ── Growler (toast notifications) ── */
@@ -551,7 +567,7 @@ div.modal-form .extras {
   font-weight: var(--theme-font-weight-bold);
 }
 .hordeCalendarPopup .hordeCalendarWeek {
-  background: var(--theme-bg-calendar-week);
+  background: var(--theme-bg-tertiary);
   font-size: 90%;
   font-style: italic;
 }

@@ -1,0 +1,236 @@
+/**
+ * Nag UPJV — Global
+ * ===================
+ * Liste des tâches, recherche rapide, états, priorités, fiche de tâche.
+ *
+ * `#tasks` est une `.horde-table` : le style de tableau (en-têtes, bordures,
+ * lignes) vient de horde/forms.css. On ne traite ici que ce qui est propre à
+ * Nag.
+ */
+
+/* ── Liste des tâches ── */
+#tasks {
+  width: 100%;
+}
+/* Ligne masquée par le filtre de recherche rapide (QuickFinder). */
+.QuickFinderNoMatch {
+  display: none;
+}
+#tasks_empty {
+  padding: var(--theme-spacing-xs);
+  font-style: italic;
+  color: var(--theme-text-secondary);
+}
+/* Les lignes portent leur propre fond (états overdue/closed) : on laisse
+   passer celui du tableau au lieu de le forcer. */
+#tasks tr.linedRow td {
+  background-color: inherit;
+  color: inherit;
+}
+#tasks-body tr {
+  line-height: 20px;
+}
+
+/* ── États d'une tâche ──
+   `overdue` = échéance dépassée, `closed` = terminée. Posés par le template
+   sur le <tr>, ils doivent teinter la ligne entière (td et liens compris). */
+.overdue,
+.overdue td,
+.overdue a,
+.overdue td a {
+  color: var(--theme-text-danger);
+}
+.closed,
+.closed td,
+.closed a,
+.closed td a {
+  color: var(--theme-text-disabled);
+}
+.closed a,
+.closed td a {
+  text-decoration: line-through;
+}
+
+/* ── Priorités (1 à 5) ──
+   Nag rend `<span class="pri-N">N</span>` (Nag::formatPriority). Les valeurs
+   d'origine sont des couleurs brutes (#f00 → #00f) sur fond blanc bordé de
+   noir. On en fait des pastilles sémantiques : 1 = urgent, 2 = élevé,
+   3 = normal, 4-5 = basses. La couleur est doublée par le CHIFFRE, qui reste
+   affiché — la distinction ne repose donc jamais sur la seule teinte. */
+#tasks .pri-1,
+#tasks .pri-2,
+#tasks .pri-3,
+#tasks .pri-4,
+#tasks .pri-5 {
+  display: inline-block;
+  min-width: 18px;
+  padding: 0 var(--theme-spacing-2xs);
+  border: 1px solid transparent;
+  border-radius: var(--theme-radius-selector);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-semi-bold);
+  line-height: 1.6;
+  text-align: center;
+}
+.pri-1 {
+  color: var(--theme-text-on-danger);
+  background-color: var(--theme-bg-danger-light);
+  border-color: var(--theme-border-danger);
+}
+.pri-2 {
+  color: var(--theme-text-on-warning);
+  background-color: var(--theme-bg-warning-light);
+  border-color: var(--theme-border-warning);
+}
+.pri-3 {
+  color: var(--theme-text-secondary);
+  background-color: var(--theme-bg-tertiary);
+  border-color: var(--theme-border);
+}
+.pri-4,
+.pri-5 {
+  color: var(--theme-text-on-information);
+  background-color: var(--theme-bg-information-light);
+  border-color: var(--theme-border-information);
+}
+/* La priorité la plus basse s'efface un peu plus. */
+.pri-5 {
+  opacity: 0.75;
+}
+
+/* ── Recherche rapide ── */
+#quicksearch {
+  display: inline;
+}
+/* L'icône de loupe remplace le PNG d'origine (background-image) : on la pose
+   en mask sur un ::before, la couleur suit alors le thème. Voir icons.css. */
+#quicksearch input {
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-xs);
+  padding-left: var(--theme-spacing-lg);
+  background-image: none;
+}
+#quicksearch a {
+  display: inline-block;
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-2xs);
+}
+
+/* ── Fiche de tâche ── */
+.horde-header {
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-secondary);
+  border-bottom: 1px solid var(--theme-border);
+}
+.horde-header tr {
+  vertical-align: top;
+}
+.horde-header td {
+  padding: 0 0 1px 0;
+}
+.horde-header td.horde-label {
+  font-weight: var(--theme-font-weight-semi-bold);
+  padding-right: var(--theme-spacing-xs);
+  text-align: right;
+  white-space: nowrap;
+  color: var(--theme-text-secondary);
+}
+/* Corps de la tâche : texte libre saisi par l'utilisateur, rendu en chasse
+   fixe pour préserver son alignement (listes, colonnes). */
+.taskBody {
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-white);
+  font-family: var(--theme-font-family-mono);
+  white-space: normal;
+  overflow: auto;
+}
+
+/* ── Sélecteurs de date du formulaire ── */
+#dueimg,
+#startimg,
+#recur_endimg {
+  cursor: pointer;
+  padding-left: var(--theme-spacing-2xs);
+}
+
+/* ── Tags ── */
+.nag-tags-related,
+.nag-tags-browsing {
+  padding-bottom: var(--theme-spacing-sm);
+  padding-left: var(--theme-spacing-2xs);
+}
+.nag-tags-related img,
+.nag-tags-browsing img {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.horde-tags li a img {
+  padding-left: var(--theme-spacing-2xs);
+}
+
+/* ── Modale ──
+   Nag remonte la modale en haut de page (liste longue). Le centrage global de
+   horde/widgets.css pose top/left en !important : on ne rétablit ici que la
+   position verticale. */
+#RB_window {
+  top: 50px !important;
+  margin-top: 0 !important;
+}
+
+@media print {
+  .header .smallheader,
+  .tabset,
+  .notices,
+  #quicksearchL,
+  #quicksearch {
+    display: none;
+  }
+}
+
+/* ── Barre de tags (filtre par tag) ──
+   Deux contextes : `.nag-tags-related` (tags suggérés, cliquables pour
+   filtrer) et `.nag-tags-browsing` (filtres ACTIFS, avec une croix pour les
+   retirer). Le conteneur passe en flex : sans cela l'icône, la liste et les
+   tags s'alignent sur la ligne de base du texte et le rendu est décousu. */
+.nag-tags-related,
+.nag-tags-browsing {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--theme-spacing-2xs);
+  padding: var(--theme-spacing-xs);
+}
+.nag-tags-related .horde-tags,
+.nag-tags-browsing .horde-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  margin: 0;
+  padding: 0;
+}
+.nag-tags-related .horde-tags li,
+.nag-tags-browsing .horde-tags li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  padding: 0 var(--theme-spacing-xs);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-selector);
+  background-color: var(--theme-bg-white);
+  font-size: var(--theme-font-size-xs);
+  line-height: 1.7;
+}
+.nag-tags-related .horde-tags li a,
+.nag-tags-browsing .horde-tags li a {
+  color: var(--theme-text-primary);
+  text-decoration: none;
+}
+.nag-tags-related .horde-tags li:hover {
+  border-color: var(--theme-border-action-hover);
+}
+/* Filtre ACTIF : traité comme une sélection, pas comme une suggestion. */
+.nag-tags-browsing .horde-tags li {
+  background-color: var(--theme-bg-information-light);
+  border-color: var(--theme-border-information);
+  color: var(--theme-text-on-information);
+}

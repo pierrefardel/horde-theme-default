@@ -29,9 +29,7 @@ img.kronolithEventIcon {
   font-weight: var(--theme-font-weight-normal);
   order: 1;
 }
-.kronolith-event-tentative {
-  font-style: italic;
-}
+
 .kronolith-event-cancelled {
   text-decoration: line-through;
 }
