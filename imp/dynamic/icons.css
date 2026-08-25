@@ -1,0 +1,617 @@
+/**
+ * IMP UPJV — Icônes
+ * ==================
+ * Toutes les icônes IMP via mask-image SVG.
+ *
+ * Deux cas :
+ *   1. Icône sur un <a> (classe actionXxx) → ::before
+ *   2. Icône sur un span.iconImg dédié → mask-image direct
+ */
+
+/* ── Reset commun — neutralise les PNG du thème default ── */
+.horde-subnavi-icon,
+.contextMenu span.iconImg,
+.horde-buttonbar span.iconImg,
+span.infoIcon, span.prefsIcon, span.logoutIcon, span.readonlyImg,
+.actionEditsearch,
+#th_expand span.iconImg, #th_collapse span.iconImg {
+  background-image: none !important;
+  background-color: transparent !important;
+  position: relative;
+}
+
+/* ── Base commune span.iconImg — menus contextuels + headers message ── */
+.context span.iconImg,
+.contextMenu span.iconImg,
+.msgHeaders span.iconImg,
+.optionsContainer span.iconImg:not(.horde-popdown),
+#th_expand span.iconImg,
+#th_collapse span.iconImg,
+#msg_newwin_options span.iconImg,
+#msg_resume_draft span.iconImg,
+#msg_template span.iconImg,
+#search_close,
+#search_edit,
+#search_refresh {
+  display: inline-block;
+  width: 16px; height: 16px;
+  background-color: var(--theme-icon-primary) !important;
+  background-image: none !important;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* ── Icônes toolbar (classe sur <a>) → ::before ── */
+.horde-buttonbar li a[class*="action"]::before {
+  content: '';
+  display: inline-block;
+  width: 14px; height: 14px;
+  margin-right: 4px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: var(--theme-icon-primary);
+}
+
+/* Spinner pendant le chargement (.imp-loading injectée/retirée par le JS
+   sur le <a id="checkmaillink">). L'icône est le ::before de ce <a>. */
+@keyframes imp-checkmail-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.horde-buttonbar li a#checkmaillink.imp-loading::before {
+  transform-origin: center;
+  animation: imp-checkmail-spin 1s linear infinite;
+}
+
+/* Neutralise le padding-left du default (réservé pour l'icône PNG) */
+
+
+.horde-buttonbar li a.actionRefresh::before {
+  -webkit-mask-image: url("../graphics/svg/action-refresh.svg");
+  mask-image: url("../graphics/svg/action-refresh.svg");
+}
+.horde-buttonbar li a.actionReply::before {
+  -webkit-mask-image: url("../graphics/svg/action-reply.svg");
+  mask-image: url("../graphics/svg/action-reply.svg");
+}
+.horde-buttonbar li a.actionForward::before {
+  -webkit-mask-image: url("../graphics/svg/action-forward.svg");
+  mask-image: url("../graphics/svg/action-forward.svg");
+}
+.horde-buttonbar li a.actionDelete::before {
+  -webkit-mask-image: url("../graphics/svg/trash.svg");
+  mask-image: url("../graphics/svg/trash.svg");
+}
+.horde-buttonbar li a.actionSpam::before {
+  -webkit-mask-image: url("../graphics/svg/spam.svg");
+  mask-image: url("../graphics/svg/spam.svg");
+}
+.horde-buttonbar li a.actionInnocent::before {
+  -webkit-mask-image: url("../graphics/svg/action-innocent.svg");
+  mask-image: url("../graphics/svg/action-innocent.svg");
+}
+.horde-buttonbar li a.actionCompose::before {
+  -webkit-mask-image: url("../graphics/svg/inbox.svg");
+  mask-image: url("../graphics/svg/inbox.svg");
+}
+.horde-buttonbar li a.actionResume::before {
+  -webkit-mask-image: url("../graphics/svg/drafts.svg");
+  mask-image: url("../graphics/svg/drafts.svg");
+}
+.horde-buttonbar li a.actionOther::before,
+.horde-buttonbar li a.actionSort::before {
+  -webkit-mask-image: url("../graphics/svg/action-sort.svg");
+  mask-image: url("../graphics/svg/action-sort.svg");
+}
+.horde-buttonbar li a.actionEditsearch::before {
+  -webkit-mask-image: url("../graphics/svg/action-editsearch.svg");
+  mask-image: url("../graphics/svg/action-editsearch.svg");
+}
+.horde-buttonbar li a.actionSend::before {
+  -webkit-mask-image: url("../graphics/svg/send.svg");
+  mask-image: url("../graphics/svg/send.svg");
+}
+.horde-buttonbar li a.actionRedirect::before {
+  -webkit-mask-image: url("../graphics/svg/maillog-redirect.svg");
+  mask-image: url("../graphics/svg/maillog-redirect.svg");
+}
+.horde-buttonbar li a.actionDrafts::before {
+  -webkit-mask-image: url("../graphics/svg/drafts.svg");
+  mask-image: url("../graphics/svg/drafts.svg");
+}
+
+/* closeImg sur div (compose_close) */
+.closeImg, .headercloseimg {
+  display: inline-block;
+  width: 16px; height: 16px;
+  background-color: var(--theme-icon-secondary);
+  background-image: none !important;
+  -webkit-mask-image: url("../graphics/svg/close.svg");
+  mask-image: url("../graphics/svg/close.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+/* ── Icônes menus contextuels (span.iconImg) ── */
+
+/* Reply / Forward */
+#ctx_reply_reply span.iconImg,
+#ctx_message_reply span.iconImg,
+#ctx_reply_reply_all span.iconImg,
+#ctx_reply_reply_list span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/action-reply.svg");
+  mask-image: url("../graphics/svg/action-reply.svg");
+}
+#ctx_message_forward span.iconImg,
+#ctx_forward_attach span.iconImg,
+#ctx_forward_body span.iconImg,
+#ctx_forward_both span.iconImg,
+#ctx_forward_editasnew span.iconImg,
+#ctx_forward_redirect span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/action-forward.svg");
+  mask-image: url("../graphics/svg/action-forward.svg");
+}
+#ctx_message_addfilter span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/filter.svg");
+  mask-image: url("../graphics/svg/filter.svg");
+}
+
+/* Supprimer / Restaurer */
+#ctx_mbox_empty span.iconImg,
+#ctx_message_delete span.iconImg,
+#ctx_oa_purge_deleted span.iconImg,
+#ctx_mbox_delete span.iconImg,
+#ctx_container_delete span.iconImg,
+#ctx_vfolder_delete span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/trash.svg");
+  mask-image: url("../graphics/svg/trash.svg");
+}
+#ctx_message_undelete span.iconImg,
+#ctx_oa_undelete span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/oa-undelete.svg");
+  mask-image: url("../graphics/svg/oa-undelete.svg");
+}
+
+/* Lu / Non lu / Flags */
+span.iconImg.flagSeen,
+#ctx_message_view span.iconImg,
+#ctx_mbox_flag_seen span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/flag-seen.svg");
+  mask-image: url("../graphics/svg/flag-seen.svg");
+}
+#ctx_mbox_flag_unseen span.iconImg,
+span.iconImg.flagUnseen {
+  -webkit-mask-image: url("../graphics/svg/flag-unseen.svg");
+  mask-image: url("../graphics/svg/flag-unseen.svg");
+}
+span.iconImg.flagAnswered {
+  -webkit-mask-image: url("../graphics/svg/action-reply.svg");
+  mask-image: url("../graphics/svg/action-reply.svg");
+}
+span.iconImg.flagForwarded {
+  -webkit-mask-image: url("../graphics/svg/action-forward.svg");
+  mask-image: url("../graphics/svg/action-forward.svg");
+}
+span.iconImg.flagFlagged {
+  -webkit-mask-image: url("../graphics/svg/flag-flagged.svg");
+  mask-image: url("../graphics/svg/flag-flagged.svg");
+}
+span.iconImg.flagDraft {
+  -webkit-mask-image: url("../graphics/svg/flag-draft-2.svg");
+  mask-image: url("../graphics/svg/flag-draft-2.svg");
+}
+span.iconImg.flagJunk {
+  -webkit-mask-image: url("../graphics/svg/spam.svg");
+  mask-image: url("../graphics/svg/spam.svg");
+}
+span.iconImg.flagNotJunk {
+  -webkit-mask-image: url("../graphics/svg/action-innocent.svg");
+  mask-image: url("../graphics/svg/action-innocent.svg");
+}
+span.iconImg.flagDeleted {
+  -webkit-mask-image: url("../graphics/svg/trash.svg");
+  mask-image: url("../graphics/svg/trash.svg");
+}
+#ctx_message_unsetflag span.iconImg,
+#ctx_oa_unsetflag span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/oa-unsetflag.svg");
+  mask-image: url("../graphics/svg/oa-unsetflag.svg");
+}
+#ctx_message_setflag span.iconImg,
+#ctx_oa_setflag span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/flag-flagged.svg");
+  mask-image: url("../graphics/svg/flag-flagged.svg");
+}
+
+/* Brouillons / Modèles */
+#ctx_message_resume span.iconImg,
+#ctx_message_template span.iconImg,
+#ctx_message_template_edit span.iconImg,
+#ctx_template_new span.iconImg,
+#ctx_template_edit span.iconImg,
+#msg_resume_draft span.iconImg,
+#msg_template span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/drafts.svg");
+  mask-image: url("../graphics/svg/drafts.svg");
+}
+
+/* Aperçu / Layout */
+#ctx_oa_preview_hide span.iconImg,
+#ctx_oa_preview_show span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/preview-show.svg");
+  mask-image: url("../graphics/svg/preview-show.svg");
+}
+#ctx_oa_layout_horiz span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/layout-horiz.svg");
+  mask-image: url("../graphics/svg/layout-horiz.svg");
+}
+#ctx_oa_layout_vert span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/layout-vert.svg");
+  mask-image: url("../graphics/svg/layout-vert.svg");
+}
+
+/* Marquer tout comme (sous-menu) */
+#ctx_mbox_setflag span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/flag-flagged.svg");
+  mask-image: url("../graphics/svg/flag-flagged.svg");
+}
+
+/* Vérifier / Ne pas vérifier les nouveaux messages */
+#ctx_mbox_poll span.iconImg,
+#ctx_mbox_nopoll span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/action-refresh.svg");
+  mask-image: url("../graphics/svg/action-refresh.svg");
+}
+
+/* Dossiers */
+#ctx_mbox_sub span.iconImg,
+#ctx_mbox_unsub span.iconImg,
+#ctx_folderopts_sub span.iconImg,
+#ctx_folderopts_unsub span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/folderopts.svg");
+  mask-image: url("../graphics/svg/folderopts.svg");
+}
+#ctx_folderopts_collapse span.iconImg,
+#ctx_container_collapse span.iconImg,
+#ctx_mbox_collapse span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/col.svg");
+  mask-image: url("../graphics/svg/col.svg");
+}
+#ctx_folderopts_expand span.iconImg,
+#ctx_container_expand span.iconImg,
+#ctx_mbox_expand span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/exp.svg");
+  mask-image: url("../graphics/svg/exp.svg");
+}
+#ctx_container_create span.iconImg,
+#ctx_folderopts_new span.iconImg,
+#ctx_mbox_create span.iconImg,
+#ctx_remoteauth_create span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/mbox-create.svg");
+  mask-image: url("../graphics/svg/mbox-create.svg");
+}
+#ctx_container_rename span.iconImg,
+#ctx_mbox_rename span.iconImg,
+#ctx_vcontainer_edit span.iconImg,
+#ctx_vfolder_edit span.iconImg,
+#ctx_container_search span.iconImg,
+#ctx_container_searchsub span.iconImg,
+#ctx_mbox_search span.iconImg,
+#ctx_mbox_searchsub span.iconImg,
+.actionEditsearch,
+#ctx_mbox_acl span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/action-editsearch.svg");
+  mask-image: url("../graphics/svg/action-editsearch.svg");
+}
+
+/* Export / Import */
+#ctx_mbox_export span.iconImg,
+#ctx_mbox_import span.iconImg,
+#ctx_preview_save span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/preview-save.svg");
+  mask-image: url("../graphics/svg/preview-save.svg");
+}
+
+#ctx_preview_viewsource span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/view-source.svg");
+  mask-image: url("../graphics/svg/view-source.svg");
+}
+#ctx_preview_allparts span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/all-parts.svg");
+  mask-image: url("../graphics/svg/all-parts.svg");
+}
+
+/* Spam / Innocent */
+#ctx_message_spam span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/spam.svg");
+  mask-image: url("../graphics/svg/spam.svg");
+}
+#ctx_message_innocent span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/action-innocent.svg");
+  mask-image: url("../graphics/svg/action-innocent.svg");
+}
+
+/* Blacklist / Whitelist */
+#ctx_message_blacklist span.iconImg,
+#ctx_oa_blacklist span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/oa-blacklist.svg");
+  mask-image: url("../graphics/svg/oa-blacklist.svg");
+}
+#ctx_message_whitelist span.iconImg,
+#ctx_oa_whitelist span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/oa-whitelist.svg");
+  mask-image: url("../graphics/svg/oa-whitelist.svg");
+}
+
+/* Thread */
+#ctx_preview_thread span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/preview-thread.svg");
+  mask-image: url("../graphics/svg/preview-thread.svg");
+}
+
+/* Sidebar info */
+span.infoIcon,
+#ctx_mbox_size span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/mbox-size.svg");
+  mask-image: url("../graphics/svg/mbox-size.svg");
+}
+span.prefsIcon {
+  -webkit-mask-image: url("../graphics/svg/prefs-icon.svg");
+  mask-image: url("../graphics/svg/prefs-icon.svg");
+}
+span.logoutIcon {
+  -webkit-mask-image: url("../graphics/svg/horde-logout.svg");
+  mask-image: url("../graphics/svg/horde-logout.svg");
+}
+span.readonlyImg {
+  -webkit-mask-image: url("../graphics/svg/mbox-acl.svg");
+  mask-image: url("../graphics/svg/mbox-acl.svg");
+  margin: -1px 0 0 3px;
+}
+
+/* Filtres */
+#ctx_filteropts_applyfilters span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/action-refresh.svg");
+  mask-image: url("../graphics/svg/action-refresh.svg");
+}
+
+/* Flags dynamiques — nouveau/modifier étiquette */
+#ctx_flag_new span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/mbox-create.svg");
+  mask-image: url("../graphics/svg/mbox-create.svg");
+}
+#ctx_flag_edit span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/action-editsearch.svg");
+  mask-image: url("../graphics/svg/action-editsearch.svg");
+}
+
+/* Montrer / Cacher messages supprimés */
+#ctx_oa_show_deleted span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/flag-unseen.svg");
+  mask-image: url("../graphics/svg/flag-unseen.svg");
+}
+#ctx_oa_hide_deleted span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/flag-seen.svg");
+  mask-image: url("../graphics/svg/flag-seen.svg");
+}
+
+/* Effacer le tri */
+#ctx_oa_clear_sort span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/action-sort.svg");
+  mask-image: url("../graphics/svg/action-sort.svg");
+}
+
+/* Reload dossiers */
+#ctx_folderopts_reload span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/action-refresh.svg");
+  mask-image: url("../graphics/svg/action-refresh.svg");
+}
+#preview_other span.iconImg,
+#preview_other_opts span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/action-sort.svg");
+  mask-image: url("../graphics/svg/action-sort.svg");
+}
+
+/* Expand/Collapse header thread */
+#th_expand span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/exp.svg");
+  mask-image: url("../graphics/svg/exp.svg");
+  cursor: pointer; margin: 0 !important;
+}
+#th_collapse span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/col.svg");
+  mask-image: url("../graphics/svg/col.svg");
+  cursor: pointer; margin: 0 !important;
+}
+
+/* Nouvelle fenêtre */
+#msg_newwin_options span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/newwin-options.svg");
+  mask-image: url("../graphics/svg/newwin-options.svg");
+}
+
+/* ── SIDEBAR — icônes dossiers (.horde-subnavi-icon.xxxImg) ── */
+
+.horde-subnavi-icon {
+  display: inline-block;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background-image: none !important;
+  background-color: transparent !important;
+  vertical-align: middle;
+}
+
+.horde-subnavi-icon::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px; height: 16px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.horde-subnavi-icon.inboxImg::before {
+  -webkit-mask-image: url("../graphics/svg/inbox.svg");
+  mask-image: url("../graphics/svg/inbox.svg");
+}
+.horde-subnavi-icon.draftsImg::before {
+  -webkit-mask-image: url("../graphics/svg/drafts.svg");
+  mask-image: url("../graphics/svg/drafts.svg");
+}
+.horde-subnavi-icon.trashImg::before {
+  -webkit-mask-image: url("../graphics/svg/trash.svg");
+  mask-image: url("../graphics/svg/trash.svg");
+}
+.horde-subnavi-icon.sentImg::before {
+  -webkit-mask-image: url("../graphics/svg/sent.svg");
+  mask-image: url("../graphics/svg/sent.svg");
+}
+.horde-subnavi-icon.spamImg::before {
+  -webkit-mask-image: url("../graphics/svg/spam.svg");
+  mask-image: url("../graphics/svg/spam.svg");
+}
+.horde-subnavi-icon.folderImg::before,
+.horde-subnavi-icon.folderoptsImg::before {
+  -webkit-mask-image: url("../graphics/svg/folderopts.svg");
+  mask-image: url("../graphics/svg/folderopts.svg");
+}
+.horde-subnavi-icon.composetemplatesImg::before {
+  -webkit-mask-image: url("../graphics/svg/composetemplates.svg");
+  mask-image: url("../graphics/svg/composetemplates.svg");
+}
+.horde-subnavi-icon.exp::before {
+  -webkit-mask-image: url("../graphics/svg/exp.svg");
+  mask-image: url("../graphics/svg/exp.svg");
+}
+.horde-subnavi-icon.col::before {
+  -webkit-mask-image: url("../graphics/svg/col.svg");
+  mask-image: url("../graphics/svg/col.svg");
+}
+
+/* Searchbar */
+#search_close {
+  -webkit-mask-image: url("../graphics/svg/close.svg");
+  mask-image: url("../graphics/svg/close.svg");
+}
+#search_refresh {
+  -webkit-mask-image: url("../graphics/svg/action-refresh.svg");
+  mask-image: url("../graphics/svg/action-refresh.svg");
+}
+#search_edit {
+  -webkit-mask-image: url("../graphics/svg/action-editsearch.svg");
+  mask-image: url("../graphics/svg/action-editsearch.svg");
+}
+
+/* Contacts context menu */
+#ctx_contacts_new span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/compose.svg");
+  mask-image: url("../graphics/svg/compose.svg");
+}
+#ctx_contacts_add span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/contacts-add.svg");
+  mask-image: url("../graphics/svg/contacts-add.svg");
+}
+#ctx_contacts_copy span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/contacts-copy.svg");
+  mask-image: url("../graphics/svg/contacts-copy.svg");
+}
+#ctx_contacts_addfilter span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/folderopts.svg");
+  mask-image: url("../graphics/svg/folderopts.svg");
+}
+/* Sort options context menu */
+#ctx_sortopts_from span.iconImg,
+#ctx_sortopts_to span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/sort-from.svg");
+  mask-image: url("../graphics/svg/sort-from.svg");
+}
+#ctx_sortopts_subject span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/sort-subject.svg");
+  mask-image: url("../graphics/svg/sort-subject.svg");
+}
+#ctx_sortopts_thread span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/sort-thread.svg");
+  mask-image: url("../graphics/svg/sort-thread.svg");
+}
+#ctx_sortopts_msgarrival span.iconImg,
+#ctx_sortopts_msgdate span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/sort-date.svg");
+  mask-image: url("../graphics/svg/sort-date.svg");
+}
+#ctx_sortopts_size span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/sort-size.svg");
+  mask-image: url("../graphics/svg/sort-size.svg");
+}
+#ctx_sortopts_sequence span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/sort-none.svg");
+  mask-image: url("../graphics/svg/sort-none.svg");
+}
+
+/* Neutralise le ::before chevron générique sur les span.iconImg du menu contextuel */
+#ctx_sortopts span.iconImg.sortup::before,
+#ctx_sortopts span.iconImg.sortdown::before {
+  display: none !important;
+}
+
+/* ── optionsContainer message (vue standalone + preview) ── */
+#msg_view_source span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/view-source.svg");
+  mask-image: url("../graphics/svg/view-source.svg");
+}
+.saveAsImg {
+  -webkit-mask-image: url("../graphics/svg/download.svg");
+  mask-image: url("../graphics/svg/download.svg");
+}
+#msg_all_parts span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/all-parts.svg");
+  mask-image: url("../graphics/svg/all-parts.svg");
+}
+#msg_listinfo span.iconImg,
+#ctx_preview_listinfo span.iconImg {
+  -webkit-mask-image: url("../graphics/svg/info.svg");
+  mask-image: url("../graphics/svg/info.svg");
+}
+
+/* Tri actif — layout flex, coche à droite portée par un span dédié */
+#ctx_sortopts a:has(span.iconImg.sortup),
+#ctx_sortopts a:has(span.iconImg.sortdown) {
+  display: flex !important;
+  align-items: center;
+}
+
+/* Point indicateur tri actif */
+#ctx_sortopts a:has(span.iconImg.sortup)::after,
+#ctx_sortopts a:has(span.iconImg.sortdown)::after {
+  content: '';
+  display: inline-block;
+  width: 10px; height: 10px;
+  flex-shrink: 0;
+  margin-left: auto;
+  border-radius: var(--theme-radius-selector);
+  background-color: var(--theme-bg-action);
+}

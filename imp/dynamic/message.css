@@ -1,0 +1,42 @@
+/**
+ * IMP — Message (fenêtre standalone)
+ * ====================================
+ * Styles de la vue message pleine page (.msgfullread).
+ */
+
+.msgfullread div.messageBody { overflow: auto; }
+.msgfullread div.subject {
+  font-size: 120%;
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-headings);
+  max-height: 50px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: 5px;
+}
+.msgfullread .msgHeaders { cursor: default; }
+.msgfullread #msgHeadersTable td.label { padding-left: 3px; }
+div.msgfullread span.messagePrintShow { display: none; }
+
+#msgHeaderAtc td.label a {
+  font-weight: normal;
+  padding-right: 2px;
+}
+.headercloseimg {
+  cursor: pointer;
+  float: right !important;
+  margin-top: 6px;
+}
+
+.saveAsImg { background-image: none; }
+
+@media print {
+  div.msgfullread div.optionsContainer,
+  div.msgfullread div.mimePartInfo a.iconImg,
+  div.msgfullread span.messagePrintNoShow { display: none; }
+  div.msgfullread span.messagePrintShow { display: inline; }
+  div.msgfullread div.messageBody {
+    height: auto !important;
+    overflow: visible;
+  }
+}

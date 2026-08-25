@@ -1,0 +1,217 @@
+/**
+ * UPJV Theme — Utilitaires globaux
+ * ==================================
+ * Classes utilitaires, styles de texte génériques, boxes,
+ * contenu email (citations, signature), alternance de lignes.
+ */
+
+/* ── Couleurs de calendrier : plancher de lisibilité ──────────────────────
+   Le JS pose `--cal-color` (couleur brute du calendrier) en inline. Le style
+   "pill" en dérive le texte et la pastille. Problème : certaines entrées n'ont
+   PAS de couleur choisie (les ressources tombent sur #dddddd) → le texte dérivé
+   devient gris pâle et illisible, alors que Horde avait justement calculé un
+   `color` contrasté (contrastColor, cf. nos PR WCAG) qu'on écrasait.
+
+   Solution : on garde le mélange existant, puis on BORNE la luminosité en oklch
+   (teinte et chroma préservés). La borne dépend de la SATURATION (c) : une
+   couleur neutre/grise n'a aucune identité à préserver → on la pousse
+   franchement vers le contraste ; une couleur vive en a une → sa borne se
+   décale avec le chroma et la laisse intacte.
+
+   SYMÉTRIE CLAIR / SOMBRE — c'est le point clé :
+   - en clair, le fond du pill est très clair  → on PLAFONNE (min) : forcer FONCÉ
+   - en sombre, le fond du pill est sombre     → on PLANCHÉISE (max) : forcer CLAIR
+   Et le mélange de base s'inverse aussi (avec black en clair, avec white en
+   sombre). Sans ça, le dark hérite de textes foncés sur fond sombre = illisible.
+   On passe par light-dark(), mécanisme déjà utilisé par les tokens du thème.
+   Ces variables sont héritées par les enfants (custom properties). */
+[style*="--cal-color"] {
+  --cal-text: light-dark(
+    oklch(from color-mix(in srgb, var(--cal-color) 72%, black) min(l, calc(0.28 + c * 2)) c h),
+    oklch(from color-mix(in srgb, var(--cal-color) 72%, white) max(l, calc(0.78 - c * 1)) c h)
+  );
+  --cal-dot: light-dark(
+    oklch(from var(--cal-color) min(l, calc(0.55 + c * 1.5)) c h),
+    oklch(from var(--cal-color) max(l, calc(0.45 + c * 0.5)) c h)
+  );
+  /* Bordure du pill : même principe. Sans borne, une couleur neutre donne une
+     bordure quasi invisible sur le fond (blanc en clair, sombre en dark),
+     contrairement aux pills colorés. Borne discrète, décalée par le chroma. */
+  --cal-border: light-dark(
+    oklch(
+      from color-mix(in srgb, var(--cal-color) 30%, var(--theme-bg-white))
+        min(l, calc(0.78 + c * 2)) c h
+    ),
+    oklch(
+      from color-mix(in srgb, var(--cal-color) 30%, var(--theme-bg-white))
+        max(l, calc(0.38 + c * 1)) c h
+    )
+  );
+}
+
+/* ── View Transitions — uniquement #horde-body, header/sub restent fixes ── */
+@view-transition {
+  navigation: auto;
+}
+
+/* Désactive l'animation sur root — header/sub ne transitent pas */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* Anime uniquement le contenu principal avec le comportement par défaut du navigateur */
+#horde-body {
+  view-transition-name: horde-body;
+}
+
+/* ── Utilitaires ── */
+.hidden     { display: none; }
+.nowrap     { white-space: nowrap; }
+.clear      { clear: both; line-height: 0; height: 0; display: none; }
+.leftAlign  { text-align: left; }
+.rightAlign { text-align: right; }
+.leftFloat  { float: left; }
+.rightFloat { float: right; }
+.pager      { text-align: center; }
+.login-app  { padding: 5px; text-align: center; }
+.gutter     { padding-right: 8px; }
+.accessKey  { text-decoration: none; }
+a.icon      { display: block; width: 100%; height: 100%; }
+.formGhost  { color: var(--theme-text-placeholder) !important; font-style: italic; }
+.inProgress { font-size: 80%; padding: 2px; color: var(--theme-text-on-action); background: var(--theme-text-error-critical); }
+
+/* ── Boxes / conteneurs visuels ── */
+.box {
+    padding: 3px;
+    border: 1px dashed var(--theme-border-disabled);
+    background: var(--theme-bg-white);
+    border-radius: var(--theme-radius-box);
+}
+.solidbox { border: 1px solid var(--theme-text-primary); border-radius: var(--theme-radius-box); }
+.greybox  { border: 1px solid var(--theme-text-primary); background: var(--theme-bg-secondary); border-radius: var(--theme-radius-box); }
+.headerbox {
+    border: 1px solid var(--theme-border-subtle);
+    border-top-width: 0;
+    background: var(--theme-bg-white);
+    vertical-align: top;
+    border-radius: var(--theme-radius-box);
+}
+.headerbox form { padding: 2px; }
+.header {
+    text-align: left;
+    font-weight: 600;
+    font-size: var(--theme-font-size-lg);
+    padding: var(--theme-spacing-xs) var(--theme-spacing-sm);
+    min-height: 21px;
+    background: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--theme-spacing-xs);
+}
+.header a:hover, a.header:hover { color: var(--theme-text-primary); }
+.header img { vertical-align: bottom; }
+.header input, .header select { font-size: 80%; }
+.header .smallheader input, .header .smallheader select, .header .smallheader .button { font-size: 89%; }
+.header .button, .header .smallheader .button { font-size: 72%; }
+.smallheader { font-size: 100%; font-weight: bold; padding: 2px; }
+.header .smallheader { font-size: 80%; }
+.header .smallheader a.smallheader { font-size: 100%; }
+small, .small { font-size: 80%; }
+.control { color: var(--theme-text-primary); background: var(--theme-bg-primary); padding: 5px; }
+.text    { color: var(--theme-text-primary); background: var(--theme-bg-white); }
+
+/* ── Sélection / highlight ── */
+.selected      { background: var(--theme-bg-highlight); }
+.selected-over { background: var(--theme-bg-selected-hover); }
+
+/* ── Alternance de lignes ── */
+.striped, .rowEven { background-color: var(--theme-bg-primary); }
+.rowOdd            { background-color: var(--theme-bg-secondary); }
+.striped.hover .rowEven:hover, .striped.hover .rowOdd:hover { background: var(--theme-bg-highlight); }
+
+/* ── Contenu email ── */
+.signature       { color: var(--theme-text-disabled); }
+.signature .fixed { color: var(--theme-text-disabled); }
+.citation {
+    margin: 1em 0; padding-left: 1em;
+    border-left-width: 1px; border-left-style: solid;
+    min-height: 12px;
+}
+.quoted1 { color: var(--theme-quoted-1); border-color: var(--theme-quoted-1); background-color: var(--theme-bg-primary); }
+.quoted2 { color: var(--theme-quoted-2); border-color: var(--theme-quoted-2); }
+.quoted3 { color: var(--theme-quoted-3); border-color: var(--theme-quoted-3); }
+.quoted4 { color: var(--theme-quoted-4); border-color: var(--theme-quoted-4); }
+.quoted5 { color: var(--theme-quoted-5); border-color: var(--theme-quoted-5); }
+
+/* ── Toggle quote ── */
+.toggleQuoteHide, .toggleQuoteShow { cursor: pointer; background: var(--theme-bg-tertiary); }
+.toggleQuoteHide:hover, .toggleQuoteShow:hover { text-decoration: underline; }
+.toggleQuoteParent { margin-bottom: 8px; }
+
+/* ── Bloc de chargement ── */
+div.logintasks-item { margin-bottom: 1em; }
+div.logintasks-item label { font-weight: normal; font-size: 90%; }
+div.logintasks-item input { width: auto; margin-bottom: 0; }
+
+/* ── Block styles ── */
+.currentBlock { border: 2px solid red; }
+.blockIcons { padding-top: 5px; display: none; }
+.blockHeader:hover .blockIcons { display: block; }
+
+/* ── Print ── */
+@media print {
+  body, .header, .smallheader {
+    background: #fff;
+    color: #000;
+  }
+  a, .signature, .signature .fixed {
+    color: #000;
+  }
+  #horde-head, #horde-sub, #horde-sidebar, #horde-slideleft,
+  .togglequotehide, .togglequoteshow {
+    display: none;
+  }
+  .horde-ajax #horde-body {
+    top: 0;
+  }
+  #horde-page {
+    left: 0 !important;
+    padding-left: 0;
+  }
+  .headerbox {
+    border: none;
+  }
+  .control, .rowEven, .rowOdd {
+    background-color: #fff;
+    border-bottom: thin solid #000;
+  }
+  .selected {
+    background: #ddd;
+  }
+  .quoted1, .quoted2, .quoted3, .quoted4, .quoted5 {
+    color: #000;
+    border-left-color: #000;
+  }
+  #Growler, #GrowlerLog {
+    display: none !important;
+  }
+}
+
+/* ── Layout AJAX ── */
+.horde-ajax {
+  overflow: hidden;
+}
+
+/* ── Icônes admin ── */
+.horde-admin-data,
+.horde-data {
+  background-image: url("graphics/admin/data.png");
+}
+
+/* ── Tables admin ── */
+.current-sessions,
+.activesync-devices {
+  width: 100%;
+}

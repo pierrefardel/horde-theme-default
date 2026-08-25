@@ -1,0 +1,722 @@
+/**
+ * UPJV Theme — Composants réutilisables
+ * =======================================
+ * Composants UI génériques utilisés dans plusieurs modules :
+ * Growler, tooltip, KeyNavList, modal forms, calendar popup,
+ * notices, quick add, tags, autocompleter.
+ */
+
+/* ── Notices ── */
+.notices {
+  list-style-type: none;
+}
+.notices li,
+.notice {
+  font-weight: bold;
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-warning-light);
+  border-bottom: 1px solid var(--theme-border);
+  padding: 7px 10px;
+  position: relative;
+  border-radius: var(--theme-radius-box);
+}
+.notices li:first-child,
+.notice {
+  border-radius: var(--theme-radius-box);
+}
+.notices img,
+.notice img {
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+  top: 0;
+}
+.notices div.noticetext,
+.notice div.noticetext {
+  margin-left: 30px;
+}
+
+/* ── Tooltip ──
+   `div#toolTip.nicetitle` est créé par `js/horde/tooltips.js` et inséré dans
+   le <body> ; il se déclenche sur l'attribut `nicetitle` d'un élément (posé
+   par Horde::linkTooltip), pas sur un `title` natif. Son contenu est enveloppé
+   dans un <pre> par le JS. */
+.tooltip,
+div.nicetitle {
+  color: var(--theme-text-primary);
+  padding: var(--theme-spacing-xs) var(--theme-spacing-sm);
+  z-index: 1001;
+  background: var(--theme-bg-primary);
+  border: 1px solid var(--theme-border);
+  box-shadow: var(--theme-shadow-md);
+  border-radius: var(--theme-radius-box);
+  font-size: var(--theme-font-size-xs);
+  line-height: 1.5;
+}
+div.nicetitle {
+  position: absolute;
+  overflow: hidden;
+  max-width: 360px;
+}
+/* Le <pre> du JS hérite d'une chasse fixe et ne se replie pas : on le ramène à
+   du texte courant, sans quoi une longue description sort du tooltip. */
+div.nicetitle pre {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* ── Growler (toast notifications) ── */
+#Growler {
+  top: var(--theme-spacing-sm) !important;
+  right: var(--theme-spacing-sm) !important;
+  bottom: auto !important;
+  left: auto !important;
+  z-index: 99999 !important;
+  width: 340px !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column;
+  gap: var(--theme-spacing-xs);
+  pointer-events: none;
+}
+
+#Growler div.GrowlerNotice {
+  position: relative;
+  padding: var(--theme-spacing-sm) var(--theme-spacing-sm)
+    var(--theme-spacing-sm) 36px !important;
+  background: var(--theme-bg-primary);
+  border: none;
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
+  pointer-events: auto;
+  cursor: pointer;
+  overflow: hidden;
+  opacity: 1 !important;
+  background-image: none !important;
+  background-position: unset !important;
+  animation: growler-in 0.2s ease-out;
+}
+
+@keyframes growler-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(100% + var(--theme-spacing-sm)));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Icône — positionnée en absolu à gauche */
+#Growler div.GrowlerNotice::before {
+  content: "";
+  position: absolute;
+  left: var(--theme-spacing-sm);
+  top: var(--theme-spacing-sm);
+  width: 16px;
+  height: 16px;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+/* Variantes sémantiques — fond + border-top 4px + border latérale */
+#Growler div.horde-success {
+  background-color: var(--theme-bg-success-light);
+  border-color: var(--theme-border-success);
+  border-top: 4px solid var(--theme-icon-success) !important;
+}
+#Growler div.horde-error {
+  background-color: var(--theme-bg-danger-light);
+  border-color: var(--theme-border-danger);
+  border-top: 4px solid var(--theme-icon-danger) !important;
+}
+#Growler div.horde-warning,
+#Growler div.horde-alarm {
+  background-color: var(--theme-bg-warning-light);
+  border-color: var(--theme-border-warning);
+  border-top: 4px solid var(--theme-icon-warning) !important;
+}
+#Growler div.horde-message {
+  background-color: var(--theme-bg-information-light);
+  border-color: var(--theme-border-information);
+  border-top: 4px solid var(--theme-icon-information) !important;
+}
+
+/* Icônes */
+#Growler div.horde-success::before {
+  mask-image: url("graphics/svg/success.svg");
+  background-color: var(--theme-icon-success);
+}
+#Growler div.horde-error::before {
+  mask-image: url("graphics/svg/error.svg");
+  background-color: var(--theme-icon-danger);
+}
+#Growler div.horde-warning::before,
+#Growler div.horde-alarm::before {
+  mask-image: url("graphics/svg/warning.svg");
+  background-color: var(--theme-icon-warning);
+}
+#Growler div.horde-message::before {
+  mask-image: url("graphics/svg/info.svg");
+  background-color: var(--theme-icon-information);
+}
+
+/* Titre — couleur conditionnelle */
+#Growler div.GrowlerNoticeHead {
+  font-weight: var(--theme-font-weight-bold);
+  font-size: var(--theme-font-size-sm);
+  margin-bottom: 2px;
+}
+#Growler div.horde-success .GrowlerNoticeHead {
+  color: var(--theme-text-on-success);
+}
+#Growler div.horde-error .GrowlerNoticeHead {
+  color: var(--theme-text-on-danger);
+}
+#Growler div.horde-warning .GrowlerNoticeHead,
+#Growler div.horde-alarm .GrowlerNoticeHead {
+  color: var(--theme-text-on-warning);
+}
+#Growler div.horde-message .GrowlerNoticeHead {
+  color: var(--theme-text-on-information);
+}
+
+/* Body — couleur conditionnelle */
+.GrowlerNoticeBody {
+  font-size: var(--theme-font-size-sm);
+  overflow-x: hidden;
+  word-wrap: break-word;
+  margin-right: 20px;
+}
+#Growler div.horde-success .GrowlerNoticeBody {
+  color: var(--theme-text-on-success);
+}
+#Growler div.horde-error .GrowlerNoticeBody {
+  color: var(--theme-text-on-danger);
+}
+#Growler div.horde-warning .GrowlerNoticeBody,
+#Growler div.horde-alarm .GrowlerNoticeBody {
+  color: var(--theme-text-on-warning);
+}
+#Growler div.horde-message .GrowlerNoticeBody {
+  color: var(--theme-text-on-information);
+}
+
+/* Bouton fermeture — absolu en haut à droite, couleur conditionnelle */
+div.GrowlerNoticeExit {
+  background: none;
+  position: absolute;
+  top: var(--theme-spacing-sm);
+  right: var(--theme-spacing-sm);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  text-indent: -9999px;
+  overflow: hidden;
+  mask-image: url("graphics/svg/close.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+  float: none !important;
+}
+div.GrowlerNoticeExit:hover {
+  opacity: 1;
+}
+#Growler div.horde-success .GrowlerNoticeExit {
+  background-color: var(--theme-text-on-success);
+}
+#Growler div.horde-error .GrowlerNoticeExit {
+  background-color: var(--theme-text-on-danger);
+}
+#Growler div.horde-warning .GrowlerNoticeExit,
+#Growler div.horde-alarm .GrowlerNoticeExit {
+  background-color: var(--theme-text-on-warning);
+}
+#Growler div.horde-message .GrowlerNoticeExit {
+  background-color: var(--theme-text-on-information);
+}
+
+/* GrowlerLog — historique en bas de page */
+#GrowlerLog {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  z-index: 10000;
+  overflow-y: auto;
+  background: var(--theme-bg-primary);
+  border-top: 1px solid var(--theme-border);
+}
+#GrowlerLog ul {
+  overflow: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#GrowlerLog ul li {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-sm);
+  color: var(--theme-text-primary);
+  font-size: var(--theme-font-size-sm);
+  padding: var(--theme-spacing-xs) var(--theme-spacing-md);
+  border-bottom: 1px solid var(--theme-border);
+  background-image: none !important;
+}
+#GrowlerLog ul li.horde-success {
+  background-color: var(--theme-bg-success-light) !important;
+}
+#GrowlerLog ul li.horde-error {
+  background-color: var(--theme-bg-danger-light) !important;
+}
+#GrowlerLog ul li.horde-warning,
+#GrowlerLog ul li.horde-alarm {
+  background-color: var(--theme-bg-warning-light) !important;
+}
+#GrowlerLog ul li.horde-message {
+  background-color: var(--theme-bg-information-light) !important;
+}
+#GrowlerLog ul li:last-child {
+  border: 0;
+}
+#GrowlerLog li.GrowlerInfo,
+#GrowlerLog li.GrowlerNoAlerts {
+  font-weight: var(--theme-font-weight-semi-bold);
+  background-color: var(--theme-bg-secondary) !important;
+}
+#GrowlerLog span.GrowlerAlertDate {
+  font-size: var(--theme-font-size-xs);
+  font-style: italic;
+  padding-left: var(--theme-spacing-sm);
+  color: var(--theme-text-secondary);
+}
+.GrowlerLogClear {
+  padding-left: var(--theme-spacing-sm);
+}
+
+/* Variantes globales horde-* (utilisées hors Growler aussi) */
+.horde-success {
+  background-color: var(--theme-bg-success-light);
+  border-color: var(--theme-border-success);
+  color: var(--theme-text-on-success);
+}
+.horde-error {
+  background-color: var(--theme-bg-danger-light);
+  border-color: var(--theme-border-danger);
+  color: var(--theme-text-on-danger);
+}
+.horde-warning {
+  background-color: var(--theme-bg-warning-light);
+  border-color: var(--theme-border-warning);
+  color: var(--theme-text-on-warning);
+}
+.horde-message {
+  background-color: var(--theme-bg-information-light);
+  border-color: var(--theme-border-information);
+  color: var(--theme-text-on-information);
+}
+.horde-alarm {
+  background-color: var(--theme-bg-warning-light);
+  border-color: var(--theme-border-warning);
+  color: var(--theme-text-on-warning);
+}
+
+/* ── KeyNavList (liste déroulante de sélection d'heure) ── */
+/* Le JS positionne cette liste via des coords document (left/top inline calculés
+   par cumulativeOffset du champ). En position:absolute, son offsetParent est
+   #RB_redbox (absolute, plein écran) → les coords se retrouvent décalées et la
+   liste atterrit en haut-gauche de l'écran. En position:fixed, elle se réfère au
+   viewport, ce qui correspond aux coords document calculées (hors scroll). */
+.KeyNavList {
+  background: var(--theme-bg-primary);
+  border: 1px solid var(--theme-border);
+  border-bottom-width: 0;
+  box-shadow: var(--theme-shadow-md);
+  border-radius: var(--theme-radius-box);
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: fixed;
+  z-index: 10000;
+}
+.KeyNavList ul {
+  list-style-type: none;
+}
+.KeyNavList ul li {
+  cursor: pointer;
+  height: auto;
+  border-bottom: 1px solid var(--theme-border-subtle);
+  padding: 5px 10px 0;
+  color: var(--theme-text-primary);
+  white-space: nowrap;
+}
+.KeyNavList ul li.noselect {
+  color: var(--theme-text-disabled);
+}
+.KeyNavList ul li.selected {
+  background: var(--theme-bg-selected-hover);
+}
+.KeyNavList ul li:hover,
+.KeyNavList ul li.selected:hover {
+  background: var(--theme-bg-action);
+  color: var(--theme-text-on-action);
+}
+
+/* ── Modal forms ── */
+body.modal-form {
+  background-color: var(--theme-bg-primary);
+}
+div.modal-form {
+  font-size: 150%;
+  width: 20em;
+  margin: 5em auto;
+  background-color: var(--theme-text-on-action);
+  border-radius: var(--theme-radius-box);
+  box-shadow: 0 0 2em var(--theme-border-subtle);
+}
+.horde-form-header {
+  margin-bottom: 1em;
+  border-bottom: thin dashed var(--theme-border-subtle);
+}
+div.modal-form .notices {
+  padding-top: 1em;
+  font-size: 14px;
+}
+div.modal-form .notices li:first-child {
+  border-top: 1px solid var(--theme-border-subtle);
+}
+div.modal-form form {
+  padding: 1em;
+}
+div.modal-form label {
+  font-weight: bold;
+}
+div.modal-form input,
+div.modal-form select {
+  width: 18em;
+  margin-bottom: 0.5em;
+}
+div.modal-form input {
+  padding: 0 0.25em;
+  width: 17.5em;
+}
+div.modal-form .submit-button {
+  display: block;
+  margin: 0.5em auto;
+  width: auto;
+}
+div.modal-form .extras {
+  font-size: 14px;
+  border-top: thin dashed var(--theme-border-subtle);
+  margin: 0.5em 0;
+}
+
+/* ── Calendar popup (date-picker) ── */
+.hordeCalendarPopup {
+  border: 1px solid var(--theme-border);
+  background: var(--theme-bg-white);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
+  padding: var(--theme-spacing-xs);
+  border-collapse: separate;
+  border-spacing: 2px;
+  width: auto;
+  font-size: var(--theme-font-size-xs);
+}
+
+/* En-tête : navigation (×, année, mois) */
+.hordeCalendarPopup thead {
+  font-weight: var(--theme-font-weight-medium);
+}
+.hordeCalendarPopup thead td {
+  padding: var(--theme-spacing-2xs);
+}
+.hordeCalendarYear,
+.hordeCalendarMonth {
+  text-align: center;
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-headings);
+}
+/* Flèches de navigation + bouton fermer (icônes Lucide via mask-image) */
+.hordeCalendarPrevYear,
+.hordeCalendarNextYear,
+.hordeCalendarPrevMonth,
+.hordeCalendarNextMonth,
+.hordeCalendarClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--theme-radius-field);
+  text-decoration: none;
+  /* masque le texte « » x */
+  font-size: 0;
+  color: transparent;
+  transition: background-color 0.15s ease;
+}
+.hordeCalendarPrevYear:hover,
+.hordeCalendarNextYear:hover,
+.hordeCalendarPrevMonth:hover,
+.hordeCalendarNextMonth:hover,
+.hordeCalendarClose:hover {
+  background-color: var(--theme-bg-secondary);
+  text-decoration: none;
+}
+/* L'icône via ::before (mask-image recoloré) */
+.hordeCalendarPrevYear::before,
+.hordeCalendarNextYear::before,
+.hordeCalendarPrevMonth::before,
+.hordeCalendarNextMonth::before,
+.hordeCalendarClose::before {
+  content: '';
+  display: block;
+  width: 15px;
+  height: 15px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  transition: background-color 0.15s ease;
+}
+.hordeCalendarPrevYear:hover::before,
+.hordeCalendarNextYear:hover::before,
+.hordeCalendarPrevMonth:hover::before,
+.hordeCalendarNextMonth:hover::before,
+.hordeCalendarClose:hover::before {
+  background-color: var(--theme-icon-primary);
+}
+.hordeCalendarPrevMonth::before {
+  -webkit-mask-image: url("graphics/svg/chevron-left.svg");
+  mask-image: url("graphics/svg/chevron-left.svg");
+}
+.hordeCalendarNextMonth::before {
+  -webkit-mask-image: url("graphics/svg/chevron-right.svg");
+  mask-image: url("graphics/svg/chevron-right.svg");
+}
+.hordeCalendarPrevYear::before {
+  -webkit-mask-image: url("graphics/svg/chevrons-left.svg");
+  mask-image: url("graphics/svg/chevrons-left.svg");
+}
+.hordeCalendarNextYear::before {
+  -webkit-mask-image: url("graphics/svg/chevrons-right.svg");
+  mask-image: url("graphics/svg/chevrons-right.svg");
+}
+.hordeCalendarClose::before {
+  width: 13px;
+  height: 13px;
+  -webkit-mask-image: url("graphics/svg/close.svg");
+  mask-image: url("graphics/svg/close.svg");
+}
+
+/* Initiales des jours de la semaine */
+.hordeCalendarPopup th {
+  padding: var(--theme-spacing-2xs);
+  text-align: center;
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-secondary);
+}
+
+/* Cellules jours */
+.hordeCalendarPopup tbody {
+  text-align: center;
+}
+.hordeCalendarPopup tbody td {
+  padding: 0;
+}
+.hordeCalendarPopup a.hordeCalendarDay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  margin: 0 auto;
+  border-radius: var(--theme-radius-field);
+  color: var(--theme-text-primary);
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.hordeCalendarPopup tbody a:hover {
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-action);
+  text-decoration: none;
+}
+.hordeCalendarEmpty {
+  background: transparent;
+}
+
+/* Jour sélectionné (date courante du champ) */
+.hordeCalendarPopup .hordeCalendarCurrent a.hordeCalendarDay {
+  background: var(--theme-bg-action);
+  color: var(--theme-text-on-action);
+  font-weight: var(--theme-font-weight-bold);
+}
+/* Aujourd'hui : contour */
+.hordeCalendarPopup .hordeCalendarToday a.hordeCalendarDay {
+  box-shadow: inset 0 0 0 1.5px var(--theme-border-action, var(--theme-bg-action));
+  font-weight: var(--theme-font-weight-bold);
+}
+.hordeCalendarPopup .hordeCalendarWeek {
+  background: var(--theme-bg-tertiary);
+  font-size: 90%;
+  font-style: italic;
+}
+
+/* ── Quick add ── */
+.quickAdd {
+  width: 30em;
+  padding: 1em;
+  border: 1px solid #ccc;
+  background: var(--theme-bg-warning-light);
+  border-radius: var(--theme-radius-box);
+}
+.quickAdd textarea {
+  width: 100%;
+  height: 10em;
+  margin-top: 0.5em;
+}
+.quickAdd p {
+  margin: 0.5em 0;
+}
+.quickAdd label {
+  font-weight: bold;
+}
+
+/* ── Tags & autocompleter ── */
+ul.horde-tags {
+  display: inline;
+  list-style-type: none;
+}
+.hordeACListItem,
+ul.horde-tags li {
+  padding: 2px 6px;
+  margin-right: 4px;
+  background-color: var(--theme-bg-white);
+  color: var(--theme-text-primary);
+  border: 1px var(--theme-border) solid;
+  font-weight: normal;
+  line-height: normal;
+  display: flex !important;
+  align-items: center;
+  width: fit-content;
+  gap: var(--theme-spacing-2xs);
+  border-radius: var(--theme-radius-selector);
+}
+.header ul.horde-tags li {
+  font-size: 72%;
+}
+.hordeACListItem img,
+ul.horde-tags li img {
+  vertical-align: middle;
+}
+.hordeACBox {
+  background: white;
+  border: 1px solid var(--theme-border);
+  cursor: default;
+  text-align: left;
+  min-height: 58px;
+  padding: 4px;
+}
+.hordeACList {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  cursor: default;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.hordeACList li {
+  display: inline-block;
+  font-size: 90%;
+  white-space: nowrap;
+}
+.hordeACTrigger,
+.hordeACTrigger:focus,
+.hordeACTrigger:disabled {
+  background: transparent;
+  border: 0;
+  display: inline;
+  outline: none;
+  position: static;
+  width: 80px;
+  font-size: 111%;
+}
+.hordeACItemRemove:hover {
+  cursor: pointer;
+}
+
+/* ── Tabs (.tabset) ── */
+.tabset {
+  width: 100%;
+  float: none;
+  background: none;
+}
+.tabset ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--theme-spacing-xs);
+  list-style: none;
+  padding: var(--theme-spacing-xs);
+  background-color: var(--theme-bg-primary);
+  width: fit-content;
+  overflow: hidden;
+  border-radius: var(--theme-radius-box);
+}
+.tabset li {
+  background: none;
+  float: none;
+  height: auto;
+  line-height: normal;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+.tabset li a {
+  display: block;
+  padding: var(--theme-spacing-xs) var(--theme-spacing-md);
+  color: var(--theme-text-primary);
+  font-weight: var(--theme-font-weight-medium);
+  text-decoration: none;
+  border-radius: var(--theme-radius-field);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  cursor: pointer;
+}
+.tabset li a:hover {
+  background-color: var(--theme-bg-secondary);
+  color: var(--theme-text-action);
+  text-decoration: none;
+}
+.tabset li.horde-active {
+  background: none;
+}
+.tabset li.horde-active a {
+  background-color: var(--theme-bg-action);
+  color: var(--theme-text-on-action);
+  font-weight: var(--theme-font-weight-bold);
+}
+.tabset img {
+  display: none;
+}
+
+/* ── Mime headers ── */
+.mimeHeaders {
+  border: 1px solid var(--theme-border-subtle);
+  background: var(--theme-bg-input);
+  display: inline-block;
+  margin-bottom: 3px;
+  padding: 5px;
+  border-radius: var(--theme-radius-box);
+}

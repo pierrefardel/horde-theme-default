@@ -1,0 +1,136 @@
+/**
+ * Kronolith UPJV — Mini calendrier
+ * ==================================
+ * Mini calendrier dans la sidebar.
+ */
+
+.kronolith-minical {
+  border-radius: var(--theme-radius-box);
+  overflow: hidden;
+  box-shadow: var(--theme-shadow-md);
+  padding: 4px;
+  background: var(--theme-bg-white);
+  border: 1px solid var(--theme-border);
+}
+
+.kronolith-minical td {
+  background-color: var(--theme-bg-secondary);
+  padding: 10px;
+  vertical-align: top;
+}
+
+.kronolith-minical > tbody > tr > td {
+  padding: 0;
+}
+
+#kronolithMinicalDate {
+  font-weight: var(--theme-font-weight-semi-bold);
+}
+
+/* ── Table interne ── */
+.kronolith-minical table {
+  border-spacing: 0.5px;
+  background-color: var(--theme-border);
+  width: 100%;
+  border-radius: var(--theme-radius-box);
+  overflow: hidden;
+}
+.kronolith-minical table th,
+.kronolith-minical table td {
+  background-color: var(--theme-bg-white);
+  height: 24px;
+  width: 18px;
+  padding: 0px;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: var(--theme-font-weight-normal);
+  font-size: var(--theme-font-size-xs);
+}
+
+.kronolith-minical table th:has(#kronolith-minical-prev),
+.kronolith-minical table th:has(#kronolith-minical-next) {
+  background-color: var(--theme-bg-action);
+}
+
+.kronolith-minical table th {
+  background-color: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
+}
+
+.kronolith-minical table td.kronolith-minical-week {
+  background-color: var(--theme-bg-white);
+  color: var(--theme-text-primary);
+}
+.kronolith-minical table tbody td {
+  empty-cells: show;
+}
+.kronolith-minical table tbody td a {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--theme-text-primary);
+  text-decoration: none;
+}
+
+/* ── Hover ── */
+.kronolith-other-month:hover a {
+  background-color: var(--theme-bg-success-light);
+  color: var(--theme-text-success);
+}
+
+/* ── Navigation ── */
+tr.kronolith-minical-nav,
+tr.kronolith-minical-nav th {
+  background-color: var(--theme-bg-secondary);
+  text-transform: capitalize;
+}
+#kronolith-minical-prev,
+#kronolith-minical-next {
+  display: block;
+  text-indent: -10000px;
+  cursor: pointer;
+  width: 100%;
+  height: 20px;
+  background-color: var(--theme-icon-action);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+#kronolith-minical-next {
+  mask-image: url("graphics/svg/nav-next.svg");
+  -webkit-mask-image: url("graphics/svg/nav-next.svg");
+}
+#kronolith-minical-prev {
+  mask-image: url("graphics/svg/nav-prev.svg");
+  -webkit-mask-image: url("graphics/svg/nav-prev.svg");
+}
+
+/* ── États ── */
+.kronolith-minical .kronolith-minical-empty {
+  background: none;
+}
+.kronolith-minical .kronolith-other-month,
+.kronolith-minical .kronolith-other-month a {
+  color: var(--theme-text-disabled) !important;
+}
+.kronolith-minical .kronolith-selected,
+#horde-sidebar .kronolith-minical .kronolith-selected a {
+  background-color: var(--theme-bg-success-light);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-success);
+}
+.kronolith-minical .kronolith-today,
+.kronolith-minical .kronolith-today:hover,
+.kronolith-minical .kronolith-today a,
+.kronolith-minical .kronolith-today:hover a,
+#horde-sidebar .kronolith-minical .kronolith-today a {
+  background-color: var(--theme-bg-action) !important;
+  color: var(--theme-text-on-action);
+  font-weight: var(--theme-font-weight-bold);
+}
+.kronolith-minical .kronolith-selected.kronolith-today {
+  border-color: var(--theme-bg-white);
+}

@@ -1,0 +1,7 @@
+/* Thème UPJV — interface mobile */
+body {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body-lg);
+  background: var(--colors-surface-white);
+  color: var(--colors-text-body);
+}

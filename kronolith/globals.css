@@ -1,0 +1,502 @@
+/**
+ * Kronolith UPJV — Globals
+ * =========================
+ * Autocomplete, tags, prefs, free/busy grid, print.
+ */
+
+/* ── Toolbar Kronolith — 3 zones distinctes ──
+   [Aujourd'hui]  ......  [< période >]  ......  [filtres de vue]
+   Zone 1 (gauche)  : #kronolithGotoToday
+   Zone 2 (centre)  : kronolithPrev + #kronolithCurrent + kronolithNext
+   Zone 3 (droite)  : li.horde-icon (Jour, Semaine, Mois…)
+*/
+#kronolithHeader .horde-buttonbar ul {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  width: 100%;
+}
+
+/* Zone droite — le premier filtre de vue (Jour) pousse tout le groupe à droite */
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavDay) {
+  margin-left: auto;
+}
+
+/* NB : l'aspect « carte » de #kronolithMenu est factorisé dans
+   horde/sidebar.css, avec #horde-sidebar-menu (wrapper JS des autres apps) et
+   #foldersSidebar (imp). Ne pas le redéfinir ici. */
+
+#kronolithMenuCalendars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-2xs);
+}
+
+/* Masque le dernier séparateur (orphelin en bas, suivi seulement de sections cachées) */
+#kronolithMenuCalendars
+  > .horde-sidebar-split:not(:has(~ .horde-sidebar-split)) {
+  display: none;
+}
+
+#kronolithPrintHeader {
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-secondary);
+  font-size: var(--theme-font-size-lg);
+  text-transform: capitalize;
+}
+
+#kronolithMain {
+  /* Base (toutes vues sauf mois) : hauteur naturelle */
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#kronolithBody {
+  /* Base (toutes vues sauf mois) : pas d'étirement flex */
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
+/* Le radius va sur chaque conteneur de vue (pas sur #kronolithBody), sinon il
+   faudrait overflow:hidden sur le parent — ce qui casserait le scroll/rendu. */
+#kronolithViewMonth,
+#kronolithViewWorkweek,
+#kronolithViewWeek,
+#kronolithViewDay,
+#kronolithViewYear,
+#kronolithViewTasks,
+#kronolithViewAgenda {
+  overflow: hidden;
+}
+
+/* ── Vue mois UNIQUEMENT (#kronolithViewMonth non masqué) ──
+   NB : Horde met style="display:none" SANS espace → le :not() matche cette
+   chaîne exacte. En vue mois, #kronolithMain remplit la hauteur et
+   #kronolithBody s'étire pour que la grille remplisse l'écran. */
+#kronolithMain:has(#kronolithViewMonth:not([style*="display:none"])) {
+  height: 100%;
+}
+#kronolithMain:has(#kronolithViewMonth:not([style*="display:none"]))
+  #kronolithBody {
+  flex: 1 1 0;
+}
+
+/* Bouton Aujourd'hui — style success (raccourci vers la date du jour) */
+.horde-buttonbar li:has(#kronolithGotoToday) {
+  border: none;
+  background: transparent;
+  overflow: visible;
+}
+#kronolithGotoToday {
+  font-size: var(--theme-font-size-xs) !important;
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-btn-success) !important;
+  background-color: var(--theme-bg-success);
+  border: 1px solid var(--theme-border-success);
+  border-radius: var(--theme-radius-field);
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+#kronolithGotoToday:hover {
+  background-color: var(--theme-bg-success-hover);
+  border-color: var(--theme-border-success-hover);
+}
+#kronolithGotoToday:active {
+  background-color: var(--theme-bg-success-active);
+}
+
+/* Indicateur de période — texte proéminent, neutralise le style toolbar du li.horde-active */
+#kronolithHeader .horde-buttonbar li:has(#kronolithCurrent) {
+  border: none !important;
+  background: transparent !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--theme-spacing-2xs) !important;
+}
+#kronolithCurrent {
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-headings);
+  white-space: nowrap;
+}
+
+/* Filtres de vue — style DS UPJV filter component */
+/* Le li porte le style toolbar (bordure) ; pour les filtres c'est le <a> qui le porte → neutralise le li */
+#kronolithHeader .horde-buttonbar li.horde-icon {
+  border: none;
+  background: transparent;
+  overflow: visible;
+}
+#kronolithHeader .horde-buttonbar li.horde-icon a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-sm);
+  font-size: var(--theme-font-size-sm);
+  background: var(--theme-bg-white);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-field);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--theme-transition);
+  text-decoration: none;
+}
+#kronolithHeader .horde-buttonbar li.horde-icon a:hover {
+  color: var(--theme-text-on-action);
+  background: var(--theme-bg-action);
+  border-color: var(--theme-bg-action);
+}
+#kronolithHeader .horde-buttonbar li.horde-icon a:hover::before {
+  background-color: var(--theme-text-on-action) !important;
+}
+#kronolithHeader .horde-buttonbar li.horde-icon.horde-active a {
+  color: var(--theme-text-on-action);
+  background: var(--theme-bg-action);
+  border-color: var(--theme-bg-action);
+  font-weight: var(--theme-font-weight-medium);
+}
+#kronolithHeader .horde-buttonbar li.horde-icon.horde-active a::before {
+  background-color: var(--theme-text-on-action) !important;
+}
+
+/* ── Modes d'affichage Tâches + Agenda (distincts des filtres temporels) ──
+   Tâches a la classe horde-icon, Agenda non. On les cible par ID.
+   Séparateur vertical avant Tâches pour marquer la rupture conceptuelle. */
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) {
+  position: relative;
+  margin-left: calc(var(--theme-spacing-md) * 2);
+}
+/* Séparateur vertical centré dans l'espace avant Tâches */
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks)::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--theme-spacing-md) * -1);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 18px;
+  background-color: var(--theme-border);
+}
+/* Pas d'icône sur Tâches */
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) a::before {
+  display: none !important;
+}
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) a,
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavAgenda) a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-sm);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-btn-secondary);
+  border: 1px solid var(--theme-border-btn-secondary);
+  border-radius: var(--theme-radius-field);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--theme-transition);
+  text-decoration: none;
+}
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) a:hover,
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavAgenda) a:hover {
+  background: var(--theme-bg-btn-secondary-hover);
+}
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks).horde-active a,
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavAgenda).horde-active a {
+  color: var(--theme-text-on-action);
+  background: var(--theme-bg-action);
+  border-color: var(--theme-bg-action);
+}
+
+/* Cacher les filtres temporels (Jour→Année) quand Tâches ou Agenda est actif —
+   ils n'ont de sens que sur les vues calendaires. */
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavTasks))
+  li:has(#kronolithNavDay),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavTasks))
+  li:has(#kronolithNavWorkweek),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavTasks))
+  li:has(#kronolithNavWeek),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavTasks))
+  li:has(#kronolithNavMonth),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavTasks))
+  li:has(#kronolithNavYear),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavAgenda))
+  li:has(#kronolithNavDay),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavAgenda))
+  li:has(#kronolithNavWorkweek),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavAgenda))
+  li:has(#kronolithNavWeek),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavAgenda))
+  li:has(#kronolithNavMonth),
+#kronolithHeader
+  .horde-buttonbar
+  ul:has(li.horde-active:has(#kronolithNavAgenda))
+  li:has(#kronolithNavYear) {
+  display: none;
+}
+
+/* ── Autocomplete ── */
+.autocomplete {
+  background: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border);
+  position: absolute;
+  padding: 2px;
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
+  z-index: 10000;
+}
+.autocomplete ul {
+  margin: 1px;
+  padding: 1px;
+  list-style-type: none;
+}
+.autocomplete ul li {
+  padding: 3px;
+  cursor: pointer;
+  font-size: 90%;
+  color: var(--theme-text-primary);
+}
+.autocomplete ul .selected {
+  background: var(--theme-bg-action);
+  color: var(--theme-text-on-action);
+}
+
+/* ── Tags ── */
+.panel-tags {
+  margin-left: 10px;
+}
+.panel-tags ul {
+  margin: 1px;
+  padding: 1px;
+  list-style-type: none;
+}
+li.panel-tags {
+  float: left;
+  padding: 2px;
+}
+.panel-tags li:hover {
+  text-decoration: underline;
+}
+
+/* ── Prefs ── */
+.fburl {
+  border: 1px solid var(--theme-border);
+  padding: 5px 0 10px 15px;
+  border-radius: var(--theme-radius-box);
+}
+.fburl .fixed {
+  padding-top: 3px;
+}
+
+/* ── Free/Busy grid ── */
+.kronolithFBLegend {
+  font-size: 90%;
+  padding-right: 10px;
+}
+.kronolithFBBusy {
+  position: relative;
+  background: var(--theme-bg-danger);
+}
+.kronolithFBUnknown {
+  background: var(--theme-bg-secondary);
+}
+.kronolithFBFree {
+  position: relative;
+  background: var(--theme-bg-success);
+  color: var(--theme-text-on-action);
+}
+div.fbgrid {
+  background-color: var(--theme-bg-white);
+  overflow: auto;
+  padding: 0 1ex;
+}
+.fbgrid table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.fbgrid table td,
+.fbgrid table th {
+  border: 1px solid var(--theme-border);
+}
+.fbgrid table .label {
+  border: none;
+  padding-right: 1ex;
+}
+
+/* ── Selected control ── */
+.selected-control {
+  background: var(--theme-bg-information-light);
+  border-bottom: 1px solid var(--theme-border);
+}
+
+/* ── Color picker (z-index Kronolith) ── */
+#color-picker {
+  z-index: 103;
+}
+
+/* ── Print ── */
+#calendarPrint {
+  display: none;
+}
+
+@media print {
+  .rowEven td,
+  .rowOdd td {
+    background: var(--theme-bg-white);
+    color: var(--theme-text-primary);
+    border-bottom: thin solid var(--theme-border);
+  }
+  .rowEven td td,
+  .rowOdd td td {
+    border: none;
+  }
+  .selected-control {
+    background: var(--theme-bg-white);
+    border-bottom: thin solid var(--theme-border);
+  }
+  .iconAlarm,
+  .iconDelete,
+  .iconEdit,
+  .iconRecur,
+  .iconAdd,
+  .iconNav,
+  a.newEvent,
+  .tabset {
+    display: none;
+  }
+  #calendarPrint {
+    display: block;
+  }
+  .year-event {
+    background: var(--theme-bg-white);
+  }
+  table.monthgrid {
+    border-top: thin solid var(--theme-border);
+    border-left: thin solid var(--theme-border);
+  }
+  table.monthgrid th,
+  table.monthgrid td {
+    border-right: thin solid var(--theme-border);
+    border-bottom: thin solid var(--theme-border);
+    padding: 2px;
+  }
+  .month-eventbox {
+    border: none;
+    border-bottom: thin solid var(--theme-border);
+  }
+  .kronolith-all-day td {
+    height: auto;
+  }
+  .kronolith-today {
+    background-color: inherit;
+  }
+}
+
+/* ── Légende ── */
+#kronolith-legend {
+  display: none;
+}
+#kronolith-legend:has(span) {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  padding: var(--theme-spacing-xs);
+  order: -1;
+  font-size: 0;
+  line-height: 0;
+  border-bottom: 1px solid var(--theme-border);
+}
+/* Pills de légende (filtres calendriers en haut) : même traitement que les
+   events (fond clair teinté + texte foncé via --cal-color posé par le JS), mais
+   SANS bordure gauche. Une pastille ronde de la couleur du calendrier précède
+   le nom (::before). Le radius de la pastille suit --theme-radius-selector
+   (pilotable globalement). */
+/* Apparition animée des pills : le JS (addCalendarLegend) INSÈRE le <span>
+   dans le DOM, donc une animation CSS se déclenche d'elle-même à l'insertion.
+   La disparition n'est PAS animable en CSS : deleteCalendarLegend fait un
+   `legend.remove()` sec (l'élément n'existe déjà plus quand on voudrait
+   l'animer). */
+@keyframes kronolithLegendIn {
+  from {
+    opacity: 0;
+    transform: translateY(-3px) scale(0.96);
+  }
+}
+#kronolith-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: var(--theme-radius-selector);
+  cursor: pointer;
+  font-size: var(--theme-font-size-xs);
+  line-height: normal;
+  font-weight: var(--theme-font-weight-medium);
+  transition: opacity 0.15s ease;
+  animation: kronolithLegendIn 0.2s ease-out;
+  background-color: color-mix(
+    in srgb,
+    var(--cal-color) 14%,
+    var(--theme-bg-white)
+  ) !important;
+  color: var(--cal-text) !important;
+  border: 1px solid var(--cal-border);
+}
+/* Pastille ronde de couleur, avant le nom */
+#kronolith-legend span::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: var(--theme-radius-selector);
+  background-color: var(--cal-dot);
+}
+#kronolith-legend span:hover {
+  opacity: 0.8;
+}
+@media (prefers-reduced-motion: reduce) {
+  #kronolith-legend span {
+    animation: none;
+  }
+}
+#kronolith-legend span::after {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-image: url("graphics/svg/close.svg");
+  mask-image: url("graphics/svg/close.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  opacity: 0.7;
+}

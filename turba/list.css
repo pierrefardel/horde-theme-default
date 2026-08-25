@@ -1,0 +1,68 @@
+/**
+ * Turba UPJV — Liste du carnet d'adresses
+ * =========================================
+ * Table addressbook-list, boutons, icônes de navigation.
+ */
+
+table#addressbook-list {
+  width: 99%;
+  margin: 0 0 8px 5px;
+  border-top: 1px solid var(--theme-border-subtle);
+  border-left: 1px solid var(--theme-border-subtle);
+}
+table#addressbook-list th {
+  padding: 3px;
+  background: var(--theme-bg-secondary);
+  border-right: 1px solid var(--theme-border);
+  text-align: left;
+}
+table#addressbook-list td {
+  padding: 3px;
+  border-right: 1px solid var(--theme-border-subtle);
+  border-bottom: 1px solid var(--theme-border-subtle);
+}
+
+/* En-têtes triables — icône SVG via ::before (PNG za/az neutralisés) */
+table#addressbook-list th.sortup,
+table#addressbook-list th.sortdown {
+  background: var(--theme-bg-selected-hover);
+  padding-left: 20px;
+  position: relative;
+}
+table#addressbook-list th.sortup::before,
+table#addressbook-list th.sortdown::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background-color: var(--theme-icon-secondary);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+table#addressbook-list th.sortup::before {
+  mask-image: url("graphics/svg/sortup.svg");
+  -webkit-mask-image: url("graphics/svg/sortup.svg");
+}
+table#addressbook-list th.sortdown::before {
+  mask-image: url("graphics/svg/sortdown.svg");
+  -webkit-mask-image: url("graphics/svg/sortdown.svg");
+}
+
+/* ── Boutons sous la liste ── */
+#addressbook-list-buttons { padding: 1em; }
+#addressbook-list-buttons form { display: inline; }
+.addressbook-list-icon { width: 1%; }
+
+/* ── Icône navigation (parcourir) ── */
+.turba-browse-icon { text-align: center; }
+.turba-browse-icon img {
+  width: 16px;
+  height: 16px;
+}

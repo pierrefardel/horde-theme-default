@@ -1,0 +1,106 @@
+/**
+ * Turba UPJV — Globals (vue classique)
+ * ======================================
+ * QuickFinder, recherche rapide, pager, groupes, photo contact,
+ * doublons, page recherche, préférences colonnes, print.
+ */
+
+/* ── QuickFinder ── */
+.QuickFinderNoMatch { display: none; }
+#QuickFinderEmpty { font-style: italic; }
+
+/* ── Recherche rapide ── */
+#quicksearch { display: inline; }
+#quicksearch input {
+  background-repeat: no-repeat;
+  background-position: 2px center;
+  padding: 1px 0 1px 20px;
+}
+#quicksearch a {
+  display: inline-block;
+  padding: 2px 4px;
+}
+
+/* ── Pager ── */
+.turbaPager {
+  text-align: center;
+  padding: 3px;
+  background: var(--theme-bg-white);
+  border-bottom: 1px solid var(--theme-border);
+}
+
+/* ── Formulaire carnet virtuel ── */
+#vbook-form { margin: 1em 0 0 0; }
+
+/* ── Édition membres de groupe ── */
+div.editGroupMembers {
+  font-weight: var(--theme-font-weight-bold);
+  padding: 8px 2px;
+}
+div.editGroupMembers span.iconImg { margin-right: 4px; }
+
+/* ── Photo de contact (formulaire) ── */
+.horde-form img.turba-contact-photo {
+  max-width: 250px;
+  max-height: 250px;
+  width: auto;
+  height: auto;
+}
+
+/* ── Doublons ── */
+.turba-duplicate {
+  overflow: auto;
+  white-space: nowrap;
+  vertical-align: top;
+  max-height: 400px;
+}
+.turba-duplicate-contact {
+  display: inline-block;
+  margin-top: 8px;
+  margin-right: 8px;
+}
+.turba-duplicate-contact p { margin: 8px; }
+.turba-duplicate-contact form { display: inline; }
+.turba-duplicate-forms { margin: 8px; }
+
+/* ── Page recherche ── */
+#advancedtoggle {
+  background-color: var(--theme-bg-warning-light);
+  margin: -12px;
+  padding: 12px;
+}
+
+/* ── Préférences colonnes ── */
+#turba-prefs-cols-list {
+  float: left;
+  width: 15em;
+}
+#turba-prefs-cols-list ul { list-style-type: none; }
+#turba-prefs-cols-list li { padding: 3px; }
+#turba-prefs-cols-list li a { display: block; }
+#turba-prefs-cols-list li.active {
+  font-weight: var(--theme-font-weight-bold);
+  border: 1px solid var(--theme-border);
+  border-right: none;
+}
+#turba-prefs-cols-columns {
+  float: left;
+  padding: 3px;
+  border: 1px solid var(--theme-border);
+}
+#turba-prefs-cols-columns ol { list-style-type: none; }
+#turba-prefs-cols-columns li {
+  padding: 2px;
+  cursor: move;
+}
+#turba-prefs-cols-columns .checkbox {
+  margin-right: 2px;
+  cursor: default;
+}
+
+/* ── Print ── */
+@media print {
+  .tabset, #page h1.header span.smallheader {
+    display: none !important;
+  }
+}

@@ -1,0 +1,141 @@
+/**
+ * Kronolith UPJV — Événements
+ * =============================
+ * Affichage des événements dans les vues.
+ */
+
+/* ── Base événement ── */
+.kronolith-event {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: var(--theme-radius-box);
+  font-size: var(--theme-font-size-xs);
+  height: auto;
+  font-weight: var(--theme-font-weight-semi-bold);
+}
+.kronolith-event .kronolith-event-info {
+  padding: 3px 5px;
+  overflow: hidden;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  text-decoration: inherit;
+  font-weight: var(--theme-font-weight-semi-bold);
+}
+img.kronolithEventIcon {
+  float: left;
+  margin: 0 2px 2px 0;
+}
+.kronolith-event .kronolith-time {
+  font-weight: var(--theme-font-weight-normal);
+  order: 1;
+}
+
+.kronolith-event-cancelled {
+  text-decoration: line-through;
+}
+.kronolith-location {
+  font-size: 90%;
+  margin-left: 2px;
+  color: var(--theme-text-secondary);
+}
+/* Icônes d'état d'un événement (récurrence, exception…) → icône Lucide en
+   mask-image. Kronolith les rend sous la forme <span><img src="…-000.png"></span>.
+   Règle GÉNÉRIQUE : tout <span> contenant un <img> devient une pastille masquée,
+   positionnée en absolu à droite ; l'<img> d'origine est caché. Le mask-image
+   (quelle icône) est choisi par les règles spécifiques ci-dessous selon la
+   source. Le positionnement s'applique donc à toute icône, pas seulement recur. */
+.kronolith-event span:has(> img) {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 3px;
+  vertical-align: middle;
+  background-color: currentColor;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  position: absolute;
+  right: var(--theme-spacing-2xs);
+  top: var(--theme-spacing-2xs);
+}
+.kronolith-event span:has(> img) img {
+  display: none;
+}
+/* Icône spécifique selon la source du PNG remplacé. */
+.kronolith-event span:has(> img[src*="recur"]) {
+  -webkit-mask-image: url("graphics/svg/repeat-2.svg");
+  mask-image: url("graphics/svg/repeat-2.svg");
+}
+.kronolith-event span:has(> img[src*="exception"]) {
+  -webkit-mask-image: url("graphics/svg/repeat-off.svg");
+  mask-image: url("graphics/svg/repeat-off.svg");
+}
+
+/* ── Événements vue mois et all-day ── */
+#kronolithViewMonth .kronolith-event,
+.kronolithViewDay .kronolith-all-day .kronolith-event {
+  line-height: 15px;
+  padding: 5px;
+  font-weight: var(--theme-font-weight-semi-bold);
+}
+
+/* ── Style "pill" : fond clair teinté + texte foncé + bordure de la couleur ──
+   Le JS pose --cal-color (couleur brute du calendrier) sur l'événement, en plus
+   du background-color/color inline. On dérive 3 tons via color-mix() et on bat
+   l'inline avec !important. Rendu type Google Calendar / Untitled UI.
+   S'applique à toutes les vues (mois, semaine, jour, agenda) via l'attribut.
+   C'est l'identité visuelle du thème UPJV (pas une option) : la vue événement
+   officielle. Le patch JS qui pose --cal-color est générique/inoffensif (donc
+   upstreamable) ; ce style pill reste propre à theme-upjv. */
+.kronolith-event[style*="--cal-color"] {
+  background-color: color-mix(in srgb, var(--cal-color) 14%, var(--theme-bg-white)) !important;
+  color: var(--cal-text) !important;
+  border: 1px solid var(--cal-border) !important;
+  border-left: 3px solid var(--cal-color) !important;
+  overflow: hidden;
+}
+/* Vue semaine/jour : le fond coloré est porté par .kronolith-event-info (enfant),
+   pas par .kronolith-event. --cal-color est hérité du parent → on applique le
+   même traitement pill à cet enfant, et on rend les draggers transparents pour
+   ne pas réafficher le fond plein. */
+.kronolith-event[style*="--cal-color"] .kronolith-event-info {
+  background-color: transparent !important;
+  color: var(--cal-text) !important;
+}
+/* Draggers (poignées resize) en contexte pill : teintés de la couleur du
+   calendrier au lieu du fond plein inline. Cachés par défaut (visibility gérée
+   ailleurs), visibles au hover/select — on garde une teinte cohérente. */
+.kronolith-event[style*="--cal-color"] .kronolithDragger {
+  background-color: color-mix(in srgb, var(--cal-color) 30%, var(--theme-bg-white)) !important;
+}
+.kronolith-event[style*="--cal-color"].kronolithEditable:hover .kronolithDragger,
+.kronolith-event[style*="--cal-color"].kronolith-selected .kronolithDragger,
+.kronolith-event[style*="--cal-color"] .kronolithDragger.drag {
+  background-color: var(--cal-color) !important;
+}
+
+.kronolithViewDay .kronolith-event {
+  max-height: 40px;
+}
+#kronolithViewMonth .kronolith-event:hover,
+.kronolithViewDay .kronolith-event:hover {
+  max-height: none;
+}
+#kronolithViewDay .kronolith-all-day .kronolith-event {
+  float: left;
+}
+
+/* ── Eventbox ── */
+.block-eventbox,
+table.nopadding td.block-eventbox {
+  padding: 0 4px;
+}
+
+/* ── Lien new event ── */
+a.newEvent img {
+  vertical-align: top;
+  padding: 3px 0 0 3px;
+}

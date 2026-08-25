@@ -1,0 +1,57 @@
+/**
+ * IMP UPJV — styles globaux (vues basic + dynamic)
+ * Les icônes dossiers et checkboxes sont gérées via ::before + mask-image dans horde/screen.css
+ */
+
+/* Dossiers sidebar — reset PNG, icônes SVG gérées dans horde/screen.css */
+.folderImg, .folderopenImg, .draftsImg, .composetemplatesImg,
+.inboxImg, .sentImg, .spamImg, .trashImg, .remoteImg,
+.msCheck, .msCheckOn,
+div.vpRowSelected .msCheck,
+.deleteImg, .closeImg {
+    background-image: none;
+}
+
+.mboxunsub {
+    background: var(--colors-surface-secondary);
+    font-style: italic;
+    color: var(--colors-text-disabled);
+}
+
+/* Quota */
+.quotawarn {
+    color: var(--colors-text-warning);
+    font-weight: bold;
+}
+.quotaalert {
+    color: var(--colors-text-danger);
+    font-weight: bold;
+}
+
+/* Label liste boîtes aux lettres */
+#mailboxLabel {
+    margin-left: 20px;
+}
+
+/* Entêtes message */
+.variableLengthHeader {
+    background-color: var(--colors-surface-primary);
+    background-image: none;
+    border-bottom: 1px solid var(--colors-border-primary);
+    padding: 8px 12px;
+}
+
+/* En-têtes MIME à l'impression */
+.mimeHeadersPrint {
+    border-color: var(--colors-border-primary);
+    font-size: 12px;
+}
+
+/* Mailing list */
+table.mailinglistinfo {
+    border: 1px solid var(--colors-border-primary);
+    border-bottom: 0;
+    margin: 8px;
+    border-radius: var(--border-radius-md);
+}
+

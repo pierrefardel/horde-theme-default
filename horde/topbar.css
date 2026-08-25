@@ -1,0 +1,669 @@
+/**
+ * UPJV Theme — Topbar & Sous-barre
+ * ==================================
+ * #horde-head, #horde-sub, navigation principale, recherche, logout.
+ * Le layout (position: fixed, flex) est déjà dans base.css.
+ * Ce fichier gère les couleurs, espacements et éléments visuels.
+ */
+
+/* ── Topbar (layout dans base.css) ── */
+#horde-head {
+  background-color: var(--theme-bg-primary) !important;
+  background-image: none;
+  border-bottom: none;
+  padding: 0 var(--theme-spacing-md);
+  gap: var(--theme-spacing-sm);
+  height: var(--theme-topbar-height);
+}
+
+#horde-logo {
+  float: none;
+  flex-shrink: 0;
+  width: var(--brand-logo-width, 40px);
+  height: var(--brand-logo-height, 36px);
+  /* Mode background-image (upjv avec CDN) */
+  background-image: var(--brand-logo-url);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center left;
+  /* Mode mask-image (default-new) — activé si --brand-logo-mask est défini */
+  background-color: var(--brand-logo-color, transparent);
+  -webkit-mask-image: var(--brand-logo-mask, none);
+  mask-image: var(--brand-logo-mask, none);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center left;
+  mask-position: center left;
+}
+
+
+#horde-logo a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#horde-version {
+  display: var(--show-version, none);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-xbold);
+  color: var(--theme-text-primary);
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-xs);
+  background-color: var(--theme-bg-tertiary);
+  border-radius: var(--theme-radius-selector);
+}
+
+#horde-navigation {
+  float: none;
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-sm);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-on-action);
+}
+
+.horde-navipoint {
+  float: none;
+  position: relative;
+}
+
+.horde-settings {
+  float: none;
+  width: auto;
+  height: auto;
+  margin: 0;
+}
+
+.horde-point-left,
+.horde-point-right,
+.horde-point-left-active,
+.horde-point-right-active {
+  display: none;
+}
+
+.horde-point-center,
+.horde-point-center-active {
+  float: none;
+  height: auto;
+  padding: 0;
+  background-image: none;
+}
+
+.horde-point-arrow,
+.horde-point-arrow-active {
+  display: none;
+}
+
+a.horde-mainnavi:link,
+a.horde-mainnavi:visited,
+a.horde-mainnavi:active {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  color: var(--theme-text-primary);
+  border-radius: var(--theme-radius-field);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  text-decoration: none;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  white-space: nowrap;
+}
+
+a.horde-mainnavi:hover {
+  background-color: unset;
+  color: var(--theme-text-action);
+  text-decoration: none;
+}
+a.horde-mainnavi-active:link,
+a.horde-mainnavi-active:visited,
+a.horde-mainnavi-active:active,
+a.horde-mainnavi-active:hover {
+  background-color: var(--theme-bg-action-active);
+  color: var(--theme-text-on-action);
+  border-radius: var(--theme-radius-field);
+  padding: 4px 8px;
+  text-decoration: none;
+  box-shadow: var(--theme-shadow-sm);
+}
+
+.horde-point-center:hover,
+a.horde-mainnavi:hover,
+a.horde-mainnavi-active:link {
+  color: var(--theme-text-on-action);
+  text-decoration: none;
+}
+
+a.horde-mainnavi-active:visited,
+a.horde-mainnavi-active:active {
+  color: var(--theme-text-on-action);
+  text-decoration: none;
+}
+
+.horde-navipoint:hover .horde-point-center a {
+  color: var(--theme-text-action);
+}
+
+/* Dropdown navigation */
+.horde-dropdown {
+  float: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+}
+.horde-dropdown li ul {
+  display: none;
+  position: absolute;
+  top: 44px;
+  left: 0;
+  list-style: none;
+  padding: 4px 0;
+  margin: 0;
+  min-width: 200px;
+  z-index: 300;
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-box);
+  background-color: var(--theme-bg-white);
+  box-shadow: var(--theme-shadow-md);
+}
+.horde-dropdown li:hover ul,
+.horde-dropdown li.over ul {
+  display: block;
+}
+.horde-dropdown li:hover ul ul,
+.horde-dropdown li.over ul ul {
+  display: none;
+}
+.horde-dropdown ul li ul {
+  margin-top: -25px;
+  margin-left: 100%;
+  top: 24px;
+}
+.horde-dropdown ul li:hover ul,
+.horde-dropdown ul li.over ul {
+  display: block;
+}
+.horde-dropdown ul li {
+  position: relative;
+  border-bottom: none;
+  white-space: nowrap;
+}
+.horde-dropdown ul li:last-child {
+  border-bottom: 0;
+}
+.horde-drowdown-str {
+  height: auto;
+  padding: 0;
+  margin: 0;
+}
+.horde-drowdown-str a.horde-mainnavi,
+.horde-drowdown-str a.horde-mainnavi:link,
+.horde-drowdown-str a.horde-mainnavi:visited {
+  padding: 7px 16px;
+  border-radius: 0;
+  color: var(--theme-text-primary) !important;
+  font-weight: var(--theme-font-weight-normal);
+  font-size: var(--theme-font-size-sm);
+  background-color: transparent;
+}
+.horde-drowdown-str a.horde-mainnavi:hover {
+  background-color: var(--theme-bg-secondary) !important;
+  color: var(--theme-text-headings) !important;
+}
+
+/* Entrée parente non-cliquable (ex. « Administration ») : le libellé est un
+   texte brut dans .horde-drowdown-str, sans <a.horde-mainnavi>. On lui applique
+   le même padding/typo que les liens pour un rendu homogène dans le dropdown. */
+.horde-drowdown-str:not(:has(a.horde-mainnavi)) {
+  padding: 7px 16px;
+  color: var(--theme-text-primary);
+  font-weight: var(--theme-font-weight-normal);
+  font-size: var(--theme-font-size-sm);
+}
+/* Même retour visuel au survol que les liens (le survol ouvre le sous-menu) */
+.horde-dropdown li:hover > .horde-drowdown-str:not(:has(a.horde-mainnavi)) {
+  background-color: var(--theme-bg-secondary);
+  color: var(--theme-text-headings);
+}
+
+/* Recherche */
+#horde-search {
+  float: none;
+  flex-shrink: 0;
+  width: 320px;
+  padding: 0;
+  margin-left:auto;
+}
+#horde-search .horde-fake-input,
+#horde-search form:not(:has(.horde-fake-input)) {
+  display: flex;
+  align-items: center;
+  background-color: var(--theme-bg-white);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-field);
+  height: 34px;
+  width: 100%;
+  padding: 0 var(--theme-spacing-xs);
+  gap: var(--theme-spacing-2xs);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  margin: 0;
+}
+#horde-search .horde-fake-input:focus-within,
+#horde-search form:not(:has(.horde-fake-input)):focus-within {
+  background-color: var(--theme-bg-white);
+  border-color: var(--theme-border);
+}
+#horde-search .horde-fake-input #horde-search-input,
+#horde-search form:not(:has(.horde-fake-input)) #horde-search-input {
+  background: transparent;
+  border: none;
+  color: var(--theme-text-primary) !important;
+  font-size: var(--theme-font-size-xs);
+  font-style: unset;
+  height: 100%;
+  width: 100%;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  float: none;
+}
+#horde-search .horde-fake-input #horde-search-input::placeholder,
+#horde-search form:not(:has(.horde-fake-input)) #horde-search-input::placeholder {
+  color: var(--theme-text-disabled);
+}
+
+/* Structure simple : icône loupe via ::before sur le form */
+#horde-search form:not(:has(.horde-fake-input))::before {
+  content: '';
+  display: block;
+  flex-shrink: 0;
+  width: 16px; height: 16px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/search.svg");
+  mask-image: url("graphics/svg/search.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+
+/* Icône loupe — remplace le PNG input[type=image] */
+#horde-search-icon {
+  display: none;
+}
+#horde-search-dropdown {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+#horde-search-dropdown::before {
+  content: '';
+  display: block;
+  width: 16px; height: 16px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/search.svg");
+  mask-image: url("graphics/svg/search.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+#horde-search-dropdown .horde-popdown {
+  display: none;
+}
+
+
+#horde-head:not(:has(#horde-search)) #horde-logout {
+  margin-left: auto;
+}
+
+#horde-head:has(#horde-search[style="display: none;"]) #horde-logout {
+  margin-left: auto;
+}
+
+
+/* Logout */
+#horde-logout {
+  float: none;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  order: 1;
+  background-image: none;
+  width: auto;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+#horde-logout a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: var(--theme-bg-danger);
+  border: 1px solid var(--theme-border-danger);
+  border-radius: var(--theme-radius-field);
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+#horde-logout a:hover {
+  background-color: var(--theme-bg-danger-hover);
+  border-color: var(--theme-border-danger-hover);
+}
+#horde-logout a:active {
+  background-color: var(--theme-bg-danger-active);
+}
+
+
+
+/* ── Sous-barre (layout dans base.css) ── */
+#horde-sub {
+  background-color: var(--theme-bg-secondary);
+  border-bottom: 1px solid var(--theme-border);
+  padding: 0 var(--theme-spacing-lg);
+  font-size: 11px;
+  color: var(--theme-text-primary);
+  justify-content: space-between;
+  height: var(--theme-subbar-height);
+}
+#horde-date,
+#horde-info {
+  float: none;
+  padding: 0;
+  color: var(--theme-text-primary);
+  font-size: 11px;
+}
+#horde-info a {
+  color: var(--theme-text-action);
+}
+
+/* Icône settings — remplacée par SVG mask dans notre thème, conservé pour compatibilité */
+.horde-icon-settings a {
+  width: 22px;
+  height: 27px;
+}
+
+/* Hover texte dropdown */
+.horde-drowdown-str:hover a {
+  color: var(--theme-text-action);
+}
+
+#horde-login-pass-capslock {
+  color: var(--theme-text-danger);
+  font-size: 90%;
+  font-weight: bold;
+  padding-bottom: 15px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Préférences d'affichage — popover topbar (injecté par display-prefs.js)
+   100 % AUTONOME : aucune classe issue du DS UPJV, pour fonctionner à
+   l'identique sur upjv ET default-new (qui n'a pas le CDN). Tout est en
+   classes .hdp-* et stylé avec les tokens --theme-*.
+   ════════════════════════════════════════════════════════════════ */
+.hdp {
+  position: relative;
+  flex-shrink: 0;
+  order: 1;
+  display: inline-flex;
+}
+/* Sans barre de recherche : c'est le bouton préfs (premier du groupe de droite)
+   qui pousse le groupe à droite — et NON le logout (sinon préfs et logout sont
+   séparés). On déplace donc le margin-left:auto du logout vers .hdp. */
+#horde-head:not(:has(#horde-search)):has(.hdp) #horde-logout {
+  margin-left: 0;
+}
+#horde-head:not(:has(#horde-search)) .hdp {
+  margin-left: auto;
+}
+
+/* Bouton déclencheur (icône palette) */
+.hdp__trigger {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-action);
+  color: var(--theme-text-on-action);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.hdp__trigger:hover {
+  background-color: var(--theme-bg-action-hover);
+}
+
+/* Panneau (popover) — ouverture pilotée en JS via .hdp-open */
+.hdp__panel {
+  position: absolute;
+  top: calc(100% + var(--theme-spacing-2xs));
+  right: 0;
+  z-index: 1000;
+  min-width: 220px;
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-white);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.95);
+  transform-origin: top right;
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-sm);
+}
+.hdp.hdp-open .hdp__panel {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.hdp__title {
+  margin: 0;
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-headings);
+}
+.hdp__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--theme-spacing-sm);
+}
+.hdp__row--column {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--theme-spacing-2xs);
+}
+.hdp__label {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-primary);
+}
+
+/* ── Switch thème 3 états (autonome, repris du switch-field du DS) ──
+   indeterminate = auto (thumb au milieu, moniteur), unchecked = light (soleil),
+   checked = dark (lune). Track + thumb animés. */
+.hdp-switch {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.hdp-switch__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.hdp-switch__track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 36px;
+  height: 20px;
+  background-color: var(--theme-bg-tertiary);
+  border: 1px solid var(--theme-border-input);
+  border-radius: var(--theme-radius-full);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.hdp-switch__thumb {
+  position: relative;
+  left: 2px;
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  background-color: var(--theme-bg-white);
+  border-radius: var(--theme-radius-full);
+  box-shadow: var(--theme-shadow-sm);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hdp-switch__icon {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  opacity: 0;
+  color: var(--theme-text-primary);
+  transition: opacity 0.2s ease;
+}
+/* Light (unchecked) : track neutre, thumb à gauche, soleil */
+.hdp-switch__icon--sun { opacity: 1; }
+/* Dark (checked) : thumb à droite, lune, track action */
+.hdp-switch__input:checked + .hdp-switch__track {
+  background-color: var(--theme-bg-action);
+  border-color: var(--theme-bg-action);
+}
+.hdp-switch__input:checked + .hdp-switch__track .hdp-switch__thumb {
+  transform: translateX(16px);
+}
+.hdp-switch__input:checked + .hdp-switch__track .hdp-switch__icon--sun  { opacity: 0; }
+.hdp-switch__input:checked + .hdp-switch__track .hdp-switch__icon--moon { opacity: 1; }
+/* Auto (indeterminate) : thumb au milieu, moniteur */
+.hdp-switch__input:indeterminate + .hdp-switch__track .hdp-switch__thumb {
+  transform: translateX(8px);
+}
+.hdp-switch__input:indeterminate + .hdp-switch__track .hdp-switch__icon--sun  { opacity: 0; }
+.hdp-switch__input:indeterminate + .hdp-switch__track .hdp-switch__icon--moon { opacity: 0; }
+.hdp-switch__input:indeterminate + .hdp-switch__track .hdp-switch__icon--auto { opacity: 1; }
+.hdp-switch__input:focus-visible + .hdp-switch__track {
+  outline: 2px solid var(--theme-bg-action);
+  outline-offset: 2px;
+}
+
+/* ── Radio-cards de forme ── */
+.hdp-shape-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--theme-spacing-2xs);
+}
+.hdp-shape-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  padding: var(--theme-spacing-xs) var(--theme-spacing-2xs);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-box);
+  background-color: var(--theme-bg-white);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+/* Radio natif masqué : la card EST le contrôle */
+.hdp-shape-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.hdp-shape-card:hover {
+  background-color: var(--theme-bg-primary);
+}
+/* État sélectionné : bordure d'accent */
+.hdp-shape-card:has(input:checked) {
+  border-color: var(--theme-bg-action);
+  box-shadow: inset 0 0 0 1px var(--theme-bg-action);
+}
+.hdp-shape-card:has(input:focus-visible) {
+  outline: 2px solid var(--theme-bg-action);
+  outline-offset: 2px;
+}
+
+/* Pastille d'aperçu : radius FIXE par preset (montre ce que fait l'option) */
+.hdp-shape-card__preview {
+  width: 22px;
+  height: 22px;
+  background-color: var(--theme-bg-secondary);
+}
+.hdp-shape-card__preview--sharp   { border-radius: var(--theme-radius-none); }
+.hdp-shape-card__preview--soft    { border-radius: var(--theme-radius-md); }
+.hdp-shape-card__preview--rounded { border-radius: var(--theme-radius-full); }
+.hdp-shape-card__label {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-primary);
+}
+
+/* ── Taille du texte : radio-cards (même modèle que l'Aspect) ── */
+.hdp-textsize-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--theme-spacing-2xs);
+}
+.hdp-textsize-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  padding: var(--theme-spacing-xs) var(--theme-spacing-2xs);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-box);
+  background-color: var(--theme-bg-white);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.hdp-textsize-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.hdp-textsize-card:hover {
+  background-color: var(--theme-bg-primary);
+}
+.hdp-textsize-card:has(input:checked) {
+  border-color: var(--theme-bg-action);
+  box-shadow: inset 0 0 0 1px var(--theme-bg-action);
+}
+.hdp-textsize-card:has(input:focus-visible) {
+  outline: 2px solid var(--theme-bg-action);
+  outline-offset: 2px;
+}
+/* Aperçu : un « A » à taille FIXE par preset (montre l'effet de l'option).
+   Valeurs alignées sur --theme-font-size-base de chaque preset. */
+.hdp-textsize-card__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-headings);
+  line-height: 1;
+}
+.hdp-textsize-card__preview--compact  { font-size: 12px; }
+.hdp-textsize-card__preview--standard { font-size: 15px; }
+.hdp-textsize-card__preview--comfort  { font-size: 18px; }
+.hdp-textsize-card__label {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-primary);
+}

@@ -1,0 +1,10 @@
+/**
+ * Turba UPJV — Point d'entrée
+ * =============================
+ * Pur orchestrateur @import. Carnet d'adresses.
+ */
+
+@import "globals.css";
+@import "list.css";
+@import "icons.css";
+@import "responsive.css";

@@ -1,0 +1,364 @@
+/**
+ * Kronolith UPJV — Vues Agenda & Tâches (vue dynamique)
+ * =======================================================
+ * Vues en liste (tabulaires). En agenda, les événements repassent en
+ * position:static (annule le position:absolute de la grille).
+ */
+
+ #kronolithViewTasks, #kronolithViewAgenda{
+  padding: var(--spacing-xs);
+ }
+
+#kronolithViewAgenda .tabset,
+#kronolithViewTasks .tabset {
+  margin-bottom: var(--theme-spacing-xs);
+}
+#kronolithViewAgenda td,
+#kronolithViewTasksBody td {
+  background-color: var(--theme-bg-white);
+}
+#kronolithViewAgenda .kronolith-view,
+#kronolithViewTasks .kronolith-view {
+  clear: left;
+}
+
+/* ── Vue Agenda ── */
+#kronolithViewAgenda table {
+  border-top-width: 0;
+}
+#kronolithViewAgenda td.kronolith-first-col {
+  width: 80px;
+  padding: 4px;
+  vertical-align: top;
+  text-align: left;
+  cursor: pointer;
+  background-color: var(--theme-bg-secondary);
+  font-size: var(--theme-font-size-sm);
+}
+#kronolithViewAgenda .kronolith-event {
+  position: relative;
+  padding: 2px 4px;
+  display: flex;
+  flex-direction: column;
+}
+#kronolithViewAgenda .kronolith-event .kronolithDate {
+  font-weight: normal;
+  color: var(--theme-text-secondary);
+}
+#kronolithAgendaNoItems td {
+  padding: 4px;
+}
+
+/* ── Vue Tâches ──
+   Le tableau n'est plus une grille : chaque tâche est une CARTE autonome.
+   On sort donc table/tbody/tr du modèle tabulaire (display:flex) pour pouvoir
+   les espacer avec un gap — impossible entre des <tr>. */
+#kronolithViewTasks .kronolith-view.kronolithViewTasks {
+  background-color: transparent;
+  border: 0;
+}
+#kronolithViewTasksBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-2xs);
+}
+#kronolithViewTasksBody tr.kronolithTaskRow {
+  display: block;
+}
+#kronolithViewTasksBody td {
+  cursor: pointer;
+  padding: 4px;
+}
+#kronolithViewTasksBody #kronolithTasksNoItems td {
+  cursor: default;
+}
+/* ── Case à cocher (remplace checkbox_off/on.png) ──
+   Kronolith rend un <div> et non un <input> : pas de :checked ici, l'état coché
+   vient de la classe .kronolithTaskCompleted posée sur le <td> parent
+   (toggleCompletionClass). On reproduit donc à l'identique le style des
+   checkboxes du DS (horde/forms.css) — mêmes tokens, mêmes transitions, même
+   coche SVG — mais piloté par le parent. */
+#kronolithViewTasksBody div.kronolithTaskCheckbox {
+  margin-right: 5px;
+  float: left;
+  flex-shrink: 0;
+  width: var(--theme-spacing-sm);
+  height: var(--theme-spacing-sm);
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+  border: 2px solid var(--theme-border-input);
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-white);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  vertical-align: middle;
+}
+/* Coche, masquée tant que la tâche n'est pas terminée. */
+#kronolithViewTasksBody div.kronolithTaskCheckbox::after {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 60%;
+  background-color: var(--theme-text-btn-action);
+  -webkit-mask-image: url("../graphics/svg/check.svg");
+  mask-image: url("../graphics/svg/check.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  opacity: 0;
+  transform: scale(0) rotate(-45deg);
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+#kronolithViewTasksBody div.kronolithTaskCheckbox:hover {
+  border-color: var(--theme-border-action-hover);
+  transform: scale(1.05);
+}
+/* Le <td> passe en grid (style carte ci-dessous) : le float du checkbox n'y a
+   plus de sens et fausserait l'alignement. */
+#kronolithViewTasksBody td.kronolithTaskCol[style*="--cal-color"] div.kronolithTaskCheckbox {
+  float: none;
+  margin-right: 0;
+}
+/* Tâche terminée : le line-through suffit à signaler l'état. La carte GARDE sa
+   couleur (titre teinté, filet gauche) — l'appartenance à une liste ne change
+   pas parce qu'une tâche est faite, et griser la ligne ferait perdre le repère
+   visuel de la liste. */
+#kronolithViewTasksBody td.kronolithTaskCompleted {
+  text-decoration: line-through;
+}
+/* Le titre vit dans .kronolithTaskMain, un conteneur flex : la décoration du
+   <td> ne s'y propage pas de façon fiable. On la repose explicitement — et
+   seulement sur le titre, pas sur les métadonnées (une date barrée se lit
+   mal). */
+#kronolithViewTasksBody td.kronolithTaskCompleted .kronolithTaskTitle {
+  text-decoration: line-through;
+}
+/* Tâche terminée = équivalent de :checked sur un input du DS. */
+#kronolithViewTasksBody td.kronolithTaskCompleted div.kronolithTaskCheckbox {
+  background-color: var(--theme-bg-action-active);
+  border-color: var(--theme-border-action-active);
+  animation: checkboxPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+#kronolithViewTasksBody td.kronolithTaskCompleted div.kronolithTaskCheckbox::after {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+#kronolithViewTasksBody td.kronolithTaskDue {
+  color: var(--theme-text-danger);
+  font-weight: var(--theme-font-weight-bold);
+}
+#kronolithViewTasks .kronolithInfo {
+  font-style: italic;
+  color: var(--theme-text-secondary);
+}
+#kronolithViewTasks ul.horde-tags {
+  margin-left: 0.5em;
+}
+
+/* ── Tâches en cartes ──
+   Kronolith peint la ligne entière avec la couleur de la liste, en inline
+   (aplat saturé pleine largeur : illisible, et sans rapport avec le style des
+   events). On remplace cet aplat par une CARTE : fond légèrement teinté de la
+   couleur de la liste + filet vertical à gauche — même vocabulaire que les
+   events. Le nom de la liste (ajouté par footer.js en multi-listes) porte
+   l'identification ; la couleur seule ne suffirait pas (teintes proches,
+   daltonisme).
+
+   --cal-color est posé sur le <td> par footer.js (JS du thème) : Kronolith ne
+   l'expose pas sur les tâches, contrairement aux events (PR upstream #73). Les
+   dérivés --cal-text/-border (horde/globals.css) garantissent la lisibilité
+   même si la liste a une couleur pâle ou neutre.
+
+   Le fond et la couleur de texte inline sont battus avec !important : c'est le
+   seul moyen de passer devant un style inline. */
+#kronolithViewTasksBody td.kronolithTaskCol[style*="--cal-color"] {
+  background-color: color-mix(
+    in srgb,
+    var(--cal-color) 7%,
+    var(--theme-bg-white)
+  ) !important;
+  /* Texte teinté de la couleur de la liste (--cal-text, horde/globals.css) :
+     même traitement que les events. Le plancher de lisibilité indexé sur le
+     chroma garantit le contraste même sur une liste pâle ou neutre. */
+  color: var(--cal-text) !important;
+  border-radius: var(--theme-radius-box);
+  overflow: hidden;
+  padding: var(--theme-spacing-xs);
+  border-left: 3px solid var(--cal-color) !important;
+  /* --task-indent : text-indent inline de Kronolith (indentation des
+     sous-tâches), reporté par footer.js — text-indent est sans effet sur un
+     conteneur flex. */
+  text-indent: 0 !important;
+  /* Grille [contenu][case à cocher] : la case est à DROITE, hors du chemin de
+     lecture — on lit le titre d'abord, on coche ensuite. */
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 2px var(--theme-spacing-xs);
+}
+/* La case à cocher occupe la 2e colonne, sur toute la hauteur de la carte. */
+#kronolithViewTasksBody td.kronolithTaskCol[style*="--cal-color"] div.kronolithTaskCheckbox {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  align-self: center;
+}
+/* ── Rangée 1 : titre, tags, icône de récurrence ──
+   Les tags suivent immédiatement le titre (ce sont ses qualificatifs), ils ne
+   sont pas rejetés à l'autre bout de la ligne. */
+#kronolithViewTasks .kronolithTaskMain {
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--theme-spacing-xs);
+  min-width: 0;
+}
+/* ── Rangée 2 : échéance puis description ── */
+#kronolithViewTasks .kronolithTaskMeta {
+  grid-column: 1;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--theme-spacing-2xs);
+  min-width: 0;
+}
+#kronolithViewTasksBody tr.kronolithTaskRow:hover td.kronolithTaskCol[style*="--cal-color"] {
+  background-color: color-mix(
+    in srgb,
+    var(--cal-color) 14%,
+    var(--theme-bg-white)
+  ) !important;
+}
+/* Le titre est enveloppé par footer.js (nœud texte nu à l'origine) : c'est
+   l'information principale de la ligne, on la fait ressortir. */
+#kronolithViewTasks .kronolithTaskTitle {
+  font-weight: var(--theme-font-weight-semi-bold);
+  color: var(--cal-text);
+}
+/* Échéance : ouvre la rangée 2, en retrait du titre. */
+#kronolithViewTasks .kronolithDate {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+/* Une échéance dépassée reste l'alerte de la ligne (règle .kronolithTaskDue
+   plus haut) : on la laisse ressortir en taille normale. */
+#kronolithViewTasksBody td.kronolithTaskDue .kronolithDate {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-danger);
+  font-weight: var(--theme-font-weight-medium);
+}
+/* Description : secondaire, tronquée à une ligne. */
+#kronolithViewTasks .kronolithTaskMeta .kronolithInfo {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-secondary);
+}
+/* Icône de récurrence / exception : le PNG est remplacé par l'icône Lucide en
+   mask-image. Le mask est porté par le <span> (posé par footer.js) et l'<img>
+   est cachée — exactement comme sur les events (kronolith/events.css). Poser
+   le mask sur l'<img> elle-même ne masque pas le pixmap de façon fiable. */
+#kronolithViewTasks .kronolithTaskIcon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  align-self: center;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+#kronolithViewTasks .kronolithTaskIcon img {
+  display: none;
+}
+#kronolithViewTasks .kronolithTaskIcon:has(> img[src*="recur"]) {
+  -webkit-mask-image: url("../graphics/svg/repeat-2.svg");
+  mask-image: url("../graphics/svg/repeat-2.svg");
+}
+#kronolithViewTasks .kronolithTaskIcon:has(> img[src*="exception"]) {
+  -webkit-mask-image: url("../graphics/svg/repeat-off.svg");
+  mask-image: url("../graphics/svg/repeat-off.svg");
+}
+/* Nom de la liste — ajouté par footer.js UNIQUEMENT quand plusieurs listes
+   sont affichées. La distinction ne repose alors plus sur la seule teinte
+   (couleurs proches, daltonisme). Poussé à droite, discret. */
+#kronolithViewTasks .kronolithTaskList {
+  margin-left: auto;
+  padding: 1px var(--theme-spacing-xs);
+  border-radius: var(--theme-radius-selector);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  white-space: nowrap;
+  color: var(--cal-text);
+  /* Fond blanc, pas teinté : la carte l'est déjà (7 %, 14 % au survol) — un
+     badge teinté s'y confondrait. */
+  background-color: var(--theme-bg-white);
+  border: 1px solid var(--cal-border);
+}
+/* Tags : en contexte flex ils ne doivent pas s'étirer ; ils passent à la ligne
+   suivante si la place manque (flex-wrap du conteneur). */
+#kronolithViewTasksBody td.kronolithTaskCol[style*="--cal-color"] ul.horde-tags {
+  flex-shrink: 0;
+  align-self: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 0;
+}
+/* Tags : de vrais badges, pas du texte gris — ils qualifient le titre et
+   doivent se lire comme des étiquettes. Fond blanc franc sur la carte teintée
+   (l'inverse se confondrait avec le fond), texte et bordure teintés via les
+   dérivés à plancher de lisibilité. */
+#kronolithViewTasks .kronolithTaskMain ul.horde-tags li {
+  font-size: var(--theme-font-size-xs);
+  line-height: 1.2;
+  color: var(--cal-text);
+  background-color: var(--theme-bg-white);
+  border: 1px solid var(--cal-border);
+  border-radius: var(--theme-radius-selector);
+}
+/* Le séparateur « · » n'a plus de sens entre des éléments espacés par le gap
+   du conteneur flex. */
+#kronolithViewTasksBody td.kronolithTaskCol[style*="--cal-color"] .kronolithSeparator {
+  display: none;
+}
+
+/* ── Onglets (caption.tabset) des vues Agenda & Tâches ── */
+#kronolithViewTasks caption,
+#kronolithViewAgenda caption {
+  margin-left: 0;
+}
+#kronolithViewTasks caption.tabset,
+#kronolithViewAgenda caption.tabset {
+  float: none;
+  width: auto;
+  background: none;
+}
+#kronolithViewTasks caption.tabset ul,
+#kronolithViewAgenda caption.tabset ul {
+  margin-top: 2px;
+}
+#kronolithViewTasks caption.tabset li a,
+#kronolithViewAgenda caption.tabset li a {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.kronolithLoading:has(#kronolithLoading:empty){
+  display: none;
+}

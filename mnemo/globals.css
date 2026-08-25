@@ -1,0 +1,181 @@
+/**
+ * Mnemo UPJV — Global
+ * =====================
+ * Liste des notes, recherche rapide, fiche de note.
+ *
+ * `#memos` (PAS `#notepad-list` — id du screen.css d'origine, obsolète face
+ * au HTML réellement rendu) est une `.horde-table` confirmé à l'écran
+ * (2026-08-25) : le style de tableau vient de horde/forms.css.
+ */
+
+/* ── Liste des notes ── */
+#memos {
+  width: 100%;
+}
+/* thead en flex → horde/forms.css met display:flex sur
+   `.horde-table-header, table.horde-table thead tr, table.horde-table th`
+   (utile en admin). Ici ça casse l'alignement des colonnes → rétablir
+   table-row/table-cell pour #memos. Même piège, même fix que #tasks (nag),
+   voir feedback_workflow. */
+#memos thead tr {
+  display: table-row;
+}
+#memos thead th {
+  display: table-cell;
+  background-color: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--theme-border);
+  color: var(--theme-text-secondary);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-2xs);
+}
+.QuickFinderNoMatch {
+  display: none;
+}
+#notes_empty {
+  padding: var(--theme-spacing-xs);
+  font-style: italic;
+  color: var(--theme-text-secondary);
+}
+#notepad-list-buttons {
+  padding: var(--theme-spacing-md);
+}
+#notepad-list-buttons form {
+  display: inline;
+}
+/* Tags de la liste : sur la même ligne que le titre (ils le qualifient), pas
+   empilés dessous — `<ul class="horde-tags">` suit le lien en bloc sinon.
+   Même piège, même fix que #tasks (nag/list.css). */
+#memos td .horde-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 0 0 0 var(--theme-spacing-2xs);
+  vertical-align: middle;
+}
+#memos td .horde-tags li {
+  padding: 0 var(--theme-spacing-xs);
+  font-size: var(--theme-font-size-xs);
+  line-height: 1.6;
+  color: var(--theme-text-secondary);
+  background-color: var(--theme-bg-white);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-selector);
+}
+
+/* ── Recherche rapide ── */
+#quicksearch {
+  display: inline;
+}
+#quicksearch input {
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-xs);
+  padding-left: var(--theme-spacing-lg);
+  background-image: none;
+}
+#quicksearch a {
+  display: inline-block;
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-2xs);
+}
+
+/* ── Fiche de note ──
+   Même pattern que nag/globals.css (.horde-header/.taskBody) : classes
+   génériques Horde, pas de fichier partagé pour .horde-header à ce jour
+   (voir feedback_workflow), donc dupliquées par module. */
+.horde-header {
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-secondary);
+  border-bottom: 1px solid var(--theme-border);
+}
+.horde-header tr {
+  vertical-align: top;
+}
+.horde-header td {
+  padding: 0 0 1px 0;
+}
+.horde-header td.horde-label {
+  font-weight: var(--theme-font-weight-semi-bold);
+  padding-right: var(--theme-spacing-xs);
+  text-align: right;
+  white-space: nowrap;
+  color: var(--theme-text-secondary);
+}
+.notePassphrase {
+  padding: var(--theme-spacing-sm);
+}
+/* Corps de la note : texte libre, rendu en chasse fixe (même choix que
+   .taskBody dans nag) pour préserver son alignement (listes, colonnes). */
+.noteBody {
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-white);
+  font-family: var(--theme-font-family-mono);
+  white-space: normal;
+  overflow: auto;
+}
+
+/* ── Tags ──
+   Le template Mnemo réutilise tel quel le partial de Nag pour cette barre :
+   la boîte FONCTIONNELLE (icône + <ul>) porte la classe `.nag-tags-related`/
+   `.nag-tags-browsing` — copier/coller resté dans Horde core, pas notre
+   thème — imbriquée DANS un wrapper `.mnemo-tags-related`/
+   `.mnemo-tags-browsing` qui, lui, ne porte que l'espacement extérieur.
+   Cibler la classe interne pour le layout/l'icône, vérifié à l'écran
+   2026-08-25. */
+.mnemo-tags-related,
+.mnemo-tags-browsing {
+  padding: var(--theme-spacing-xs);
+}
+.nag-tags-related,
+.nag-tags-browsing {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--theme-spacing-2xs);
+}
+.nag-tags-related .horde-tags,
+.nag-tags-browsing .horde-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  margin: 0;
+  padding: 0;
+}
+.nag-tags-related .horde-tags li,
+.nag-tags-browsing .horde-tags li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  padding: 0 var(--theme-spacing-xs);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-selector);
+  background-color: var(--theme-bg-white);
+  font-size: var(--theme-font-size-xs);
+  line-height: 1.7;
+}
+.nag-tags-related .horde-tags li a,
+.nag-tags-browsing .horde-tags li a {
+  color: var(--theme-text-primary);
+  text-decoration: none;
+}
+.nag-tags-related .horde-tags li:hover {
+  border-color: var(--theme-border-action-hover);
+}
+/* Filtre ACTIF : traité comme une sélection, pas comme une suggestion. */
+.nag-tags-browsing .horde-tags li {
+  background-color: var(--theme-bg-information-light);
+  border-color: var(--theme-border-information);
+  color: var(--theme-text-on-information);
+}
+
+@media print {
+  .tabset,
+  .notices,
+  #quicksearchL,
+  #quicksearch {
+    display: none;
+  }
+}

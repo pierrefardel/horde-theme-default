@@ -1,0 +1,264 @@
+/**
+ * Mnemo UPJV — Icônes
+ * =====================
+ * Les PNG du thème d'origine sont remplacés par des SVG Lucide en
+ * `mask-image` : la couleur suit alors le thème (clair/sombre, états) au lieu
+ * d'être cuite dans l'image.
+ *
+ * Technique : `::before` sur l'élément, JAMAIS `mask-image` directement sur un
+ * `<a>` — le mask masquerait aussi le texte du lien. Voir feedback_workflow.
+ */
+
+/* Géométrie commune des icônes de menu et d'action. */
+.mnemo-list::before,
+.mnemo-search::before,
+.mnemo-pdf::before,
+.mnemo-edit::before,
+.mnemo-delete::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  vertical-align: text-bottom;
+  background-color: currentColor;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* Neutralise les PNG d'origine (background-image sur l'élément lui-même). */
+.mnemo-list,
+.mnemo-search,
+.mnemo-pdf,
+.mnemo-edit,
+.mnemo-delete {
+  background-image: none;
+}
+
+/* ── Navigation ── */
+.mnemo-list::before {
+  -webkit-mask-image: url("graphics/svg/mnemo.svg");
+  mask-image: url("graphics/svg/mnemo.svg");
+}
+.mnemo-search::before {
+  -webkit-mask-image: url("graphics/svg/search.svg");
+  mask-image: url("graphics/svg/search.svg");
+}
+
+/* ── Actions sur une note ── */
+.mnemo-pdf::before {
+  -webkit-mask-image: url("graphics/svg/download.svg");
+  mask-image: url("graphics/svg/download.svg");
+}
+.mnemo-edit::before {
+  -webkit-mask-image: url("graphics/svg/edit.svg");
+  mask-image: url("graphics/svg/edit.svg");
+}
+.mnemo-delete::before {
+  -webkit-mask-image: url("graphics/svg/delete.svg");
+  mask-image: url("graphics/svg/delete.svg");
+}
+
+/* ── Colonne icône « Modifier » de la liste (#memos) ──
+   Ni le <th> d'en-tête ni les liens de ligne ne portent de classe
+   `.mnemo-edit` : le template rend un <img> nue en en-tête et un
+   <a><img></a> par ligne, sans hook CSS dédié. On cible donc par structure
+   et alt, en cachant l'<img> et en posant l'icône en ::before sur le parent
+   — jamais de mask direct sur l'<img>, le pixmap resterait visible dessous.
+   `alt^="Modifier"` : le libellé de ligne inclut le titre de la note
+   ("Modifier « test »"), variable — seul le préfixe est stable. */
+#memos thead th img[alt="Modifier la note"] {
+  display: none;
+}
+#memos thead th:has(img[alt="Modifier la note"])::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/edit.svg");
+  mask-image: url("graphics/svg/edit.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+#memos tbody td a:has(> img[alt^="Modifier"]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+#memos tbody td a:has(> img[alt^="Modifier"]) img {
+  display: none;
+}
+#memos tbody td a:has(> img[alt^="Modifier"])::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/edit.svg");
+  mask-image: url("graphics/svg/edit.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+#memos tbody td a:has(> img[alt^="Modifier"]):hover::before {
+  background-color: var(--theme-icon-primary);
+}
+
+/* ── Loupe de la recherche rapide ──
+   Le champ portait l'icône en background-image (neutralisée dans
+   globals.css). On la repose sur le conteneur, en absolu par-dessus le
+   padding réservé. */
+#quicksearch {
+  position: relative;
+}
+#quicksearch::before {
+  content: "";
+  position: absolute;
+  left: var(--theme-spacing-2xs);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/search.svg");
+  mask-image: url("graphics/svg/search.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* ── Loupe d'ouverture de la recherche rapide (en-tête de liste) ──
+   Repris du pattern nag (widget QuickFinder partagé) — non vérifié à l'écran
+   pour Mnemo, DOM pas encore inspecté. */
+#quicksearchL img {
+  display: none;
+}
+#quicksearchL {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  margin-left: var(--theme-spacing-2xs);
+}
+#quicksearchL::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("graphics/svg/search.svg");
+  mask-image: url("graphics/svg/search.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+/* Fermeture de la recherche : le « X » textuel devient une croix. */
+#quicksearch small a[title] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+  text-indent: -999px;
+  vertical-align: middle;
+}
+#quicksearch small a[title]::before {
+  content: "";
+  display: block;
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  text-indent: 0;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/close.svg");
+  mask-image: url("graphics/svg/close.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* ── Icône de la barre de tags ──
+   Cible `.nag-tags-related`/`.nag-tags-browsing` (boîte interne réelle, voir
+   commentaire globals.css), pas le wrapper `.mnemo-tags-*` — l'<img> est un
+   enfant du DIV INTERNE, pas du wrapper. IMPORTANT — on CACHE l'<img> et on
+   pose l'icône en ::before sur le conteneur. Poser le mask sur l'<img>
+   elle-même ne suffit pas : le pixmap reste visible sous le masque. */
+.nag-tags-related > img,
+.nag-tags-browsing > img {
+  display: none;
+}
+.nag-tags-related::before,
+.nag-tags-browsing::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+.nag-tags-related::before {
+  -webkit-mask-image: url("graphics/svg/tags.svg");
+  mask-image: url("graphics/svg/tags.svg");
+}
+.nag-tags-browsing::before {
+  -webkit-mask-image: url("graphics/svg/filter.svg");
+  mask-image: url("graphics/svg/filter.svg");
+}
+
+/* ── Croix de retrait d'un filtre actif ── */
+.nag-tags-browsing .horde-tags li img {
+  display: none;
+}
+.nag-tags-browsing .horde-tags li a:has(img) {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.nag-tags-browsing .horde-tags li a:has(img)::before {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  background-color: currentColor;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+  -webkit-mask-image: url("graphics/svg/close.svg");
+  mask-image: url("graphics/svg/close.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+.nag-tags-browsing .horde-tags li a:hover::before {
+  opacity: 1;
+}

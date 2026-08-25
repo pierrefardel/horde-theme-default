@@ -1,0 +1,179 @@
+/**
+ * Kronolith UPJV — Divers vue dynamique
+ * =======================================
+ * Loaders, création rapide (quickEvent/addEvent), titres de vue, séparateurs,
+ * alertes collantes, impression. Complète le rapatriement du dynamic/screen.css.
+ */
+
+html,
+body {
+  height: 100%;
+}
+
+/* ── Titres / séparateurs ── */
+#kronolithToday {
+  font-weight: var(--theme-font-weight-bold);
+}
+.kronolithSeparator {
+  padding-left: 5px;
+  padding-right: 5px;
+  color: var(--theme-text-secondary);
+}
+#kronolithBody caption {
+  position: relative;
+  margin: 2px 2px 0 26px;
+  height: 20px;
+  line-height: 20px;
+  text-align: left;
+  font-weight: var(--theme-font-weight-bold);
+}
+#kronolithBody caption span {
+  padding: 0;
+}
+
+/* ── Spinners de chargement (remplace loading.gif par un spinner CSS) ── */
+.kronolithLoading {
+  position: absolute;
+  left: 0;
+  z-index: 1;
+}
+#kronolithLoadingday,
+#kronolithLoadingmonth,
+#kronolithLoadingweek,
+#kronolithLoadingworkweek {
+  top: 0;
+}
+#kronolithLoadingtasks,
+#kronolithLoadingagenda {
+  display: inline-block;
+  position: relative;
+  top: 5px;
+}
+#kronolithLoadingCalendars {
+  padding-left: 10px;
+}
+#kronolithLoading,
+#kronolithFBLoading {
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  border: 2px solid var(--theme-border);
+  border-top-color: var(--theme-text-action);
+  border-radius: var(--theme-radius-selector);
+  animation: kronolithSpin 0.8s linear infinite;
+}
+#kronolithFBLoading {
+  position: absolute;
+  top: 65px;
+  border-bottom: 2px solid var(--theme-border);
+}
+@keyframes kronolithSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Création rapide ── */
+.horde-new-extra,
+.horde-new-extra a {
+  background: none;
+}
+#kronolithQuickinsert {
+  line-height: 2em;
+}
+
+/* ── Curseur d'ajout (cellule de jour, vue mois) ──
+   Un curseur `url()` charge une image EXTERNE : le SVG n'a donc aucun accès au
+   CSS de la page, et `var(--theme-*)` n'y fonctionne pas — les couleurs doivent
+   être en dur dans le fichier. On fournit donc deux fichiers (tracé sombre pour
+   fond clair, tracé clair pour fond sombre) et on bascule par une variable, ce
+   qui garde UN seul point de réglage et vaut pour les deux thèmes.
+   Valeurs calées sur --theme-text-primary (≈ neutral-700 / neutral-50 du DS). */
+:root {
+  --kronolith-add-cursor: url("../graphics/svg/cursor-calendar-plus.svg") 4 4;
+}
+@media (prefers-color-scheme: dark) {
+  html:not(.theme-light) {
+    --kronolith-add-cursor: url("../graphics/svg/cursor-calendar-plus-dark.svg") 4 4;
+  }
+}
+html.theme-dark {
+  --kronolith-add-cursor: url("../graphics/svg/cursor-calendar-plus-dark.svg") 4 4;
+}
+html.theme-light {
+  --kronolith-add-cursor: url("../graphics/svg/cursor-calendar-plus.svg") 4 4;
+}
+
+/* La cellule ouvre la modale d'AJOUT au clic → curseur « calendrier + » (Lucide
+   calendar-plus), explicite sur l'action. Il se distingue du `pointer` des
+   événements (qui, eux, s'ÉDITENT au clic) : le curseur change en passant du
+   vide à un événement, ce qui lève l'ambiguïté créer / éditer.
+   Le « 4 4 » est le hotspot (point de clic réel) ; `copy` sert de repli si
+   l'image ne charge pas. */
+#kronolith-month-body .kronolithMonthDay {
+  cursor: var(--kronolith-add-cursor), copy;
+  transition: all 0.2s ease;
+  padding: 5px;
+}
+#kronolith-month-body .kronolithMonthDay:hover {
+  box-shadow: var(--theme-shadow-xs) inset;
+  background-color: var(--theme-bg-primary);
+}
+/* Pendant le DÉPLACEMENT d'un événement, le pointeur survole les cellules : sans
+   ça, le curseur d'ajout reprendrait le dessus alors qu'on est en train de
+   déplacer. Tant qu'un événement porte .drag, les cellules (et tout ce qu'elles
+   contiennent) gardent donc le curseur `move`. */
+#kronolith-month-body:has(.kronolith-event.drag) .kronolithMonthDay,
+#kronolith-month-body:has(.kronolith-event.drag) .kronolithMonthDay * {
+  cursor: move !important;
+}
+
+/* ── Cellules cliquables ── */
+.kronolithWeekDay {
+  cursor: pointer;
+}
+#kronolith-month-body td {
+  padding-bottom: 16px;
+}
+.kronolithMore {
+  padding: 0 2px;
+  color: var(--theme-text-secondary);
+  cursor: pointer;
+  font-size: var(--theme-font-size-xs);
+}
+
+/* ── Vue plein écran (iframe) ── */
+#kronolithViewIframe iframe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Alerte collante ── */
+#hordeAlerts div.kronolith-sticky {
+  background-color: var(--theme-bg-warning-light);
+  border-color: var(--theme-bg-warning);
+}
+
+/* ── Impression ── */
+@media print {
+  #kronolithMenu,
+  #kronolithBar,
+  #kronolithHeader {
+    display: none;
+  }
+  #kronolithPrintHeader {
+    display: block;
+  }
+  #kronolithBody {
+    position: static;
+  }
+  #kronolith-legend {
+    display: block;
+  }
+}

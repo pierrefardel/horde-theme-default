@@ -1,0 +1,16 @@
+/**
+ * IMP UPJV — Point d'entrée (orchestrateur)
+ * ===========================================
+ * Charge tous les modules IMP dans l'ordre.
+ */
+
+@import "globals.css";
+@import "sidebar.css";
+@import "preview.css";
+@import "search.css";
+@import "context.css";
+@import "mailbox.css";
+@import "compose.css";
+@import "message_view.css";
+@import "message.css";
+@import "icons.css";

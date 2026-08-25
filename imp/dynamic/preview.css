@@ -1,0 +1,82 @@
+/**
+ * IMP UPJV — Volet de prévisualisation
+ * ======================================
+ * #previewPane, en-tête compact, maillog, conflit .fixed DS/Horde.
+ */
+
+#previewPane { overflow: auto; }
+
+/* Neutralise la collision entre .fixed (DS UPJV = position:fixed)
+   et .fixed (Horde = font monospace sur corps du message) */
+#messageBody .fixed {
+  position: static;
+  font-family: var(--theme-font-family) !important;
+}
+
+
+/* En-tête compact du message prévisualisé */
+#msgHeadersColl { line-height: 20px; }
+#msgHeadersColl ul {
+  list-style: none;
+  overflow: hidden;
+  white-space: nowrap;
+}
+#msgHeadersColl li { float: left; }
+#msgHeadersColl .date { margin-left: 5px; }
+#msgHeadersColl div.addrgroup-div { padding: 3px 2px; }
+#msgHeadersColl .from .horde-button {
+  line-height: 16px !important;
+  margin: 0;
+}
+
+/* Maillog — statut réponse/transfert sur les lignes de messages */
+.imp-reply,
+.imp-reply_all,
+.imp-reply_list,
+.imp-forward,
+.imp-redirect {
+  display: inline-block;
+  width: 16px; height: 16px;
+  background-image: none !important;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  vertical-align: middle;
+}
+.imp-reply,
+.imp-reply_all,
+.imp-reply_list {
+  -webkit-mask-image: url("../graphics/svg/action-reply.svg");
+  mask-image: url("../graphics/svg/action-reply.svg");
+}
+.imp-forward {
+  -webkit-mask-image: url("../graphics/svg/action-forward.svg");
+  mask-image: url("../graphics/svg/action-forward.svg");
+}
+.imp-redirect {
+  -webkit-mask-image: url("../graphics/svg/maillog-redirect.svg");
+  mask-image: url("../graphics/svg/maillog-redirect.svg");
+}
+.imp-maillog-sent { color: var(--theme-text-action) !important; }
+
+/* Redbox (popup) — styles IMP spécifiques */
+.RB_Form { width: 20em; padding: 6px; border: 1px solid var(--theme-border); }
+.RB_Form input { margin: .2em; }
+#mbox_import { overflow: hidden; }
+
+/* Icônes sidebar/subinfo */
+span.infoIcon,
+#ctx_mbox_size span.iconImg { background-image: url("../graphics/info_icon.png"); }
+span.prefsIcon  { background-image: url("../graphics/prefs.png"); }
+span.logoutIcon { background-image: url("../graphics/logout.png"); }
+span.readonlyImg {
+  background-image: url("../graphics/locked-inv.png");
+  margin: -1px 0 0 3px;
+}
+
+/* th collapse/expand */
+#th_collapse, #th_expand { cursor: pointer; }

@@ -1,0 +1,9 @@
+/* Thème UPJV — vues embarquées (portlets, widgets) */
+body {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body-md);
+  color: var(--colors-text-body);
+  background: var(--colors-surface-white);
+  margin: 0;
+  padding: 8px;
+}

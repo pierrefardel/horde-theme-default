@@ -1,0 +1,42 @@
+/**
+ * Kronolith UPJV — Mini-calendrier : densité d'événements (vue dynamique)
+ * ========================================================================
+ * Les classes .heat1..heat6 colorent les jours du mini-calendrier (sidebar
+ * et vue année) selon le nombre d'événements. Dégradé de "chaleur" tokenisé :
+ * warning-light (peu) → danger (beaucoup), via color-mix.
+ */
+
+.kronolithHasEvents {
+  font-weight: var(--theme-font-weight-bold);
+}
+
+.kronolith-minical .kronolithIsBusy {
+  background-color: var(--theme-bg-warning-light);
+}
+
+.kronolith-minical .heat1,
+.kronolith-minical .heat1 a {
+  background-color: var(--theme-bg-warning-light);
+}
+.kronolith-minical .heat2,
+.kronolith-minical .heat2 a {
+  background-color: color-mix(in srgb, var(--theme-bg-warning-light), var(--theme-bg-danger) 20%);
+}
+.kronolith-minical .heat3,
+.kronolith-minical .heat3 a {
+  background-color: color-mix(in srgb, var(--theme-bg-warning-light), var(--theme-bg-danger) 40%);
+}
+.kronolith-minical .heat4,
+.kronolith-minical .heat4 a {
+  background-color: color-mix(in srgb, var(--theme-bg-warning-light), var(--theme-bg-danger) 60%);
+}
+.kronolith-minical .heat5,
+.kronolith-minical .heat5 a {
+  background-color: color-mix(in srgb, var(--theme-bg-warning-light), var(--theme-bg-danger) 80%);
+  color: var(--theme-text-btn-danger);
+}
+.kronolith-minical .heat6,
+.kronolith-minical .heat6 a {
+  background-color: var(--theme-bg-danger);
+  color: var(--theme-text-btn-danger);
+}

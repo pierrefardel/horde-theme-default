@@ -1,0 +1,1014 @@
+/**
+ * IMP UPJV — liste des messages (style Gmail)
+ */
+
+/* ── Structure de base des lignes (hérité Horde, overridé plus bas) ── */
+div.vpRow {
+  border-bottom: 1px solid var(--theme-border);
+  cursor: pointer;
+  height: 21px;
+  overflow: hidden;
+}
+div.vpRow div {
+  overflow: hidden;
+  padding-top: 4px;
+  position: absolute;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Colonnes — positions absolues par défaut (overridées en mode horiz flex) */
+div.msgFrom {
+  left: 85px;
+  width: 150px;
+}
+div.msgFrom a {
+  color: inherit;
+}
+div.msgSubject {
+  left: 240px;
+  right: 225px;
+}
+div.msgDate {
+  text-align: right;
+  right: 88px;
+  width: 130px;
+}
+div.msgSize {
+  text-align: right;
+  right: 18px;
+  width: 50px;
+}
+
+/* Pas de message sélectionné : limite la hauteur à celle de #previewInfo */
+#previewPane:has(#previewInfo:not([style="display: none;"])) {
+  height: auto !important;
+  max-height: fit-content !important;
+}
+
+/* previewPane : scroll interne sur messages longs */
+#previewPane {
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  width: 100%;
+  background: var(--theme-bg-white);
+  z-index: 3;
+}
+
+/* Preview vide */
+#previewInfo {
+  background: none;
+  background-color: var(--theme-bg-white) !important;
+  color: var(--theme-text-disabled);
+  font-size: var(--theme-font-size-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  gap: 12px;
+  height: 100%;
+}
+#previewInfo::before {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 32px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("../graphics/svg/mail-empty.svg");
+  mask-image: url("../graphics/svg/mail-empty.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+/* Splitbar */
+#msgSplitPane {
+  border-bottom: none;
+  overflow: hidden;
+  position: relative;
+}
+#msgSplitPane > div:first-child {
+  overflow: auto;
+  height: var(--imp-list-height) !important;
+  width: var(--imp-list-width, 100%) !important;
+  float: none !important;
+}
+.msglist { width: 100% !important; }
+.vpScroll { display: none !important; }
+#previewPane { flex: 1; height: var(--imp-preview-height, auto) !important; }
+.horde-splitbar-horiz {
+  height: 6px;
+  background: var(--theme-bg-primary);
+  border-top: 1px solid var(--theme-border);
+  border-bottom: 1px solid var(--theme-border);
+  cursor: row-resize;
+  background-position: center -1px;
+  z-index: 3;
+}
+.horde-splitbar-horiz-handle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background-image: none;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: var(--theme-bg-secondary);
+}
+
+/* En-tête de liste */
+#msglistHeaderContainer{
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+
+#msglistHeaderHoriz .msgSize {
+  padding-right: 12px;
+}
+#msglistHeaderHoriz {
+  border-bottom: 0;
+}
+#msglistHeaderVert {
+  white-space: nowrap;
+}
+#msglistHeaderContainer .horde-popdown {
+  display: inline-block;
+  float: none;
+  margin-bottom: -8px;
+  margin-top: -4px;
+}
+#msglistHeaderContainer .sortup,
+#msglistHeaderContainer .sortdown {
+  margin-top: 3px;
+  padding-top: 0;
+}
+.horde-table-header .horde-split-left {
+  width: 2px;
+  height: 22px;
+  margin: 0 5px 0 -6px;
+  top: 0;
+}
+
+/* Colonnes — valeurs par défaut (mode vert, fallback) */
+div.msgStatus {
+  font-size: 0;
+  margin-left: 8px;
+  width: 70px;
+}
+div.msgStatus .iconImg {
+  position: relative;
+  margin-top: -2px;
+  width: 16px;
+}
+div.msgFrom a {
+  color: inherit;
+}
+div.msgSort {
+  float: right;
+  padding-top: 2px;
+}
+
+/* =============================================
+   LISTE MESSAGES — MODE HORIZ
+   =============================================
+   Source unique : header + lignes partagent les mêmes largeurs via CSS vars.
+   Le default impose position:absolute + left/right en px sur les enfants
+   de vpRow ; on reset ciblé pour vpRowHoriz et on flexbox la ligne.
+   Pour vpRowVert, voir bloc "MODE VERT" plus bas.
+*/
+
+/* Largeurs colonnes — une seule source de vérité, consommée par header + lignes */
+#msglistHeaderHoriz,
+.msglist {
+  --col-status: 60px;
+  --col-from: 180px;
+  --col-date: 110px;
+  --col-size: 60px;
+}
+
+.msglist {
+  position: relative;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  overflow: auto;
+  width: 100% !important;
+}
+
+/* Reset position:absolute du default sur les enfants directs de vpRowHoriz.
+   On cible > div pour ne pas perturber les éléments internes (ex. msCheck). */
+div.vpRowHoriz.vpRow > div {
+  position: static;
+  left: auto;
+  right: auto;
+  padding-top: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Conteneur ligne horiz : flex */
+div.vpRowHoriz.vpRow {
+  display: flex;
+  align-items: center;
+  height: auto;
+  border-bottom: 1px solid var(--theme-border) !important;
+  cursor: pointer;
+  overflow: hidden;
+  gap: var(--theme-spacing-sm);
+  font-size: var(--theme-font-size-sm);
+  transition: background-color 0.1s ease;
+  padding: var(--theme-spacing-xs) var(--spacing-sm);
+}
+
+/* Colonnes horiz — largeurs cohérentes avec le header */
+div.vpRowHoriz div.msgStatus {
+  flex-shrink: 0;
+  width: var(--col-status);
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+}
+div.vpRowHoriz div.msgFrom {
+  flex-shrink: 0;
+  width: var(--col-from);
+}
+div.vpRowHoriz div.msgSubject {
+  flex: 1;
+  min-width: 0;
+}
+div.vpRowHoriz div.msgDate {
+  flex-shrink: 0;
+  width: var(--col-date);
+  text-align: left;
+}
+div.vpRowHoriz div.msgSize {
+  flex-shrink: 0;
+  width: var(--col-size);
+  text-align: right;
+  padding-right: 8px;
+}
+
+/* Séparateur de colonne (padding interne hérité du default) */
+div.vpRowHoriz div.sep {
+  padding-left: 0px;
+}
+
+/* Hover */
+div.vpRowHoriz.vpRow:hover {
+  background-color: var(--theme-bg-secondary);
+}
+
+/* Ligne sélectionnée → action */
+div.vpRowSelected {
+  background-color: var(--theme-bg-btn-secondary) !important;
+  color: var(--theme-text-action) !important;
+  box-shadow: inset 4px 0 0 var(--theme-border-action);
+}
+
+/* Boîte vide */
+span.vpEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: var(--theme-text-disabled);
+  font-size: var(--theme-font-size-sm);
+  text-align: center;
+  gap: 12px;
+  background: none;
+}
+span.vpEmpty::before {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 32px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("../graphics/svg/folder-empty.svg");
+  mask-image: url("../graphics/svg/folder-empty.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+/* horde-popdown dans une ligne (hérité du default) */
+div.vpRow div.horde-popdown {
+  position: relative;
+  width: 16px;
+  margin-top: -4px;
+}
+
+/* Flags texte sur lignes */
+div.flagLowpriority {
+  font-weight: normal !important;
+}
+div.flagUnseen {
+  font-weight: bold;
+}
+div.flagDeleted * {
+  text-decoration: line-through;
+  color: var(--theme-text-secondary);
+}
+
+/* Indicateurs de message non lu — point bleu style Gmail */
+div.flagUnseen div.msgFrom::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--theme-bg-action);
+  border-radius: 50%;
+  margin-right: 6px;
+  margin-top: -1px;
+  vertical-align: middle;
+}
+
+/* Tags utilisateur */
+div.vpRow div.msgSubject span.flagUser {
+  font-size: 90%;
+  font-weight: normal;
+  margin-right: 3px;
+  padding: 1px 4px;
+  border-radius: var(--theme-radius-sm);
+  position: relative;
+  top: -2px;
+}
+
+/* Flags icônes */
+.msgflags {
+  margin-right: 1px;
+}
+.msgflags.iconImg {
+  width: 16px;
+}
+
+/* Scrollbar JS custom — masquée */
+.vpScroll,
+.vpScrollCursor,
+.vpScrollDown,
+.vpScrollUp {
+  display: none !important;
+}
+#slider_count {
+  background-color: var(--theme-bg-primary);
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: var(--theme-radius-box);
+  position: absolute;
+  opacity: 0.9;
+  box-shadow: var(--theme-shadow-sm);
+}
+
+/* IFRAMEs */
+#impbase_iframe iframe {
+  border: 0;
+  width: 100%;
+}
+
+/* =============================================
+   LISTE DES MAILS — états de ligne
+   ============================================= */
+
+/* Flags — pas de fond coloré sur les rows, info portée par les icônes uniquement
+   background-color: transparent !important neutralise l'injection JS inline style="background:#..."
+   La sélection (vpRowSelected) reprend le dessus car elle vient après dans la cascade. */
+div.vpRow.flagUnseen:not(.vpRowSelected),
+div.vpRow.flagAnswered:not(.vpRowSelected),
+div.vpRow.flagHighpriority:not(.vpRowSelected),
+div.vpRow.flagFlagged:not(.vpRowSelected),
+div.vpRow.flagDraft:not(.vpRowSelected),
+div.vpRow.flagForwarded:not(.vpRowSelected),
+div.vpRow.flagJunk:not(.vpRowSelected),
+div.vpRow.flagNotJunk:not(.vpRowSelected),
+div.vpRow.flagPersonal:not(.vpRowSelected),
+div.vpRow.flagList:not(.vpRowSelected),
+div.vpRow.flagAttachmsg:not(.vpRowSelected),
+div.vpRow.flagSignedmsg:not(.vpRowSelected),
+div.vpRow.flagEncryptmsg:not(.vpRowSelected),
+div.vpRow.flagLowpriority:not(.vpRowSelected) {
+  background-color: transparent !important;
+}
+
+/* Hover explicite sur rows flaggées — doit aussi être !important pour battre le style JS inline */
+div.vpRow.flagUnseen:not(.vpRowSelected):hover,
+div.vpRow.flagAnswered:not(.vpRowSelected):hover,
+div.vpRow.flagHighpriority:not(.vpRowSelected):hover,
+div.vpRow.flagFlagged:not(.vpRowSelected):hover,
+div.vpRow.flagDraft:not(.vpRowSelected):hover,
+div.vpRow.flagForwarded:not(.vpRowSelected):hover,
+div.vpRow.flagJunk:not(.vpRowSelected):hover,
+div.vpRow.flagNotJunk:not(.vpRowSelected):hover,
+div.vpRow.flagPersonal:not(.vpRowSelected):hover,
+div.vpRow.flagList:not(.vpRowSelected):hover,
+div.vpRow.flagAttachmsg:not(.vpRowSelected):hover,
+div.vpRow.flagSignedmsg:not(.vpRowSelected):hover,
+div.vpRow.flagEncryptmsg:not(.vpRowSelected):hover,
+div.vpRow.flagLowpriority:not(.vpRowSelected):hover {
+  background-color: var(--theme-bg-secondary) !important;
+}
+
+div.vpRow.flagJunk {
+  font-style: italic;
+}
+
+/* flagDeleted — seule exception, état destructif dominant */
+
+/* ── Priorité flags multiples ──
+   flagDeleted domine tout — renforce l'opacité + neutralise les fonds des autres flags.
+   Ordre : deleted > junk > highpriority > les autres. */
+div.vpRow.flagDeleted {
+  background: transparent !important;
+  color: var(--theme-text-disabled) !important;
+  font-style: normal !important;
+  box-shadow: none !important;
+  opacity: 1;
+}
+div.vpRow.flagDeleted * {
+  text-decoration: line-through;
+}
+.vpRowHoriz.flagDeleted {
+  opacity: 0.55;
+}
+
+/* Mail non lu — plus visible */
+.vpRowHoriz.vpRow:not(.msgReadRow) .msgFrom a,
+.vpRowHoriz.vpRow:not(.msgReadRow) .msgSubject {
+  font-weight: var(--theme-font-weight-medium);
+}
+.vpRowHoriz.vpRow.flagUnseen .msgFrom a,
+.vpRowHoriz.vpRow.flagUnseen .msgSubject {
+  font-weight: var(--theme-font-weight-bold);
+}
+
+/* Mail supprimé */
+.vpRowHoriz.flagDeleted {
+  opacity: 0.55;
+  background: transparent !important;
+}
+
+/* ── FLAGS — liste messages (.msgflags inline) ── */
+/* mask-image direct car .msgflags est un élément dédié sans texte enfant */
+
+.msgflags.iconImg {
+  background-color: var(--theme-icon-secondary) !important;
+  background-image: none !important;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+/* Icônes flags — couleurs sémantiques, persistent en sélection */
+.msgflags.flagAnswered {
+  -webkit-mask-image: url("../graphics/svg/action-reply.svg");
+  mask-image: url("../graphics/svg/action-reply.svg");
+  background-color: var(--theme-icon-warning) !important;
+}
+.msgflags.flagForwarded {
+  -webkit-mask-image: url("../graphics/svg/action-forward.svg");
+  mask-image: url("../graphics/svg/action-forward.svg");
+  background-color: var(--theme-icon-information) !important;
+}
+.msgflags.flagFlagged {
+  -webkit-mask-image: url("../graphics/svg/flag-flagged.svg");
+  mask-image: url("../graphics/svg/flag-flagged.svg");
+  background-color: var(--theme-icon-warning) !important;
+}
+.msgflags.flagDraft {
+  -webkit-mask-image: url("../graphics/svg/flag-draft-2.svg");
+  mask-image: url("../graphics/svg/flag-draft-2.svg");
+  background-color: var(--theme-icon-success) !important;
+}
+.msgflags.flagJunk {
+  -webkit-mask-image: url("../graphics/svg/spam.svg");
+  mask-image: url("../graphics/svg/spam.svg");
+  background-color: var(--theme-icon-danger) !important;
+}
+.msgflags.flagNotJunk {
+  -webkit-mask-image: url("../graphics/svg/action-innocent.svg");
+  mask-image: url("../graphics/svg/action-innocent.svg");
+  background-color: var(--theme-icon-success) !important;
+}
+.msgflags.flagDeleted {
+  -webkit-mask-image: url("../graphics/svg/trash.svg");
+  mask-image: url("../graphics/svg/trash.svg");
+  background-color: var(--theme-icon-danger) !important;
+}
+.msgflags.flagUnseen {
+  -webkit-mask-image: url("../graphics/svg/flag-unseen.svg");
+  mask-image: url("../graphics/svg/flag-unseen.svg");
+  background-color: var(--theme-icon-information) !important;
+}
+.msgflags.flagPersonal {
+  -webkit-mask-image: url("../graphics/svg/flag-personal.svg");
+  mask-image: url("../graphics/svg/flag-personal.svg");
+  background-color: var(--theme-icon-action) !important;
+}
+.msgflags.flagHighpriority {
+  -webkit-mask-image: url("../graphics/svg/flag-highpriority.svg");
+  mask-image: url("../graphics/svg/flag-highpriority.svg");
+  background-color: var(--theme-icon-danger) !important;
+}
+.msgflags.flagLowpriority {
+  -webkit-mask-image: url("../graphics/svg/flag-lowpriority.svg");
+  mask-image: url("../graphics/svg/flag-lowpriority.svg");
+  background-color: var(--theme-icon-secondary) !important;
+}
+.msgflags.flagList {
+  -webkit-mask-image: url("../graphics/svg/preview-thread.svg");
+  mask-image: url("../graphics/svg/preview-thread.svg");
+  background-color: var(--theme-icon-secondary) !important;
+}
+.msgflags.flagSignedmsg {
+  -webkit-mask-image: url("../graphics/svg/oa-whitelist.svg");
+  mask-image: url("../graphics/svg/oa-whitelist.svg");
+  background-color: var(--theme-icon-secondary) !important;
+}
+.msgflags.flagEncryptmsg {
+  -webkit-mask-image: url("../graphics/svg/mbox-acl.svg");
+  mask-image: url("../graphics/svg/mbox-acl.svg");
+  background-color: var(--theme-icon-secondary) !important;
+}
+.msgflags.flagAttachmsg {
+  -webkit-mask-image: url("../graphics/svg/flag-attachmsg.svg");
+  mask-image: url("../graphics/svg/flag-attachmsg.svg");
+  background-color: var(--theme-icon-secondary) !important;
+}
+
+/* ── CHECKBOX msCheck — liste messages + menus contextuels (ctx_flag) ── */
+
+/* Checkbox masquée dans la liste — la sélection est indiquée par box-shadow sur vpRowSelected */
+div.vpRow:not(.horde-table-header) div.msgStatus .iconImg.msCheck,
+div.vpRow:not(.horde-table-header) div.msgStatus .iconImg.msCheckOn {
+  display: none !important;
+}
+
+.context .iconImg.msCheck,
+.context .iconImg.msCheckOn {
+  background-image: none !important;
+  background-color: transparent !important;
+  position: relative;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Carré de base — présent dans les deux états */
+div.msgStatus .iconImg.msCheck::before,
+div.msgStatus .iconImg.msCheckOn::before,
+.context .iconImg.msCheck::before,
+.context .iconImg.msCheckOn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid var(--theme-border);
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-tertiary);
+  box-sizing: border-box;
+}
+
+/* Hover : bordure colorée */
+div.msgStatus .iconImg.msCheck:hover::before,
+div.msgStatus .iconImg.msCheckOn:hover::before,
+.context .iconImg.msCheck:hover::before,
+.context .iconImg.msCheckOn:hover::before {
+  border-color: var(--theme-border-action);
+}
+
+/* État coché */
+div.msgStatus .iconImg.msCheckOn::before,
+div.vpRowSelected div.msgStatus .iconImg.msCheck::before,
+.context .iconImg.msCheckOn::before {
+  background-color: var(--theme-bg-action);
+  border-color: var(--theme-border-action);
+  mask-image: none;
+}
+
+/* Coche SVG via ::after */
+div.msgStatus .iconImg.msCheckOn::after,
+div.vpRowSelected div.msgStatus .iconImg.msCheck::after,
+.context .iconImg.msCheckOn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: var(--theme-text-on-action);
+  -webkit-mask-image: url("../graphics/svg/ms-check.svg");
+  mask-image: url("../graphics/svg/ms-check.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+/* Header "tout cocher" */
+.msCheckAll {
+  cursor: pointer;
+  background-image: none !important;
+  position: relative;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+
+.msCheckAll::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid var(--theme-border-action);
+  border-radius: 3px;
+  background-color: var(--theme-bg-primary);
+  box-sizing: border-box;
+}
+
+.msCheckAll:hover::before {
+  border-color: var(--theme-bg-action);
+}
+
+/* Flèche popdown (▾ à côté des boutons avec sous-menu) */
+.horde-buttonbar .horde-popdown {
+  background-image: none !important;
+  position: relative;
+  display: inline-block;
+  width: 24px !important;
+  height: auto;
+  vertical-align: middle;
+  margin: 0;
+}
+
+.horde-buttonbar .horde-popdown::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("../graphics/svg/horde-popdown.svg");
+  mask-image: url("../graphics/svg/horde-popdown.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+/* ── msgStatus : icônes inline (msCheck + msgflags) ── */
+
+div.msgStatus .iconImg {
+  display: inline-block !important;
+  width: 16px !important;
+  height: 16px !important;
+  vertical-align: middle;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+/* msgflags dans msgStatus : mask-image direct */
+div.msgStatus .iconImg.msgflags {
+  background-color: var(--theme-icon-secondary);
+  background-image: none !important;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+/* Icônes flags : couleurs sémantiques persistantes même en sélection — pas de reset ici */
+
+/* ── HEADER LISTE MESSAGES ── */
+
+.vpRow.horde-table-header {
+  background-image: none !important;
+  background-color: var(--theme-bg-primary);
+  border-bottom: 2px solid var(--theme-border);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  height: 34px;
+}
+
+/* Reset positions absolues du default sur les enfants directs du header */
+#msglistHeaderHoriz > div {
+  position: static;
+  left: auto;
+  right: auto;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#msglistHeaderHoriz .msgStatus {
+  flex-shrink: 0;
+  width: var(--col-status);
+  position: relative;
+}
+#msglistHeaderHoriz .msgFrom {
+  flex-shrink: 0;
+  width: var(--col-from);
+  position: relative;
+}
+#msglistHeaderHoriz .msgSubject {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+#msglistHeaderHoriz .msgDate {
+  flex-shrink: 0;
+  width: var(--col-date);
+  position: relative;
+}
+#msglistHeaderHoriz .msgSize {
+  flex-shrink: 0;
+  width: var(--col-size);
+  padding-right: 8px;
+  position: relative;
+}
+
+/* Links dans header */
+.vpRow.horde-table-header a {
+  color: var(--theme-text-primary);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+}
+
+/* Séparateurs de colonnes : supprimer PNG */
+.horde-table-header .horde-split-left,
+.horde-table-header .horde-split-right {
+  background-image: none !important;
+  width: 0 !important;
+}
+
+/* Sort indicators : SVG ::before */
+.sortup,
+.sortdown {
+  background-image: none !important;
+  text-indent: 0 !important;
+  position: relative;
+  padding-left: 18px !important;
+}
+
+.sortup::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("../graphics/svg/sortup.svg");
+  mask-image: url("../graphics/svg/sortup.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.sortdown::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("../graphics/svg/sortdown.svg");
+  mask-image: url("../graphics/svg/sortdown.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+/* horde-popdown dans le header (flèche tri) */
+#msglistHeaderContainer .horde-popdown {
+  background-image: none !important;
+  position: relative;
+  display: inline-block;
+  width: 12px !important;
+  height: 14px;
+  vertical-align: middle;
+  margin-top: 0 !important;
+  margin-bottom: 0;
+}
+
+#msglistHeaderContainer .horde-popdown::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("../graphics/svg/horde-popdown.svg");
+  mask-image: url("../graphics/svg/horde-popdown.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+/* =============================================
+   MODE VERT
+   ============================================= */
+
+div.vpRowVert {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "status  top"
+    "status  bottom";
+  min-height: 52px;
+  height: auto;
+  padding: 0;
+  overflow: hidden;
+  border-bottom: 1px solid var(--theme-border);
+  cursor: pointer;
+  font-size: var(--theme-font-size-sm);
+}
+
+div.vpRowVert:hover {
+  background-color: var(--theme-bg-secondary);
+}
+
+/* Neutralise le margin-top générique sur les icônes dans msgStatus en mode vert */
+div.vpRowVert div.iconImg.msgStatus .iconImg {
+  margin-top: 0;
+}
+
+/* Colonne gauche : checkbox aligné en haut + flags en dessous */
+div.vpRowVert div.iconImg.msgStatus {
+  grid-area: status;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 6px;
+  gap: 3px;
+  float: none;
+  width: auto;
+  height: auto;
+  margin: 0;
+}
+
+/* Reset positions absolues héritées du default */
+div.vpRowVert div {
+  position: static;
+  left: auto;
+  right: auto;
+  width: auto;
+  height: auto;
+  padding: 0;
+  padding-top: 0;
+  float: none;
+}
+
+/* Ligne 1 : expéditeur (flex:1) + date (flex-shrink:0) */
+div.vpRowVert > div:not(.iconImg):nth-child(2) {
+  grid-area: top;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  min-width: 0;
+  padding: 6px 8px 1px 4px;
+}
+
+/* Ligne 2 : sujet */
+div.vpRowVert > div:not(.iconImg):nth-child(3) {
+  grid-area: bottom;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 0 8px 6px 4px;
+}
+
+/* Expéditeur */
+div.vpRowVert div.msgFrom {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--theme-font-weight-bold);
+}
+
+/* Date — à droite, collée en haut */
+div.vpRowVert div.msgDate {
+  flex-shrink: 0;
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-secondary);
+  white-space: nowrap;
+  margin-left: 0px;
+  order: 1;
+}
+
+/* Sujet */
+div.vpRowVert div.msgSubject {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--theme-text-secondary);
+  font-weight: normal;
+}
+
+.imp-sidebar-container a,
+.imp-sidebar-mbox-loading {
+  color: var(--theme-text-primary) !important;
+}
+
+/* Searchbar */
+#searchbar {
+  background-color: var(--theme-bg-success-light);
+  color: var(--theme-text-on-success);
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+}
+
+#searchbar .closeImg {
+  margin-left: auto;
+}
+
+#searchbar #search_label {
+  color: inherit;
+  order: -1;
+}
+
+/* Viewport error */
+#viewport_error {
+  background-color: var(--theme-bg-danger-light);
+  border-bottom: 1px solid var(--theme-border-danger);
+}
+#viewport_error div {
+  color: var(--theme-text-on-danger);
+}
+
+/* En-tête compact (collapsed) */
+#msgHeadersColl {
+  line-height: 20px;
+}
+#msgHeadersColl .from .horde-button {
+  line-height: 16px !important;
+  margin: 0;
+}
+#msgHeadersColl div.addrgroup-div {
+  background-color: var(--theme-bg-tertiary);
+}
+
+#imp-normalmboxes {
+  height: unset !important;
+  overflow-y: visible !important;
+}

@@ -1,0 +1,588 @@
+/**
+ * UPJV Theme — Sidebar
+ * =====================
+ * #horde-sidebar, .horde-new, .horde-subnavi, splitbar vertical.
+ */
+
+#horde-sidebar {
+  background-color: var(--theme-bg-primary);
+  border-right: none;
+  padding-bottom: 0;
+  width: clamp(
+    var(--horde-sidebar-min-width),
+    var(--horde-sidebar-width, var(--horde-sidebar-min-width)),
+    var(--horde-sidebar-max-width)
+  ) !important;
+  margin-bottom: var(--theme-spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-sm);
+}
+
+/* ── Carte de contenu de la sidebar ──
+   Kronolith encapsule le contenu de sa sidebar dans #kronolithMenu. Les autres
+   apps (turba, nag, mnemo, ingo…) n'ont aucun wrapper : h3, splits et blocs sont
+   des enfants directs de #horde-sidebar, à plat. sidebar-menu.js reconstitue ce
+   conteneur (#horde-sidebar-menu) en y déplaçant tout ce qui suit .horde-new.
+   Les deux reçoivent donc le même aspect carte. */
+#horde-sidebar-menu,
+#kronolithMenu,
+#foldersSidebar {
+  background: var(--theme-bg-white);
+  padding: var(--theme-spacing-xs);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
+}
+#horde-sidebar a {
+  color: var(--theme-text-primary);
+}
+#horde-sidebar a:hover {
+  text-decoration: none;
+}
+#foldersSidebar a {
+  text-decoration: none;
+}
+
+/* Bouton "Nouveau" */
+.horde-new {
+  background-image: none;
+  background-color: var(--theme-bg-action);
+  border-bottom: 1px solid var(--theme-border);
+  height: 40px;
+  overflow: visible;
+  padding: 0;
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-on-action);
+  text-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--theme-radius-field);
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: var(--theme-shadow-md);
+}
+
+.horde-new:hover {
+  background-color: var(--theme-bg-action-hover);
+  color: var(--theme-text-on-action);
+  text-decoration: none;
+}
+
+.horde-new-link {
+  width: 100%;
+  text-align: center;
+}
+
+.horde-new a,
+#horde-sidebar .horde-new-link a,
+.horde-new-link a {
+  background-image: none;
+  padding: var(--theme-spacing-sm) var(--theme-spacing-md);
+  margin: 0;
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--theme-text-on-action);
+  display: block;
+  width: 100%;
+}
+.horde-new-split,
+.horde-new-extra {
+  display: none;
+}
+.horde-new-extra a {
+  display: block;
+}
+.horde-portal-new {
+  float: left;
+  border-right: 1px solid var(--theme-border);
+  margin-right: 10px;
+}
+
+/* Navigation sidebar */
+.horde-subnavi {
+  padding: 6px 8px;
+  height: auto;
+  margin: 0;
+  border-radius: var(--theme-radius-field);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.horde-subnavi:hover,
+.horde-subnavi-active {
+  height: auto;
+  background-image: none !important;
+  background-color: var(--theme-bg-secondary) !important;
+  margin: 0;
+}
+.horde-subnavi-active a {
+  font-weight: var(--theme-font-weight-medium);
+}
+
+.horde-subnavi-icon {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center right;
+  display: inline-block;
+  height: 20px;
+  margin: -1px 8px 0 10px;
+  vertical-align: middle;
+  width: 20px;
+}
+.horde-subnavi-point {
+  display: inline;
+}
+.horde-subnavi-sub {
+  padding-left: 0px;
+}
+
+.horde-subnavi-sub .horde-subnavi {
+  padding-left: 16px;
+}
+
+.horde-sidebar-split {
+  border-top: 1px solid var(--theme-border);
+  height: 0;
+  margin: var(--theme-spacing-xs) 0;
+}
+
+#horde-sidebar h3 {
+  font-size: var(--theme-font-size-sm);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+}
+
+/* ── Bouton "+" d'ajout des titres de section : révélé au survol ──
+   Même logique que les icônes d'action des lignes de calendrier (plus bas) :
+   on désencombre la sidebar, l'action n'apparaît que sur sa section.
+   On masque par `opacity` et NON par `display:none` → le lien reste dans
+   l'ordre de tabulation, et `:focus-within` le révèle donc au clavier. */
+#horde-sidebar h3 .horde-add {
+  opacity: 0;
+  transform: translateX(4px) scale(0.85);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+  pointer-events: none;
+}
+#horde-sidebar h3:hover .horde-add,
+#horde-sidebar h3:focus-within .horde-add {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+/* ── Bouton « Ajouter… », dernier élément de la liste (créé par footer.js) ──
+   Action explicite, à la fin des entrées, là où l'œil arrive après les avoir
+   parcourues. Placé DANS .horde-resources : il hérite du gap du grid parent
+   (donc pas de margin ici) et se replie avec la section. Discret au repos
+   (texte secondaire, fond transparent) pour ne pas concurrencer les calendriers,
+   franc au survol. Le libellé vient du title du lien d'origine, déjà traduit. */
+.horde-add-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  width: 100%;
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-xs);
+  border: none;
+  background: transparent;
+  border-radius: var(--theme-radius-box);
+  color: var(--theme-text-secondary);
+  font-family: inherit;
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+.horde-add-btn::before {
+  content: "";
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  -webkit-mask-image: url("graphics/svg/plus.svg");
+  mask-image: url("graphics/svg/plus.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+.horde-add-btn:hover,
+.horde-add-btn:focus-visible {
+  background-color: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+}
+
+/* imp : #foldersSidebar est son propre conteneur de contenu (le wrapper JS le
+   détecte et ne double donc pas la carte). L'aspect carte est factorisé plus
+   haut avec #horde-sidebar-menu / #kronolithMenu ; ici seules ses spécificités. */
+#foldersSidebar {
+  height: fit-content;
+  overflow: auto;
+}
+
+
+/* Ressources sidebar */
+#horde-sidebar div.horde-resources {
+  margin-top: 10px;
+  display: grid;
+  gap: var(--theme-spacing-xs);
+}
+
+#horde-sidebar div.horde-resources:empty {
+  display: none;
+}
+/* Ligne de calendrier/tasklist en sidebar : pill clair teinté (comme events/
+   légende) via --cal-color.
+   SCOPE : toute ligne QUI PORTE --cal-color, quelle que soit l'app. Kronolith
+   la pose lui-même (notre PR upstream #73) ; pour les autres (nag, mnemo…),
+   qui enferment la couleur dans un background-color inline, footer.js la
+   recopie dans la même variable (syncListColors). L'attribut garantit que
+   color-mix a bien une couleur à consommer — sans lui il serait invalide. */
+#horde-sidebar .horde-resources > div[style*="--cal-color"] {
+  background-color: color-mix(in srgb, var(--cal-color) 14%, var(--theme-bg-white)) !important;
+  color: var(--cal-text) !important;
+}
+/* Layout de base (radius, flex) : commun à toutes les apps, pas de --cal-color */
+#horde-sidebar div.horde-resources > div {
+  border-radius: var(--theme-radius-box);
+  display: flex;
+  align-items: center;
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-xs);
+  cursor: pointer;
+}
+.horde-resource-link {
+  overflow: hidden;
+  order: -1;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+}
+/* Pastille de couleur À GAUCHE du nom, qui remplace la checkbox : elle porte
+   l'état de sélection. Pleine = calendrier visible, contour seul = masqué
+   (pattern Google Calendar). Radius pilotable via --theme-radius-selector.
+   SCOPE : toute ligne portant --cal-color (voir ci-dessus). */
+[style*="--cal-color"] > .horde-resource-link::before,
+[style*="--cal-color"] .horde-resource-link::before {
+  content: "";
+  display: inline-block;
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--theme-radius-selector);
+  border: 2px solid var(--cal-color);
+  background-color: var(--cal-dot);
+  transition: background-color 0.15s ease;
+}
+.horde-resource-on,
+.horde-resource-off,
+.horde-resource-none {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  cursor: pointer;
+  background-image: none;
+  position: relative;
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+}
+
+/* Checkbox (case + coche) — RÈGLE GLOBALE, pour toutes les apps (nag, mnemo…).
+   Kronolith la masque plus bas (remplacée par la pastille de couleur). */
+.horde-resource-on::before,
+.horde-resource-off::before,
+.horde-resource-none::before {
+  content: "";
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid var(--theme-border-input);
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-white);
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+}
+.horde-resource-on::before {
+  background-color: var(--theme-bg-action);
+  border-color: var(--theme-border-action);
+}
+.horde-resource-off:hover::before {
+  border-color: var(--theme-border-action-hover);
+}
+.horde-resource-on::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  background-color: var(--theme-text-on-action);
+  -webkit-mask-image: url("graphics/svg/ms-check.svg");
+  mask-image: url("graphics/svg/ms-check.svg");
+  -webkit-mask-size: 60% 60%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: 60% 60%;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  pointer-events: none;
+}
+
+/* Là où une ligne porte --cal-color, la pastille de couleur remplace la
+   checkbox : on masque donc cette dernière (sinon les deux coexistent).
+   SCOPE : l'attribut, pas l'app — Kronolith pose --cal-color lui-même, Nag et
+   Mnemo l'obtiennent via footer.js (syncListColors). Une app sans couleur de
+   liste garde sa checkbox. */
+[style*="--cal-color"] .horde-resource-on::before,
+[style*="--cal-color"] .horde-resource-off::before,
+[style*="--cal-color"] .horde-resource-none::before,
+[style*="--cal-color"] .horde-resource-on::after {
+  display: none;
+}
+
+/* État MASQUÉ (calendrier décoché) : pastille en contour seul (fond transparent)
+   + ligne très légèrement estompée. Scope : toute ligne portant --cal-color.
+   L'opacité reste HAUTE volontairement : l'état masqué est déjà signalé par la
+   pastille en contour, et c'est précisément cette ligne qu'on doit pouvoir lire
+   pour la recocher. Trop l'estomper rendait illisibles les entrées sans couleur
+   choisie (les ressources tombent sur #dddddd) — cumul couleur pâle × opacité. */
+[style*="--cal-color"] .horde-resource-link:has(.horde-resource-off)::before {
+  background-color: transparent;
+}
+#horde-sidebar .horde-resources > div[style*="--cal-color"]:has(.horde-resource-off) {
+  opacity: 0.85;
+}
+#horde-sidebar div.horde-resources .horde-resource-edit-000,
+#horde-sidebar div.horde-resources .horde-resource-edit-fff,
+#horde-sidebar div.horde-resources .horde-resource-refresh-000,
+#horde-sidebar div.horde-resources .horde-resource-refresh-fff,
+#horde-sidebar div.horde-resources .horde-resource-share-000,
+#horde-sidebar div.horde-resources .horde-resource-share-fff {
+  float: right;
+  display: block;
+  width: 14px;
+  height: 14px;
+  margin-left: var(--theme-spacing-2xs);
+  flex-shrink: 0;
+  cursor: pointer;
+  /* Fond pill clair → les icônes prennent la couleur du calendrier (--cal-color,
+     posée par le JS sur le conteneur, héritée ici) au lieu du currentColor
+     blanc/noir qui disparaîtrait sur le fond clair. Fallback currentColor si
+     --cal-color absent. */
+  background-color: var(--cal-color, currentColor) !important;
+  background-image: none !important;
+  text-indent: 0;
+  font-size: 0;
+  overflow: hidden;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+/* L'icône share contient un <img> (attendees-000.png) à masquer */
+#horde-sidebar div.horde-resources .horde-resource-share-000 img,
+#horde-sidebar div.horde-resources .horde-resource-share-fff img {
+  display: none;
+}
+#horde-sidebar div.horde-resources .horde-resource-edit-000,
+#horde-sidebar div.horde-resources .horde-resource-edit-fff {
+  -webkit-mask-image: url("graphics/svg/edit.svg");
+  mask-image: url("graphics/svg/edit.svg");
+}
+#horde-sidebar div.horde-resources .horde-resource-refresh-000,
+#horde-sidebar div.horde-resources .horde-resource-refresh-fff {
+  -webkit-mask-image: url("graphics/svg/refresh.svg");
+  mask-image: url("graphics/svg/refresh.svg");
+}
+#horde-sidebar div.horde-resources .horde-resource-share-000,
+#horde-sidebar div.horde-resources .horde-resource-share-fff {
+  -webkit-mask-image: url("graphics/svg/users.svg");
+  mask-image: url("graphics/svg/users.svg");
+}
+
+/* ── Icônes d'ACTION (refresh, edit) cachées par défaut, apparition au hover ──
+   Désencombre la sidebar. Au survol du wrapper, elles apparaissent une par une
+   (stagger). Le share (.horde-resource-share-*) est EXCLU : c'est une icône
+   informative (partagé), pas une action → toujours visible, pas de pointer. */
+#horde-sidebar div.horde-resources [class*="horde-resource-refresh-"],
+#horde-sidebar div.horde-resources [class*="horde-resource-edit-"] {
+  opacity: 0;
+  transform: translateX(4px) scale(0.85);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+  pointer-events: none;
+}
+/* Au hover (ou focus clavier) de l'item ressource → révélation */
+#horde-sidebar
+  div.horde-resources
+  > div:hover
+  [class*="horde-resource-refresh-"],
+#horde-sidebar div.horde-resources > div:hover [class*="horde-resource-edit-"],
+#horde-sidebar
+  div.horde-resources
+  > div:focus-within
+  [class*="horde-resource-refresh-"],
+#horde-sidebar
+  div.horde-resources
+  > div:focus-within
+  [class*="horde-resource-edit-"] {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+/* Stagger : edit puis refresh */
+#horde-sidebar div.horde-resources > div:hover [class*="horde-resource-edit-"],
+#horde-sidebar
+  div.horde-resources
+  > div:focus-within
+  [class*="horde-resource-edit-"] {
+  transition-delay: 0s;
+}
+#horde-sidebar
+  div.horde-resources
+  > div:hover
+  [class*="horde-resource-refresh-"],
+#horde-sidebar
+  div.horde-resources
+  > div:focus-within
+  [class*="horde-resource-refresh-"] {
+  transition-delay: 0.05s;
+}
+
+/* Icône share : informative (partagé) → toujours visible, pas cliquable */
+#horde-sidebar div.horde-resources [class*="horde-resource-share-"] {
+  cursor: default;
+}
+
+#horde-sidebar div.horde-resources div a {
+  color: inherit;
+}
+#horde-sidebar .horde-info {
+  padding: 10px 0 0 26px;
+  color:var(--theme-text-secondary)
+}
+
+/* Collapse/expand */
+.horde-collapse,
+.horde-expand {
+  display: block;
+  padding-left: 26px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+/* Splitbar vertical (width géré par grid-template-columns dans base.css) */
+.horde-splitbar-vert {
+  background-color: var(--theme-border);
+  background-image: none;
+}
+.horde-splitbar-vert.DragElt {
+  cursor: col-resize;
+}
+.horde-splitbar-vert-handle {
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: var(--theme-bg-secondary);
+  z-index: 10;
+  cursor: col-resize;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Footer de sidebar (injecté par footer.js)
+   Collé en bas, toujours visible même quand la liste d'items scrolle.
+   #horde-sidebar est déjà en flex column.
+   ════════════════════════════════════════════════════════════════ */
+#horde-sidebar-footer {
+  /* pousse le footer en bas + le maintient visible au scroll */
+  margin-top: auto;
+  position: sticky;
+  bottom: var(--theme-spacing-xs);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-sm);
+  padding: var(--theme-spacing-xs);
+  background-color: var(--theme-bg-white);
+  box-shadow: var(--theme-shadow-sm);
+  border-radius: var(--theme-radius-box);
+}
+#horde-sidebar-footer[hidden] {
+  display: none;
+}
+
+/* ── Bouton bascule de thème (3 états) — style autonome ──
+   Nécessaire pour default-new (pas de CDN DS). Sur upjv, le CDN définit aussi
+   .toggle-theme mais avec les mêmes valeurs (--theme-* → --colors-*).
+   Logique 3 états reprise du composant toggle-theme du DS UPJV. */
+#horde-theme-toggle.toggle-theme {
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-action);
+  color: var(--theme-text-on-action);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+#horde-theme-toggle.toggle-theme:hover {
+  background-color: var(--theme-bg-action-hover);
+}
+#horde-theme-toggle.toggle-theme svg {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition:
+    opacity 0.25s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+/* Auto (aucune classe sur html) : moniteur visible */
+#horde-theme-toggle.toggle-theme .icon-auto {
+  opacity: 1;
+  transform: scale(1);
+}
+/* Light : soleil visible */
+html.theme-light #horde-theme-toggle.toggle-theme .icon-auto {
+  opacity: 0;
+  transform: scale(0.5);
+}
+html.theme-light #horde-theme-toggle.toggle-theme .icon-sun {
+  opacity: 1;
+  transform: scale(1);
+}
+/* Dark : lune visible */
+html.theme-dark #horde-theme-toggle.toggle-theme .icon-auto {
+  opacity: 0;
+  transform: scale(0.5);
+}
+html.theme-dark #horde-theme-toggle.toggle-theme .icon-moon {
+  opacity: 1;
+  transform: scale(1);
+}

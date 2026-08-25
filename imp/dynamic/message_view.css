@@ -1,0 +1,313 @@
+/**
+ * IMP UPJV — Message View
+ * ========================
+ * Styles du volet de lecture (preview + fenêtre standalone).
+ * Override du thème default : neutralise les couleurs codées en dur.
+ * Les icônes PNG sont remplacées par SVG mask-image dans icons.css.
+ */
+
+/* ── En-têtes ── */
+.msgHeaders {
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-primary);
+  border-bottom: 1px solid var(--theme-border);
+  position: sticky;
+  top: 0;
+  box-shadow: var(--theme-shadow-sm);
+  max-height: 250px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index:2;
+}
+.msgHeaders a {
+  color: var(--theme-text-primary);
+}
+#msgHeadersTable tr {
+  vertical-align: top;
+}
+#msgHeadersTable td {
+  padding-bottom: 0;
+}
+#msgHeadersTable td.label {
+  color: var(--theme-text-secondary);
+  font-weight: var(--theme-font-weight-medium);
+  padding-right: 4px;
+  text-align: right;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.msgHeaders .subject {
+  font-weight: var(--theme-font-weight-bold);
+}
+
+/* ── Log & pièces jointes ── */
+#msgloglist,
+#partlist {
+  border-top: 1px solid var(--theme-border);
+  margin-top: 2px;
+  margin-left: 5px;
+  padding: 4px 2px 0;
+}
+#msgloglist,
+#partlist ul {
+  list-style-type: none;
+}
+.partlistDownloadAll {
+  float: right;
+  font-style: italic;
+}
+#partlist .horde-tree-image {
+  padding-right: 1px;
+}
+#msgloglist li,
+#partlist li {
+  padding: 2px;
+}
+
+.resentFrom {
+  font-style: italic;
+  padding: 2px 0 2px 2px;
+}
+.resentFrom .address {
+  font-style: normal;
+}
+.resentFrom .address:first-child {
+  margin-left: 3px;
+}
+
+/* ── Corps du message ── */
+.messageBody {
+  padding: var(--theme-spacing-sm);
+}
+
+/* ── Adresses (groupe) ── */
+.msgHeaders div.addrgroup-div {
+  background-color: var(--theme-bg-primary);
+  display: inline-block;
+  margin: 1px;
+  padding: 1px 2px;
+}
+.msgHeaders .horde-button {
+  margin: 1px;
+  padding: 3px 6px;
+}
+.msgHeaders a.addrgroup-name {
+  font-weight: var(--theme-font-weight-bold);
+}
+.largeaddrlist,
+.largeaddrlistlimit {
+  color: var(--theme-text-action);
+  cursor: pointer;
+  font-weight: var(--theme-font-weight-bold);
+  margin-right: 5px;
+  padding: 1px;
+}
+.largeaddrlist:hover,
+.largeaddrlistlimit:hover {
+  text-decoration: underline;
+}
+
+/* ── Icônes actions — neutralise les PNG du default (SVG dans icons.css) ── */
+#ctx_reply_reply span.iconImg,
+#ctx_message_reply span.iconImg,
+.actionReply,
+#ctx_reply_reply_all span.iconImg,
+#ctx_reply_reply_list span.iconImg,
+#ctx_forward_attach span.iconImg,
+#ctx_preview_allparts span.iconImg,
+#msg_all_parts span.iconImg,
+.mimePartInfoAtc div,
+#ctx_message_forward span.iconImg,
+#ctx_forward_body span.iconImg,
+#ctx_forward_both span.iconImg,
+#ctx_forward_redirect span.iconImg,
+.actionForward,
+#ctx_message_source span.iconImg,
+#ctx_preview_viewsource span.iconImg,
+#msg_view_source span.iconImg,
+#ctx_preview_listinfo span.iconImg,
+#msg_listinfo span.iconImg,
+.actionCompose,
+#ctx_contacts_new span.iconImg,
+#ctx_forward_editasnew span.iconImg,
+#ctx_message_editasnew span.iconImg,
+.actionFilter,
+#ctx_contacts_addfilter span.iconImg,
+#ctx_message_addfilter span.iconImg,
+#ctx_filteropts_applyfilters span.iconImg,
+.actionSpam,
+.actionInnocent,
+.actionDelete,
+.actionResume,
+.downloadAtc,
+.saveImgAtc,
+.printAtc {
+  background-image: none;
+}
+
+.downloadAtc,
+.saveImgAtc,
+.printAtc {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+.downloadAtc {
+  -webkit-mask-image: url("../graphics/svg/download.svg");
+  mask-image: url("../graphics/svg/download.svg");
+}
+.saveImgAtc {
+  -webkit-mask-image: url("../graphics/svg/preview-save.svg");
+  mask-image: url("../graphics/svg/preview-save.svg");
+}
+.printAtc {
+  -webkit-mask-image: url("../graphics/svg/print.svg");
+  mask-image: url("../graphics/svg/print.svg");
+}
+
+/* ── MIME ── */
+.mimeStatusMessageTable {
+  background-color: var(--theme-bg-warning-light);
+  border-color: var(--theme-border-warning);
+  color: var(--theme-text-primary);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-sm);
+}
+
+/* Icônes mimeStatus — remplace les PNG par SVG mask-image */
+.mimeStatusIcon {
+  width: 22px;
+  vertical-align: top;
+}
+.mimeStatusIcon img {
+  display: none;
+}
+.mimeStatusIcon::before {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: 2px auto 0;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+/* Warning (défaut) */
+.mimeStatusIcon::before {
+  mask-image: url("../graphics/svg/warning.svg");
+  -webkit-mask-image: url("../graphics/svg/warning.svg");
+  background-color: var(--theme-icon-warning);
+}
+/* Error */
+.mimeStatusIcon:has(img[src*="error"])::before {
+  mask-image: url("../graphics/svg/error.svg");
+  -webkit-mask-image: url("../graphics/svg/error.svg");
+  background-color: var(--theme-icon-danger);
+}
+/* Success */
+.mimeStatusIcon:has(img[src*="success"])::before {
+  mask-image: url("../graphics/svg/success.svg");
+  -webkit-mask-image: url("../graphics/svg/success.svg");
+  background-color: var(--theme-icon-success);
+}
+.mimePartInfo div {
+  background-color: var(--theme-bg-secondary);
+  border-color: var(--theme-border);
+}
+span.mimePartInfoSize {
+  color: var(--theme-text-secondary);
+}
+.mimePartWrap,
+.mimePartWrapValid,
+.mimePartWrapInvalid {
+  border-color: var(--theme-border);
+}
+.mimePartWrapValid {
+  border-color: var(--theme-border-success);
+}
+.mimePartWrapInvalid {
+  border-color: var(--theme-border-danger);
+}
+
+/* ── Structure MIME ── */
+div.partsTreeDiv {
+  min-height: 0;
+}
+.messageBody div.mimePartData {
+  line-height: 1.3em;
+  margin-bottom: 8px;
+}
+.htmlMsgData {
+  margin: 2px 0;
+  width: 100%;
+}
+.mimeStatusMessageTable {
+  display: inline-block;
+  margin-bottom: 3px;
+  padding: 4px;
+}
+.mimeStatusIcon {
+  width: 22px;
+}
+div.mimeStatusMessage,
+div.mimePartInfo {
+  margin-bottom: 7px;
+}
+.mimePartInfo div {
+  margin: 0;
+  padding: 5px;
+  display: inline-block;
+}
+.mimePartInfo div > img {
+  vertical-align: top;
+}
+.mimePartInfoAtc div {
+  border: 1px dotted var(--theme-border);
+  background-position: 2px 50%;
+  background-repeat: no-repeat;
+}
+.mimeStatusMessageTable td {
+  padding: 0;
+}
+.mimeStatusMessageTable td table td {
+  padding-right: 2px;
+  white-space: nowrap;
+}
+.mimePartWrap,
+.mimePartWrapValid,
+.mimePartWrapInvalid {
+  margin: 2px 0;
+  padding: 10px;
+  border-width: 1px;
+  border-style: solid;
+}
+.downloadAtc {
+  margin-left: 1px;
+}
+.saveImgAtc {
+  margin-left: 1px;
+}
+
+/* ── Thread images ── */
+div.msgSubject span.horde-tree-image {
+  margin-top: -3px;
+  margin-right: 1px;
+}
+
+/* ── Context menus message ── */
+.context div.contactAddr,
+.context div.mboxName {
+  font-style: italic;
+  padding: 0 2px;
+  text-align: center;
+}

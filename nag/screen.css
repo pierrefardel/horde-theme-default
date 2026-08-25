@@ -1,0 +1,17 @@
+/**
+ * Nag UPJV — point d'entrée
+ * ===========================
+ * Pur orchestrateur @import, dans l'ordre de cascade.
+ *
+ * Nag est l'application « Tâches ». Ses tâches remontent aussi dans la vue
+ * Tâches de Kronolith — le style de CETTE vue-là est dans
+ * kronolith/dynamic/lists.css, pas ici.
+ *
+ * La vue responsive (`.horde-responsive`, ~510 lignes dans le screen.css
+ * d'origine) n'est PAS reprise : le mobile est traité après le desktop.
+ */
+
+@import "globals.css";
+@import "list.css";
+@import "forms.css";
+@import "icons.css";

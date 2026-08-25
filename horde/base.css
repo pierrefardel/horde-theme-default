@@ -1,0 +1,127 @@
+/**
+ * UPJV Theme — Couche 2 : Base Layout
+ * =====================================
+ * Neutralise les float/absolute/px codés en dur du thème Horde default.
+ * Applique grid/flex sur les conteneurs structurels communs à tous les modules.
+ *
+ * Règle stricte : uniquement du layout (position, display, grid, overflow).
+ * Zéro couleur, zéro padding décoratif — tout ça va dans les fichiers thématiques.
+ */
+
+/* ── Body = colonne flex pleine hauteur ── */
+body.horde-ajax,
+body:not(.horde-ajax) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Topbar ── */
+#horde-head {
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  height: var(--theme-topbar-height);
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
+
+/* ── Sub-bar ── */
+#horde-sub {
+  position: sticky;
+  top: var(--theme-topbar-height);
+  flex-shrink: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Body principal — grid commun à toutes les pages ── */
+#horde-body,
+body.horde-ajax #horde-body {
+  flex: 1 1 0;
+  position:relative;
+  top:0;
+  min-height: 0;
+  float: none;
+  display: grid;
+  grid-template-columns: clamp(var(--horde-sidebar-min-width), var(--horde-sidebar-width, var(--horde-sidebar-min-width)), var(--horde-sidebar-max-width)) 6px 1fr;
+  grid-template-areas: "sidebar split content";
+  background-color: var(--theme-bg-primary);
+}
+
+/* Sans sidebar : content occupe toute la largeur */
+#horde-body:not(:has(#horde-sidebar)) {
+  grid-template-columns: 0 0 1fr;
+}
+
+/* ── Sidebar ── */
+#horde-sidebar {
+  grid-area: sidebar;
+  position: relative !important;
+  float: none !important;
+  margin-left: 0 !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--theme-spacing-sm);
+  overflow-y:auto;
+  display: flex;
+  flex-direction: column;
+  gap:var(--theme-spacing-sm);
+}
+
+/* ── Splitbar sidebar ── */
+#horde-slideleft {
+  grid-area: split;
+  position: static;
+}
+
+/* ── Content wrapper ── */
+#horde-contentwrapper {
+  grid-area: content;
+  position: relative;
+  min-width: 0;
+  overflow: auto;
+  padding: var(--theme-spacing-sm);
+ background-color: var(--theme-bg-primary);
+}
+
+body.horde-ajax #horde-contentwrapper {
+  overflow: hidden;
+}
+
+#horde-content {
+  margin-left: 0 !important;
+  padding-left: 0 ;
+  background-color: var(--theme-bg-white);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-shadow-md);
+}
+.horde-no-sidebar #horde-content { padding-left: 0; }
+.horde-content { padding: 5px 5px 0; }
+
+#horde-page {
+  position: relative;
+  height: 100%;
+  left: 0 !important;
+  padding: 0;
+}
+
+/* ── Buttonbar ── */
+.horde-buttonbar ul {
+  display: flex;
+  align-items: center;
+  float: none;
+}
+.horde-buttonbar li {
+  float: none;
+  height: auto;
+}
+
+/* Tabs → voir components.css */

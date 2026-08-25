@@ -1,0 +1,74 @@
+/**
+ * Nag UPJV — Formulaires
+ * ========================
+ * Champ couleur du formulaire de liste de tâches (Créer / Modifier une liste).
+ * Fiche de tâche (task.php) : à compléter.
+ */
+
+/* ── Champ couleur (#color) ──
+   Même logique que kronolith/forms.css : le champ affiche la couleur choisie
+   via un background-color inline (posé par le ColorPicker), illisible depuis
+   le CSS. footer.js (syncColorFields) la recopie dans --cal-color sur le <td>
+   parent — pas de <label> ici, contrairement à Kronolith, la structure est un
+   tableau .horde-form classique. #color est un id unique par page (le
+   conteneur du formulaire porte un suffixe d'instance, pas le champ), donc pas
+   besoin de scoper sur l'id du formulaire.
+
+   Rendu en badge : pastille (::before du td) + valeur hex dans un champ neutre. */
+td:has(> input#color) {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+}
+td:has(> input#color)::before {
+  content: "";
+  position: absolute;
+  left: var(--theme-spacing-sm);
+  width: 16px;
+  height: 16px;
+  background-color: var(--cal-color, var(--theme-bg-secondary));
+  border-radius: var(--theme-radius-selector);
+  pointer-events: none;
+}
+#color {
+  /* Neutralise le background-color / color inline posé par le ColorPicker */
+  background-color: var(--theme-bg-white) !important;
+  color: var(--theme-text-primary) !important;
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-selector);
+  font-family: var(--theme-font-family-mono);
+  letter-spacing: 0.03em;
+  /* Place laissée à la pastille */
+  padding-left: calc(var(--theme-spacing-sm) + 24px);
+}
+
+/* Lien picker : même rendu que a.kronolithColorPicker (kronolith/icons.css) —
+   pastille cliquable, icône SVG en mask, PNG d'origine masqué. */
+td:has(> input#color) a:has(> img[alt="Color Picker"]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--theme-bg-secondary);
+  padding: var(--theme-spacing-xs);
+  border-radius: var(--theme-radius-field);
+}
+td:has(> input#color) a:has(> img[alt="Color Picker"]) img {
+  display: none;
+}
+td:has(> input#color) a:has(> img[alt="Color Picker"])::before {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 18px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("graphics/svg/colorpicker.svg");
+  mask-image: url("graphics/svg/colorpicker.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}

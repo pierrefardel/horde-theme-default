@@ -1,0 +1,201 @@
+/**
+ * UPJV Theme — Toolbar
+ * =====================
+ * .horde-buttonbar et ses enfants.
+ *
+ * Structure HTML des boutons :
+ *   <li class="horde-icon|horde-nobutton">
+ *     <a>Label</a>
+ *     <span class="horde-popdown">  ← présent uniquement si sous-menu
+ *   </li>
+ * Les deux classes ont la même structure — même style.
+ */
+
+/* ── Conteneur ── */
+.horde-buttonbar {
+  background-image: none;
+  background-color: var(--theme-bg-white);
+  border-bottom: 1px solid var(--theme-border);
+  min-height: 40px;
+  padding: var(--theme-spacing-xs) !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap:var(--theme-spacing-sm);
+}
+.horde-buttonbar ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  list-style: none;
+  float: none;
+}
+.horde-buttonbar .rightFloat {
+  order:1;
+}
+
+/* ── Chaque li = split button potentiel ── */
+.horde-buttonbar li {
+  display: flex;
+  align-items: stretch;
+  float: none;
+  height: auto;
+  padding: 0 !important;
+  background-image: none !important;
+  background-color: var(--theme-bg-btn-secondary);
+  border-radius: var(--theme-radius-field);
+  overflow: hidden;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.horde-buttonbar li:hover,
+.horde-buttonbar li.horde-active {
+  background-color: var(--theme-bg-btn-secondary-hover);
+}
+.horde-buttonbar li:active {
+  background-color: var(--theme-bg-btn-secondary-active);
+}
+
+/* ── Boutons à identité sémantique ── */
+/* Pattern DS : fond STRONG par défaut, icône/texte = --theme-text-on-* (blanc en light mode) */
+
+.horde-buttonbar li:has(#send_button) {
+  background-color: var(--theme-bg-action);
+  border-color: var(--theme-border-action);
+}
+.horde-buttonbar li:has(#send_button) a { color: var(--theme-text-btn-action) !important; }
+.horde-buttonbar li:has(#send_button) a::before { background-color: var(--theme-text-btn-action) !important; }
+.horde-buttonbar li:has(#send_button):hover {
+  background-color: var(--theme-bg-action-hover);
+  border-color: var(--theme-border-action-hover);
+}
+.horde-buttonbar li:has(#send_button):active {
+  background-color: var(--theme-bg-action-active);
+}
+
+.horde-buttonbar li:has(#draft_button) {
+  background-color: var(--theme-bg-warning);
+  border-color: var(--theme-border-warning);
+}
+.horde-buttonbar li:has(#draft_button) a { color: var(--theme-text-btn-warning) !important; }
+.horde-buttonbar li:has(#draft_button) a::before { background-color: var(--theme-text-btn-warning) !important; }
+.horde-buttonbar li:has(#draft_button):hover {
+  background-color: var(--theme-bg-warning-hover);
+  border-color: var(--theme-border-warning-hover);
+}
+.horde-buttonbar li:has(#draft_button):active {
+  background-color: var(--theme-bg-warning-active);
+}
+
+.horde-buttonbar li:has(#checkmaillink) {
+  background-color: var(--theme-bg-success);
+  border-color: var(--theme-border-success);
+}
+.horde-buttonbar li:has(#checkmaillink) a { color: var(--theme-text-btn-success) !important; }
+.horde-buttonbar li:has(#checkmaillink) a::before { background-color: var(--theme-text-btn-success) !important; }
+.horde-buttonbar li:has(#checkmaillink):hover {
+  background-color: var(--theme-bg-success-hover);
+  border-color: var(--theme-border-success-hover);
+}
+.horde-buttonbar li:has(#checkmaillink):active {
+  background-color: var(--theme-bg-success-active);
+}
+
+.horde-buttonbar li:has(#button_delete) {
+  background-color: var(--theme-bg-danger);
+  border-color: var(--theme-border-danger);
+}
+.horde-buttonbar li:has(#button_delete) a { color: var(--theme-text-btn-danger) !important; }
+.horde-buttonbar li:has(#button_delete) a::before { background-color: var(--theme-text-btn-danger) !important; }
+.horde-buttonbar li:has(#button_delete):hover {
+  background-color: var(--theme-bg-danger-hover);
+  border-color: var(--theme-border-danger-hover);
+}
+.horde-buttonbar li:has(#button_delete):active {
+  background-color: var(--theme-bg-danger-active);
+}
+
+/* ── Lien principal ── */
+.horde-buttonbar li a,
+.horde-buttonbar li a:link,
+.horde-buttonbar li a:visited,
+.horde-buttonbar li a:active {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-xs) !important;
+  color: var(--theme-text-primary);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  text-decoration: none;
+  background-color: transparent;
+  background-image: none !important;
+  border-radius: 0;
+  white-space: nowrap;
+}
+.horde-buttonbar li.disabled a {
+  color: var(--theme-text-disabled);
+  pointer-events: none;
+}
+
+/* ── Chevron split button (span.horde-popdown) ── */
+.horde-buttonbar .horde-popdown {
+  background-image: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--theme-bg-overlay-split);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+/* ── Sous-menus dropdown ── */
+.horde-buttonbar li div { display: none; }
+.horde-buttonbar li:hover div { display: block; }
+.horde-buttonbar li ul li {
+  float: none; background: transparent;
+  height: auto; margin: 0; padding: 0;
+  border-radius: 0; overflow: visible;
+}
+.horde-buttonbar li ul li a,
+.horde-buttonbar li ul li a:link {
+  font-weight: normal;
+  color: var(--theme-text-primary);
+}
+
+/* ── Boutons désactivés ── */
+.horde-buttonbar .disabled {
+  display: none;
+}
+
+/* ── Select dans la toolbar ── */
+.horde-buttonbar select {
+  background-color: transparent;
+  border-width: 0;
+  color: var(--theme-text-primary);
+  font-weight: bold;
+  margin-top: 0;
+  cursor: pointer;
+  height: auto;
+}
+.horde-buttonbar li option { padding: 0; }
+.horde-buttonbar li span.accessKey { padding: 0; margin-right:-4px; }
+
+.horde-buttonbar .rightFloat li.horde-nobutton { margin-right: 5px; }
+.horde-buttonbar .rightFloat li.horde-active { background-color: var(--theme-bg-btn-secondary-hover); }
+
+/* ── Icônes bouton (horde-icon) ── */
+.horde-buttonbar li.horde-icon a { padding-left: 25px; background-position: left center; background-repeat: no-repeat; }
+.horde-buttonbar .horde-icon { background-position: right center; background-repeat: no-repeat; }
+
+/* ── Chevron has-menu ── */
+.horde-buttonbar .horde-hasmenu { padding-right: 24px; }
+
+/* ── Bouton split horde-button-* (ancien layout, conservé pour compatibilité) ── */
+.horde-button-icon { width: 20px; height: 24px; }
+.horde-button-left, .horde-button-left-arrow { height: 22px; }
+.horde-button-right, .horde-button-right-arrow { height: 22px; }

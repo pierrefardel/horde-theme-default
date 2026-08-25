@@ -1,0 +1,120 @@
+/**
+ * Kronolith UPJV — Événements (vue dynamique)
+ * =============================================
+ * Placement des événements sur la grille horaire. Le JS calcule
+ * top/height/left/width en inline ; sans position:absolute ces valeurs
+ * n'ont aucun effet → les événements s'empilent en flux normal.
+ * Chargé UNIQUEMENT en vue dynamique (pas en vue basic).
+ */
+
+/* Apparition en fondu : le JS insère les événements dans le DOM, l'animation
+   se déclenche donc d'elle-même à l'insertion (même principe que les pills de
+   légende). Fondu SEUL et très court : les événements sont recréés à chaque
+   navigation (mois suivant, jour↔semaine) et peuvent être nombreux — un
+   déplacement ou une durée plus longue deviendrait vite fatigant. */
+@keyframes kronolithEventIn {
+  from {
+    opacity: 0;
+  }
+}
+.kronolith-event {
+  cursor: pointer;
+  position: absolute;
+  animation: kronolithEventIn 0.15s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kronolith-event {
+    animation: none;
+  }
+}
+#kronolithViewDay .kronolith-event,
+#kronolithViewWeek .kronolith-event,
+#kronolithViewWorkweek .kronolith-event {
+  position: absolute;
+}
+
+/* En vue mois et dans les en-têtes (all-day), retour au flux normal */
+#kronolithViewMonth .kronolith-event,
+#kronolithViewDay .kronolith-view-head .kronolith-event,
+#kronolithViewWeek .kronolith-view-head .kronolith-event,
+#kronolithViewWorkweek .kronolith-view-head .kronolith-event {
+  position: relative;
+  width: auto;
+  margin-bottom: 2px;
+  display: flex;
+  flex-direction: column;
+}
+#kronolithViewDay .kronolith-view-head .kronolith-event,
+#kronolithViewWeek .kronolith-view-head .kronolith-event,
+#kronolithViewWorkweek .kronolith-view-head .kronolith-event {
+  white-space: nowrap;
+}
+
+
+/* Le contenu remplit la boîte de l'événement */
+.kronolith-event .kronolith-event-info {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+div.kronolithEditable.kronolithFirst:hover .kronolith-event-info,
+.kronolith-event.kronolithFirst.kronolith-selected .kronolith-event-info {
+  top: 7px;
+}
+div.kronolithEditable.kronolithLast:hover .kronolith-event-info,
+.kronolith-event.kronolithLast.kronolith-selected .kronolith-event-info {
+  bottom: 7px;
+}
+
+/* ── Poignées de redimensionnement (drag) ── */
+.kronolith-event.kronolithEditable {
+  cursor: move;
+}
+/* Les poignées gardent une hauteur CONSTANTE et n'apparaissent qu'en opacité :
+   animer leur hauteur (ou celle de l'événement) fausserait les heures, car le JS
+   relit la géométrie en direct pendant le resize et lirait des valeurs
+   intermédiaires. `pointer-events: none` au repos pour qu'elles ne captent pas
+   le clic tant qu'elles sont invisibles. */
+.kronolith-event .kronolithDragger {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 5px;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.18s ease,
+    background-color 0.18s ease;
+}
+.kronolith-event.kronolithEditable .kronolithDragger,
+.kronolithDragger.drag {
+  background: var(--theme-bg-tertiary);
+}
+.kronolith-event.kronolithEditable:hover .kronolithDragger,
+.kronolith-event.kronolithEditable.kronolith-selected .kronolithDragger,
+.kronolithDragger.drag {
+  background-color: var(--theme-text-secondary) !important;
+}
+.kronolith-event .kronolithDragger.kronolithDraggerTop,
+.kronolithDraggerTop.drag {
+  top: 0;
+}
+.kronolith-event .kronolithDragger.kronolithDraggerBottom,
+.kronolithDraggerBottom.drag {
+  bottom: 0;
+}
+.kronolith-event.kronolithEditable .kronolithDragger.kronolithDraggerTop {
+  cursor: n-resize;
+}
+.kronolith-event.kronolithEditable .kronolithDragger.kronolithDraggerBottom {
+  cursor: s-resize;
+}
+/* Apparition en fondu (opacité seule — la hauteur ne bouge pas, cf. plus haut).
+   Les poignées redeviennent cliquables une fois visibles. */
+div.kronolithEditable:hover .kronolithDragger,
+.kronolith-event.kronolith-selected .kronolithDragger,
+.kronolithDragger.drag {
+  opacity: 1;
+  pointer-events: auto;
+}

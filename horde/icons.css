@@ -1,0 +1,242 @@
+/**
+ * UPJV Theme — Icônes Horde global
+ * ==================================
+ * Toutes les icônes du layout Horde (hors modules) via mask-image SVG.
+ * Les icônes de module IMP sont dans imp/dynamic/icons.css.
+ *
+ * Technique : toujours ::before sur les conteneurs non-dédiés,
+ * mask-image direct sur les span.iconImg dédiés.
+ */
+
+/* ── Settings (engrenage nav) ── */
+.horde-icon-settings {
+  background-image: none !important;
+}
+.horde-icon-settings a.horde-mainnavi {
+  width: 32px;
+  height: 32px;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.horde-icon-settings a.horde-mainnavi::before {
+  content: '';
+  display: inline-block;
+  width: 18px; height: 18px;
+  background-color: var(--theme-text-primary);
+  -webkit-mask-image: url("graphics/svg/settings-2.svg");
+  mask-image: url("graphics/svg/settings-2.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+  vertical-align: middle;
+}
+.horde-icon-settings a.horde-mainnavi:hover::before {
+  background-color: var(--theme-text-action);
+}
+
+/* ── Logout ── */
+#horde-logout a::before {
+  content: '';
+  display: block;
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  background-color: var(--theme-text-btn-danger);
+  -webkit-mask-image: url("graphics/svg/horde-logout.svg");
+  mask-image: url("graphics/svg/horde-logout.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+
+
+/* ── Popdown (chevron sous-menu) ── */
+.horde-popdown {
+  background-image: none !important;
+}
+.horde-popdown::before {
+  content: '';
+  display: inline-block;
+  width: 12px; height: 12px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/horde-popdown.svg");
+  mask-image: url("graphics/svg/horde-popdown.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+  vertical-align: middle;
+}
+
+/* ── Sidebar — expand/collapse ── */
+.horde-collapse {
+  background-image: none !important;
+  padding-left: 26px;
+  position: relative;
+}
+.horde-collapse::before {
+  content: '';
+  position: absolute; left: 4px; top: 50%;
+  transform: translateY(-50%);
+  width: 16px; height: 16px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/col.svg");
+  mask-image: url("graphics/svg/col.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+.horde-expand {
+  background-image: none !important;
+  padding-left: 26px;
+  position: relative;
+}
+.horde-expand::before {
+  content: '';
+  position: absolute; left: 4px; top: 50%;
+  transform: translateY(-50%);
+  width: 16px; height: 16px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/exp.svg");
+  mask-image: url("graphics/svg/exp.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+
+/* ── Sidebar — ajouter un élément ── */
+#horde-sidebar a.horde-add {
+  background-image: none !important;
+  position: relative;
+  font-size: 0;
+  overflow: visible;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  order:1;
+  margin-left:auto;
+}
+#horde-sidebar a.horde-add::before {
+  content: '';
+  position: absolute; right: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 16px; height: 16px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/plus.svg");
+  mask-image: url("graphics/svg/plus.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+
+/* ── Flèche sous-menu navigation dropdown ── */
+.horde-dropdown ul li.arrow {
+  background-image: none !important;
+  position: relative;
+}
+.horde-dropdown ul li.arrow::after {
+  content: '';
+  position: absolute; right: 8px; top: 50%;
+  transform: translateY(-50%);
+  width: 12px; height: 12px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/context-submenu.svg");
+  mask-image: url("graphics/svg/context-submenu.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+.horde-dropdown ul li.arrow:hover::after {
+  background-color: var(--theme-icon-primary);
+}
+
+/* ── Submenu dans les menus contextuels ── */
+.contextSubmenu {
+  background-image: none !important;
+  padding-right: 24px !important;
+  position: relative;
+}
+.contextSubmenu::after {
+  content: '';
+  position: absolute; right: 8px; top: 50%;
+  transform: translateY(-50%);
+  width: 12px; height: 12px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/context-submenu.svg");
+  mask-image: url("graphics/svg/context-submenu.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+
+/* ── Sort indicators (horde-table) ── */
+.sortup, .sortdown {
+  background-image: none !important;
+  text-indent: 0 !important;
+  padding-left: 18px !important;
+  position: relative;
+}
+.sortup::before {
+  content: '';
+  position: absolute; left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 14px; height: 14px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/sortup.svg");
+  mask-image: url("graphics/svg/sortup.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+.sortdown::before {
+  content: '';
+  position: absolute; left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 14px; height: 14px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/sortdown.svg");
+  mask-image: url("graphics/svg/sortdown.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+
+/* ── Aide (helplink) ── */
+a.helplink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+a.helplink img { display: none; }
+a.helplink::before {
+  content: '';
+  display: block;
+  width: 16px; height: 16px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("graphics/svg/help.svg");
+  mask-image: url("graphics/svg/help.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+  transition: var(--theme-transition);
+}
+a.helplink:hover::before {
+  background-color: var(--theme-icon-primary);
+}
+
+/* ── Importer/Exporter (sous-navigation) ──
+   `horde-data` est une classe du CŒUR Horde, partagée par la sous-navigation
+   des apps (Nag, Turba…) et par l'écran d'administration — d'où sa place ici
+   et non dans un module. Les PNG d'origine (globals.css et widgets.css) sont
+   neutralisés au profit d'un mask, pour que la couleur suive le thème. */
+.horde-subnavi-icon.horde-data,
+.horde-admin-data {
+  background-image: none;
+}
+.horde-subnavi-icon.horde-data::before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("graphics/svg/data.svg");
+  mask-image: url("graphics/svg/data.svg");
+  -webkit-mask-size: 16px;
+  mask-size: 16px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}

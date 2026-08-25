@@ -1,0 +1,535 @@
+/**
+ * UPJV Theme — Formulaires & Tables
+ * ====================================
+ * Inputs, selects, .horde-form, .horde-table, .linedRow, boutons.
+ */
+label:has(input[type="checkbox"]), label:has(input[type="radio"]) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+}
+
+/* ── Formulaires ── */
+.horde-form table {
+  width: 100%; padding: 2px;
+  border-collapse: collapse; border-spacing: 0;
+}
+.horde-form tr { vertical-align: top; }
+.horde-form td { padding-bottom: 5px; }
+.horde-form-buttons {
+  padding: 10px;
+}
+.horde-form .horde-form-buttons { padding-left: 15%; }
+.horde-form td.horde-form-label { padding: 5px 9px 0 0; text-align: right; }
+.horde-form-error { color: var(--theme-text-danger); }
+.horde-form-field-description { color: var(--theme-text-primary); font-size: 70%; }
+
+input, select, textarea {
+  font-size: 100%;
+  font-weight: normal;
+  background-color: var(--theme-bg-input);
+  border: 1px solid var(--theme-border-input);
+  color: var(--theme-text-primary);
+}
+select { padding: 2px 0 0 2px; }
+
+/* ── Champs texte — style DS UPJV ── */
+/* NB : `input:not([type])` couvre le HTML legacy de Horde qui omet l'attribut
+   type (ex. <input id="id" name="id" size="30">). Ces champs sont des text
+   inputs par défaut mais n'étaient pas capturés par input[type="text"]. */
+input:not([type]),
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="url"],
+input[type="tel"],
+input[type="number"],
+textarea,
+select {
+  background-color: var(--theme-bg-input);
+  border: 1px solid var(--theme-border-input);
+  border-radius: var(--theme-radius-field);
+  color: var(--theme-text-primary);
+  padding: var(--theme-spacing-xs) var(--theme-spacing-sm);
+  font-size: var(--theme-font-size-sm);
+  outline: none;
+  transition: var(--theme-transition);
+  max-width: 100%;
+  box-sizing: border-box;
+}
+/* textarea : radius-box */
+textarea {
+  border-radius: var(--theme-radius-box);
+}
+/* select : apparence custom + chevron SVG */
+select {
+  border-radius: var(--theme-radius-box);
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--theme-spacing-xs) center;
+  background-size: 16px;
+  padding-right: calc(var(--theme-spacing-xs) * 2 + 16px);
+  cursor: pointer;
+}
+input:not([type])::placeholder,
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="search"]::placeholder,
+textarea::placeholder {
+  color: var(--theme-text-placeholder);
+  opacity: 0.7;
+}
+input:not([type]):not(:disabled):hover,
+input[type="text"]:not(:disabled):hover,
+input[type="email"]:not(:disabled):hover,
+input[type="password"]:not(:disabled):hover,
+input[type="search"]:not(:disabled):hover,
+input[type="url"]:not(:disabled):hover,
+input[type="tel"]:not(:disabled):hover,
+input[type="number"]:not(:disabled):hover,
+textarea:not(:disabled):hover,
+select:not(:disabled):hover {
+  border-color: var(--theme-border-action-hover);
+}
+input:not([type]):focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="url"]:focus,
+input[type="tel"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--theme-border-action);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--theme-bg-action) 15%, transparent);
+}
+input:not([type]):disabled,
+input[type="text"]:disabled,
+input[type="email"]:disabled,
+input[type="password"]:disabled,
+input[type="search"]:disabled,
+input[type="url"]:disabled,
+input[type="tel"]:disabled,
+input[type="number"]:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: var(--theme-bg-disabled);
+  border-color: var(--theme-border-disabled);
+  color: var(--theme-text-disabled);
+  cursor: not-allowed;
+}
+input:not([type]):read-only,
+input[type="text"]:read-only,
+input[type="email"]:read-only,
+textarea:read-only {
+  background-color: var(--theme-bg-secondary);
+  cursor: default;
+}
+/* Supprimer les flèches sur number et le bouton clear sur search */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
+input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+input:focus, textarea:focus, select:focus {
+  background-color: var(--theme-bg-input);
+}
+input[type="submit"], input[type="button"], input[type="reset"],
+a.horde-button, a.horde-default, a.horde-create, a.horde-delete, a.horde-cancel, input.horde-cancel {
+  background-image: none;
+  background-color: var(--theme-bg-btn-secondary);
+  border: 1px solid var(--theme-border-btn-secondary);
+  border-radius: var(--theme-radius-field);
+  padding: 6px 12px;
+  color: var(--theme-text-primary);
+  cursor: pointer;
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-normal);
+  line-height: 1.5;
+  transition: var(--theme-transition);
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+}
+input[type="submit"]:hover, input[type="button"]:hover, input[type="reset"]:hover,
+a.horde-button:hover {
+  background-color: var(--theme-bg-btn-secondary-hover);
+}
+input[type="submit"]:active, input[type="button"]:active, input[type="reset"]:active,
+a.horde-button:active {
+  background-color: var(--theme-bg-btn-secondary-active);
+}
+a.horde-button, a.horde-default, a.horde-create, a.horde-delete, a.horde-cancel {
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* horde-default → btn-primary */
+input.horde-default, a.horde-default {
+  background-image: none;
+  background-color: var(--theme-bg-action);
+  border-color: var(--theme-border-action);
+  color: var(--theme-text-on-action);
+}
+input.horde-default:hover, a.horde-default:hover {
+  background-color: var(--theme-bg-action-hover);
+  border-color: var(--theme-border-action-hover);
+}
+input.horde-default:active, a.horde-default:active {
+  background-color: var(--theme-bg-action-active);
+  border-color: var(--theme-border-action-active);
+}
+
+/* horde-create → btn-success */
+input.horde-create, a.horde-create {
+  background-image: none;
+  background-color: var(--theme-bg-success);
+  border-color: var(--theme-border-success);
+  color: var(--theme-text-btn-success);
+}
+input.horde-create:hover, a.horde-create:hover {
+  background-color: var(--theme-bg-success-hover);
+  border-color: var(--theme-border-success-hover);
+}
+
+/* horde-delete → btn-danger */
+input.horde-delete, a.horde-delete {
+  background-image: none;
+  background-color: var(--theme-bg-danger);
+  border-color: var(--theme-border-danger);
+  color: var(--theme-text-btn-danger);
+}
+input.horde-delete:hover, a.horde-delete:hover {
+  background-color: var(--theme-bg-danger-hover);
+  border-color: var(--theme-border-danger-hover);
+}
+
+/* horde-cancel → btn-secondary */
+input.horde-cancel, a.horde-cancel {
+  background-color: var(--theme-bg-btn-secondary);
+  border-color: var(--theme-border-btn-secondary);
+}
+input.horde-cancel:hover, a.horde-cancel:hover {
+  background-color: var(--theme-bg-btn-secondary-hover);
+  border-color: var(--theme-border-btn-secondary);
+}
+input.horde-cancel:active, a.horde-cancel:active {
+  background-color: var(--theme-bg-btn-secondary-active);
+}
+
+form[action^="https://"] input[type="submit"].horde-default {
+  background-image: none;
+  padding: 6px 12px;
+}
+input[disabled], input[disabled]:hover, textarea[disabled], option[disabled] {
+  background-color: var(--theme-bg-primary);
+  color: var(--theme-text-disabled);
+}
+.checkbox, .radio { border: 0; height: 14px; width: 14px; background: transparent; }
+
+.horde-form div.checkbox {
+  display: inline-block;
+  width: auto !important;
+  height: auto !important;
+  border: none;
+  background: transparent;
+  padding: 1px 0;
+  overflow: visible;
+}
+.horde-form div.checkbox label { display: inline; cursor: pointer; }
+.horde-form td.control input[type="checkbox"] {
+  width: auto;
+  height: auto;
+  min-width: 1em;
+  margin: 0 3px 0 0;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+/* ── Checkbox — style DS UPJV ──
+   inline-grid (pas grid) : beaucoup de templates Horde legacy mettent le
+   <label for="..."> en FRÈRE de l'input, pas en parent (contrairement au cas
+   couvert par label:has(...) ci-dessus). Un display bloc pousserait alors le
+   label sur la ligne suivante — inline-grid garde le centrage interne de la
+   coche tout en laissant l'input dans le flux du texte voisin. */
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input) {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  flex-shrink: 0;
+  width: var(--theme-spacing-sm);
+  height: var(--theme-spacing-sm);
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--theme-border-input);
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-white);
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  vertical-align: middle;
+}
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input)::after {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 60%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transform: scale(0) rotate(-45deg);
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):checked {
+  background-color: var(--theme-bg-action-active);
+  border-color: var(--theme-border-action-active);
+  transform: scale(1.05);
+  animation: checkboxPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):checked::after {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):indeterminate {
+  background-color: var(--theme-bg-action-active);
+  border-color: var(--theme-border-action-active);
+}
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):indeterminate::after {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+}
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):not(:disabled):hover {
+  border-color: var(--theme-border-action-hover);
+  transform: scale(1.05);
+}
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):focus-visible {
+  outline: 2px solid var(--theme-border-action);
+  outline-offset: 2px;
+}
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):disabled {
+  background-color: var(--theme-bg-disabled);
+  border-color: var(--theme-border-disabled);
+  cursor: not-allowed;
+}
+input[type="checkbox"]:not(.msCheck):not(.switch-field__input):disabled:checked::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2395a3b3' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+}
+@keyframes checkboxPop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* ── Radios : repris du composant radio du DS UPJV (.radio__input) ──
+   Le HTML legacy de Kronolith a des <input type="radio"> nus (sans classe DS),
+   on applique donc le style DS directement sur le sélecteur d'attribut, en
+   traduisant les tokens colors/spacing du DS vers nos --theme-. */
+input[type="radio"]:not(.msCheck) {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  width: var(--theme-spacing-sm);
+  height: var(--theme-spacing-sm);
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--theme-border);
+  border-radius: var(--theme-radius-full);
+  background-color: var(--theme-bg-white);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+  vertical-align: middle;
+}
+input[type="radio"]:not(.msCheck)::after {
+  content: "";
+  display: block;
+  width: 50%;
+  height: 50%;
+  border-radius: var(--theme-radius-full);
+  background-color: var(--theme-bg-white);
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+input[type="radio"]:not(.msCheck):checked {
+  background-color: var(--theme-bg-action-active);
+  border-color: var(--theme-border-action-active);
+  animation: radioPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+input[type="radio"]:not(.msCheck):checked::after {
+  opacity: 1;
+  transform: scale(1);
+}
+input[type="radio"]:not(.msCheck):focus-visible {
+  outline: 2px solid var(--theme-border-action);
+  outline-offset: 2px;
+}
+input[type="radio"]:not(.msCheck):not(:disabled):hover {
+  border-color: var(--theme-border-action-hover);
+  transform: scale(1.05);
+}
+input[type="radio"]:not(.msCheck):disabled {
+  background-color: var(--theme-bg-disabled);
+  border-color: var(--theme-border-disabled);
+  cursor: not-allowed;
+}
+input[type="radio"]:not(.msCheck):disabled:checked {
+  background-color: var(--theme-bg-disabled);
+  border-color: var(--theme-border-disabled);
+}
+input[type="radio"]:not(.msCheck):disabled:checked::after {
+  background-color: var(--theme-icon-secondary, var(--theme-text-disabled));
+}
+@keyframes radioPop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* Inputs pleine largeur dans les contextes formulaire */
+.horde-form td.control input:not([type]),
+.horde-form td.control input[type="text"],
+.horde-form td.control input[type="email"],
+.horde-form td.control input[type="password"],
+.horde-form td.control input[type="url"],
+.horde-form td.control input[type="tel"],
+.horde-form td.control input[type="number"],
+.horde-form td.control select,
+.horde-form td.control textarea {
+  width: 100%;
+}
+
+table.horde-table td img { width: 16px; height: 16px; vertical-align: middle; }
+
+/* ── Tables ── */
+table { border: none; }
+td, th { padding: 1px; }
+
+ul.linedRow { list-style-type: none; }
+.linedRow, tr.linedRow td, table.linedRow td, ul.linedRow li {
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-white);
+  border-bottom: 1px solid var(--theme-border);
+}
+table.linedRow, ul.linedRow { border-bottom: none; }
+.linedRowSelectedCol, td.linedRowSelectedCol, table.linedRow td.linedRowSelectedCol {
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-linedrow-alt);
+  border-bottom: 1px solid var(--theme-border);
+}
+.selectedRow, tr.selectedRow td, .selectedRow a {
+  background-color: var(--theme-bg-action);
+  color: var(--theme-text-on-action);
+}
+table.nopadding td, table.nopadding th { padding: 0; }
+table.nopadding table td, table.nopadding table th { padding: 1px; }
+table.nopadding .headerbox td, table.nopadding .headerbox th { padding: 1px 5px; }
+
+.sortdown, .sortup { font-weight: bold; }
+/* icônes sortup/sortdown → icons.css */
+
+table.horde-table { border-spacing: 0; width: 100%; }
+table.horde-table th {
+  text-align: left;
+  font-weight: var(--theme-font-weight-bold);
+  font-size: var(--theme-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: var(--theme-text-primary);
+}
+table.horde-table th.sortdown, table.horde-table th.sortup { font-weight: bold; }
+table.horde-table th.rightAlign { text-align: right; }
+table.horde-table td { border-bottom: 1px solid var(--theme-border); }
+.horde-table-header th, table.horde-table td, table.horde-table th {
+  height: 21px; padding: 0 5px;
+}
+.horde-table-header, table.horde-table thead tr, table.horde-table th {
+  background-image: none !important;
+  background-color: var(--theme-bg-primary);
+  border-bottom: 1px solid var(--theme-border);
+  height: var(--theme-spacing-lg);
+  padding: 0 var(--theme-spacing-xs);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.horde-table-header a, table.horde-table th a { color: var(--theme-text-primary); text-decoration: none; }
+.horde-table-header .horde-split-left,
+table.horde-table thead .horde-split-left,
+.horde-table-header .horde-split-right,
+table.horde-table thead .horde-split-right {
+  background-image: none !important;
+  width: 0;
+}
+table.horde-table thead .horde-split-left.sortup,
+table.horde-table thead .horde-split-right.sortup,
+table.horde-table thead .horde-split-left.sortdown,
+table.horde-table thead .horde-split-right.sortdown {
+  background-image: none !important;
+}
+.horde-table-header .iconImg { vertical-align: middle;margin:0; order:-1; }
+
+/* Tabs → déplacé dans components.css */
+
+/* ── Formulaires V3 (Horde\Form\V3) ── */
+.horde-form .form-table { width: 100%; padding: 2px; border-collapse: collapse; }
+.horde-form .form-table tr { vertical-align: top; }
+.horde-form .form-table td { padding-bottom: 5px; }
+
+.horde-form td.label { padding: 5px 9px 0 0; text-align: right; width: 15%; }
+
+.horde-form span.required { color: var(--theme-text-danger); font-weight: bold; }
+.horde-form .optional { color: var(--theme-text-secondary); font-weight: normal; font-size: 85%; }
+
+.horde-form td.control { padding: 3px 0; }
+.horde-form td.control input:not([type]),
+.horde-form td.control input[type="text"],
+.horde-form td.control input[type="email"],
+.horde-form td.control input[type="number"],
+.horde-form td.control input[type="password"],
+.horde-form td.control input[type="url"],
+.horde-form td.control input[type="tel"],
+.horde-form td.control select,
+.horde-form td.control textarea { box-sizing: border-box; }
+
+.horde-form .help-text { color: var(--theme-text-secondary); font-size: 70%; display: block; }
+
+.horde-form .field-error { color: var(--theme-text-danger); display: block; font-size: 85%; }
+.horde-form td.control.error input,
+.horde-form td.control.error select,
+.horde-form td.control.error textarea { border-color: var(--theme-border-danger); }
+
+.horde-form .form-errors {
+  color: var(--theme-text-danger);
+  margin: 0.5em 0; padding: 0.5em;
+  border: 1px solid var(--theme-border-danger);
+  background: var(--theme-bg-danger-light);
+  border-radius: var(--theme-radius-sm);
+}
+
+.horde-form .form-header { margin-bottom: 1em; border-bottom: thin dashed var(--theme-border); }
+.horde-form .form-header h2 { margin: 0.3em 0; font-size: 1.1em; }
+
+.horde-form .section-header td {
+  background-color: var(--theme-bg-secondary);
+  padding: 5px; font-weight: bold;
+}
+
+.horde-form .form-buttons { padding: 10px; margin: 10px 0; background-color: var(--theme-bg-primary); }
+.horde-form .form-buttons-inner { padding-left: 15%; }
+.horde-form .form-buttons-inner input[type="submit"],
+.horde-form .form-buttons-inner input[type="button"] { color: var(--theme-text-on-action); }
+
+.horde-form .odd { background-color: var(--theme-bg-secondary); }
