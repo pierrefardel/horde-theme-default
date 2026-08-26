@@ -177,6 +177,24 @@
   }
 }
 
+/* ── color-scheme : pilote `light-dark()` ──
+   Déclaré ICI parce que ce fichier est chargé dans le <head> (hook cssfiles),
+   alors que display-prefs.js — qui pose `theme-light` / `theme-dark` — part en
+   fin de <body> (`deferScripts` de Horde). Le navigateur connaît donc le mode
+   dès le premier octet peint, et non après le rendu complet.
+
+   Sans classe, on suit l'OS : c'est le comportement du mode « auto ». Les deux
+   classes forcent ensuite le choix de l'utilisateur. */
+:root {
+  color-scheme: light dark;
+}
+html.theme-light {
+  color-scheme: light;
+}
+html.theme-dark {
+  color-scheme: dark;
+}
+
 /* ── Presets de forme (piloté par classe sur <html>) ── */
 /* soft = défaut, pas de classe nécessaire */
 html.shape-rounded {

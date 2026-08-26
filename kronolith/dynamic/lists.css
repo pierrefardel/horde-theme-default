@@ -166,11 +166,11 @@
    (aplat saturé pleine largeur : illisible, et sans rapport avec le style des
    events). On remplace cet aplat par une CARTE : fond légèrement teinté de la
    couleur de la liste + filet vertical à gauche — même vocabulaire que les
-   events. Le nom de la liste (ajouté par footer.js en multi-listes) porte
+   events. Le nom de la liste (ajouté par theme-tasks.js en multi-listes) porte
    l'identification ; la couleur seule ne suffirait pas (teintes proches,
    daltonisme).
 
-   --cal-color est posé sur le <td> par footer.js (JS du thème) : Kronolith ne
+   --cal-color est posé sur le <td> par theme-tasks.js (JS du thème) : Kronolith ne
    l'expose pas sur les tâches, contrairement aux events (PR upstream #73). Les
    dérivés --cal-text/-border (horde/globals.css) garantissent la lisibilité
    même si la liste a une couleur pâle ou neutre.
@@ -192,7 +192,7 @@
   padding: var(--theme-spacing-xs);
   border-left: 3px solid var(--cal-color) !important;
   /* --task-indent : text-indent inline de Kronolith (indentation des
-     sous-tâches), reporté par footer.js — text-indent est sans effet sur un
+     sous-tâches), reporté par theme-tasks.js — text-indent est sans effet sur un
      conteneur flex. */
   text-indent: 0 !important;
   /* Grille [contenu][case à cocher] : la case est à DROITE, hors du chemin de
@@ -235,7 +235,7 @@
     var(--theme-bg-white)
   ) !important;
 }
-/* Le titre est enveloppé par footer.js (nœud texte nu à l'origine) : c'est
+/* Le titre est enveloppé par theme-tasks.js (nœud texte nu à l'origine) : c'est
    l'information principale de la ligne, on la fait ressortir. */
 #kronolithViewTasks .kronolithTaskTitle {
   font-weight: var(--theme-font-weight-semi-bold);
@@ -266,7 +266,7 @@
   color: var(--theme-text-secondary);
 }
 /* Icône de récurrence / exception : le PNG est remplacé par l'icône Lucide en
-   mask-image. Le mask est porté par le <span> (posé par footer.js) et l'<img>
+   mask-image. Le mask est porté par le <span> (posé par theme-tasks.js) et l'<img>
    est cachée — exactement comme sur les events (kronolith/events.css). Poser
    le mask sur l'<img> elle-même ne masque pas le pixmap de façon fiable. */
 #kronolithViewTasks .kronolithTaskIcon {
@@ -294,7 +294,7 @@
   -webkit-mask-image: url("../graphics/svg/repeat-off.svg");
   mask-image: url("../graphics/svg/repeat-off.svg");
 }
-/* Nom de la liste — ajouté par footer.js UNIQUEMENT quand plusieurs listes
+/* Nom de la liste — ajouté par theme-tasks.js UNIQUEMENT quand plusieurs listes
    sont affichées. La distinction ne repose alors plus sur la seule teinte
    (couleurs proches, daltonisme). Poussé à droite, discret. */
 #kronolithViewTasks .kronolithTaskList {

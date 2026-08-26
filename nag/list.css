@@ -11,15 +11,15 @@
  * et lignes espacées. Même vocabulaire que les tâches dans Kronolith
  * (kronolith/dynamic/lists.css) et que les events.
  *
- * La couleur est récupérée par footer.js, qui la recopie du fond inline vers
- * `--cal-color` : les dérivés à plancher de lisibilité (--cal-text,
- * --cal-border, horde/globals.css) deviennent alors utilisables ici.
+ * La couleur est récupérée par theme-sidebar.js, qui la recopie du fond inline
+ * vers `--cal-color`. Seul le FILET GAUCHE la porte : le fond reste neutre,
+ * pour ne pas concurrencer les badges de priorité (voir plus bas).
  */
 
 /* ── Le tableau n'est plus une grille pleine ── */
 #tasks.horde-table {
-  border-collapse: separate;
-  border-spacing: 0 var(--theme-spacing-2xs);
+  border-collapse: collapse;
+  border-spacing: 0;
   background-color: transparent;
   border: 0;
 }
@@ -59,7 +59,7 @@
   width: 14px;
   height: 14px;
   vertical-align: middle;
-  background-color: var(--theme-icon-secondary);
+  background-color: var(--theme-icon-primary);
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -122,40 +122,45 @@
    l'autre et sous les en-têtes de tri. Passer le <tr> en flex donnait de
    belles cartes mais faisait perdre cet alignement (essayé puis abandonné).
 
-   Le fond, les bordures et les arrondis sont donc portés par les CELLULES : un
-   radius ou une bordure posés sur un <tr> ne sont pas rendus. */
+   Bordures et arrondis sont portés par les CELLULES, et non par le <tr> :
+   `border` et `border-radius` ne sont pas rendus sur un <tr> en modèle
+   tabulaire. Or c'est là que vivent le filet gauche, les traits haut/bas et
+   les arrondis d'extrémité — qu'un <tr> ne saurait de toute façon pas porter
+   « à gauche seulement ».
+   Le FOND suit les cellules par cohérence (il pourrait vivre sur le <tr>, mais
+   il faudrait alors un !important pour battre le background-color inline que
+   Nag pose dessus ; les cellules opaques le masquent sans cela).
+
+   FOND NEUTRE, couleur de liste réduite au FILET GAUCHE. Une version
+   précédente teintait tout le fond de `--cal-color` : deux systèmes de couleur
+   se superposaient alors sur la même surface — la LISTE (fond) et la PRIORITÉ
+   (badges) — sans hiérarchie, d'où des badges illisibles selon la liste et des
+   priorités 4/5 indistinguables. Une information, un porteur : le filet dit la
+   liste, les badges disent la priorité, le fond ne dit rien. */
 #tasks-body tr[style*="--cal-color"] > td {
-  background-color: color-mix(
-    in srgb,
-    var(--cal-color) 7%,
-    var(--theme-bg-white)
-  ) !important;
-  color: var(--cal-text) !important;
+  background-color: var(--theme-bg-white);
+  color: var(--theme-text-primary) !important;
   border: 0;
-  border-top: 1px solid var(--cal-border);
-  border-bottom: 1px solid var(--cal-border);
+  border-top: 1px solid var(--theme-border);
+  border-bottom: 1px solid var(--theme-border);
   padding: var(--theme-spacing-xs) var(--theme-spacing-2xs);
   vertical-align: middle;
+  transition: background-color 0.15s ease;
 }
 /* Extrémités de la carte : filet de couleur à gauche, arrondis aux deux bouts. */
 #tasks-body tr[style*="--cal-color"] > td:first-child {
-  border-left: 3px solid var(--cal-color);
-  border-top-left-radius: var(--theme-radius-box);
-  border-bottom-left-radius: var(--theme-radius-box);
-  padding-left: var(--theme-spacing-xs);
+  padding-left: var(--theme-spacing-2xs);
 }
 #tasks-body tr[style*="--cal-color"] > td:last-child {
-  border-right: 1px solid var(--cal-border);
+  border-right: 1px solid var(--theme-border);
   border-top-right-radius: var(--theme-radius-box);
   border-bottom-right-radius: var(--theme-radius-box);
   padding-right: var(--theme-spacing-sm);
 }
+/* Survol : gris NEUTRE et non une teinte de --cal-color, qui ferait revenir le
+   conflit avec les badges de priorité. */
 #tasks-body tr[style*="--cal-color"]:hover > td {
-  background-color: color-mix(
-    in srgb,
-    var(--cal-color) 14%,
-    var(--theme-bg-white)
-  ) !important;
+  background-color: var(--theme-bg-primary);
 }
 
 /* ── Nom de la tâche ──
@@ -168,7 +173,7 @@
    pas l'attribut et gardait sa couleur inline. On vise donc tout lien vers
    `view.php`, qui est le lien de nom quelle que soit la tâche. */
 #tasks-body tr[style*="--cal-color"] td a[href*="view.php"] {
-  color: var(--cal-text) !important;
+  color: var(--theme-text-primary) !important;
   font-weight: var(--theme-font-weight-semi-bold);
   text-decoration: none;
 }
@@ -188,9 +193,9 @@
   padding: 0 var(--theme-spacing-xs);
   font-size: var(--theme-font-size-xs);
   line-height: 1.6;
-  color: var(--cal-text);
+  color: var(--theme-text-secondary);
   background-color: var(--theme-bg-white);
-  border: 1px solid var(--cal-border);
+  border: 1px solid var(--theme-border);
   border-radius: var(--theme-radius-selector);
 }
 
@@ -207,7 +212,7 @@
   display: inline-block;
   width: 16px;
   height: 16px;
-  background-color: var(--theme-icon-secondary);
+  background-color: var(--theme-icon-primary);
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -236,7 +241,7 @@
   display: block;
   width: 16px;
   height: 16px;
-  background-color: var(--theme-icon-secondary);
+  background-color: var(--theme-icon-primary);
   -webkit-mask-image: url("graphics/svg/edit.svg");
   mask-image: url("graphics/svg/edit.svg");
   -webkit-mask-size: contain;
@@ -343,6 +348,110 @@
   white-space: nowrap;
 }
 
+/* ── Traits d'arborescence (sous-tâches) ──
+   `Nag_Task::treeIcons()` rend des <img> en dur (`tree/join.png`,
+   `tree/joinbottom.png`…) : des fragments de lignes, pas des icônes — Lucide
+   n'a évidemment pas d'équivalent. On les DESSINE donc en CSS, ce qui est plus
+   juste : ce sont des traits de 1px qui suivent la couleur du thème, alors que
+   les PNG sont d'un gris fixe (et existent en double, `-fff` pour les fonds
+   sombres, ce dont on n'a plus besoin).
+
+   Quatre cas rendus par Nag en LTR :
+     blank       espace, aucun trait
+     line        trait vertical continu (niveau intermédiaire)
+     join        ├  enfant qui n'est pas le dernier
+     joinbottom  └  dernier enfant */
+/* Le raccord en L d'origine (20px) était trop discret : une sous-tâche avait
+   exactement le même poids visuel que sa mère. On marque donc la hiérarchie
+   par trois signaux cumulés — RETRAIT du contenu, BARRE de rattachement sur
+   toute la hauteur de la ligne, et titre allégé.
+
+   Le retrait se pose sur le CONTENU de la cellule (padding-left) et non sur la
+   ligne : le tableau et l'alignement des autres colonnes restent intacts.
+
+   `.nag-subtask` et `data-depth` sont posés par theme-sidebar.js — Nag
+   n'expose aucune classe pour cela, la seule trace étant les <img> de
+   raccord. */
+#tasks-body td img[src*="/tree/"],
+#tasks-body td .nag-tree-line {
+  display: none;
+}
+/* Le DÉCALAGE porte le message, et il s'applique à la LIGNE ENTIÈRE — pas
+   seulement à la cellule du nom. C'est la convention des fils de discussion
+   (Gmail et consorts) : l'enfant est rentré, un trait vertical continu le
+   relie à son parent.
+
+   Mise en œuvre : on rentre la PREMIÈRE cellule et on compense sur la
+   DERNIÈRE, ce qui décale tout le contenu sans sortir du modèle tabulaire.
+   CONTREPARTIE ASSUMÉE — les colonnes d'une sous-tâche ne s'alignent plus
+   exactement sous celles de sa mère. C'est le prix d'une hiérarchie lisible,
+   et c'est ce qui était demandé : le retrait limité à une colonne ne se
+   voyait pas. */
+#tasks-body tr.nag-subtask > td:first-child {
+  padding-left: calc(32px * var(--depth, 1) + var(--theme-spacing-xs));
+  position: relative;
+}
+#tasks-body tr.nag-subtask > td:last-child {
+  padding-right: calc(
+    var(--theme-spacing-sm) + 32px * var(--depth, 1)
+  );
+}
+/* Trait vertical continu, le long du retrait : il relie visuellement les
+   enfants successifs d'un même parent. */
+#tasks-body tr.nag-subtask > td:first-child::after {
+  content: "";
+  position: absolute;
+  left: calc(32px * var(--depth, 1) - 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  height: 70%;
+  width: 2px;
+  border-radius: 1px;
+  background-color: var(--theme-border);
+}
+/* Barre de rattachement : verticale, sur toute la hauteur de la ligne, juste
+   à gauche du contenu décalé. Elle dit « cette ligne dépend de celle du
+   dessus » bien mieux qu'un raccord de 20px. */
+#tasks-body tr.nag-subtask[data-depth="1"] > td { --depth: 1; }
+#tasks-body tr.nag-subtask[data-depth="2"] > td { --depth: 2; }
+#tasks-body tr.nag-subtask[data-depth="3"] > td { --depth: 3; }
+/* Titre subordonné : ni le poids ni la taille d'une tâche mère. */
+#tasks-body tr.nag-subtask td a[href*="view.php"] {
+  font-weight: var(--theme-font-weight-normal);
+}
+
+/* ── Badge « nom de la liste » ──
+   Le filet coloré à gauche disait l'appartenance, mais restait trop discret —
+   d'autant plus depuis que les lignes ne sont plus espacées. On le remplace
+   par un badge NOMMÉ, posé par theme-sidebar.js (labelTaskRows), qui reprend
+   la couleur de la liste : la teinte guide, le texte confirme.
+
+   Affiché UNIQUEMENT quand plusieurs listes sont visibles — avec une seule,
+   il n'apprend rien. */
+#tasks-body .nag-task-list {
+  float: right;
+  margin-left: var(--theme-spacing-xs);
+  padding: 1px var(--theme-spacing-xs);
+  border-radius: var(--theme-radius-selector);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  line-height: 1.5;
+  white-space: nowrap;
+  color: var(--cal-text);
+  background-color: color-mix(
+    in srgb,
+    var(--cal-color) 12%,
+    var(--theme-bg-white)
+  );
+  border: 1px solid var(--cal-border);
+}
+/* Tâche terminée : le badge s'efface comme le reste de la ligne. */
+#tasks-body tr.closed .nag-task-list {
+  color: var(--theme-text-secondary);
+  background-color: var(--theme-bg-tertiary);
+  border-color: var(--theme-border);
+}
+
 /* ── États ──
    `overdue` et `closed` sont posés sur le <tr> par le template. Ils doivent
    primer sur la teinte de la liste : une échéance dépassée est l'information
@@ -355,4 +464,57 @@
    (l'appartenance ne change pas parce que la tâche est faite). */
 #tasks-body tr.closed td a[href*="view.php"] {
   text-decoration: line-through;
+}
+
+/* ── Tâche TERMINÉE : la carte recule ──
+   Le barré et la case cochée sont des signaux discrets, et la carte gardait
+   toute son intensité (fond teinté, filet de couleur, priorité vive) : une
+   tâche faite pesait autant qu'une tâche active. Or c'est de l'archive — elle
+   ne s'affiche d'ailleurs que si l'utilisateur a demandé à voir les terminées.
+
+   On neutralise donc la couleur de liste : fond et filet passent au gris. Le
+   contraste avec les tâches actives se lit d'un coup d'œil, sans rien ajouter
+   à une ligne déjà dense (un badge « Terminée » a été écarté pour cette
+   raison).
+
+   PAS D'OPACITÉ : une première version cumulait `opacity: 0.7` sur la cellule
+   ET `--theme-text-disabled` sur le texte — les deux atténuations
+   s'additionnaient et le titre devenait illisible. Le recul vient du fond
+   neutre et du barré ; le texte reste en `secondary`, lisible. Même piège que
+   l'état masqué des calendriers Kronolith (voir feedback_workflow). */
+#tasks-body tr.closed[style*="--cal-color"] > td {
+  background-color: var(--theme-bg-secondary);
+  border-top-color: var(--theme-border);
+  border-bottom-color: var(--theme-border);
+}
+#tasks-body tr.closed[style*="--cal-color"]:hover > td {
+  background-color: var(--theme-bg-tertiary);
+}
+/* Le nom perd aussi la teinte de la liste (posée en !important plus haut). */
+#tasks-body tr.closed[style*="--cal-color"] td a[href*="view.php"] {
+  color: var(--theme-text-secondary) !important;
+  font-weight: var(--theme-font-weight-normal);
+}
+/* Priorité : une pastille rouge « 1 » sur une tâche faite n'a plus de sens. */
+#tasks-body tr.closed .pri-1,
+#tasks-body tr.closed .pri-2,
+#tasks-body tr.closed .pri-3,
+#tasks-body tr.closed .pri-4,
+#tasks-body tr.closed .pri-5 {
+  color: var(--theme-text-secondary);
+  background-color: var(--theme-bg-tertiary);
+}
+/* Tags : mêmes contours neutres, ils ne doivent plus attirer l'œil. */
+#tasks-body tr.closed td .horde-tags li {
+  color: var(--theme-text-secondary);
+  border-color: var(--theme-border);
+}
+/* Case cochée : elle resterait le seul élément vif (bleu d'action) sur une
+   carte grisée. La coche subsiste — c'est le signal d'état — mais en neutre. */
+#tasks-body tr.closed td a:has(> img[src*="checked"]:not([src*="unchecked"])) {
+  background-color: var(--theme-bg-disabled);
+  border-color: var(--theme-border);
+}
+#tasks-body tr.closed td a:has(> img[src*="checked"])::before {
+  background-color: var(--theme-text-secondary);
 }

@@ -1,0 +1,297 @@
+/**
+ * Mnemo UPJV — Global
+ * =====================
+ * Liste des notes, recherche rapide, fiche de note.
+ *
+ * `#memos` (PAS `#notepad-list` — id du screen.css d'origine, obsolète face
+ * au HTML réellement rendu) est une `.horde-table` confirmé à l'écran
+ * (2026-08-25) : le style de tableau vient de horde/forms.css.
+ */
+
+/* ── Liste des notes ── */
+#memos {
+  width: 100%;
+}
+
+#notes_body tr {
+  line-height: 32px;
+  overflow: hidden;
+}
+/* thead en flex → horde/forms.css met display:flex sur
+   `.horde-table-header, table.horde-table thead tr, table.horde-table th`
+   (utile en admin). Ici ça casse l'alignement des colonnes → rétablir
+   table-row/table-cell pour #memos. Même piège, même fix que #tasks (nag),
+   voir feedback_workflow. */
+#memos thead tr {
+  display: table-row;
+}
+#memos thead th {
+  display: table-cell;
+  background-color: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--theme-border);
+  color: var(--theme-text-secondary);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-2xs);
+}
+.QuickFinderNoMatch {
+  display: none;
+}
+#notepad-list-buttons {
+  padding: var(--theme-spacing-md);
+}
+#notepad-list-buttons form {
+  display: inline;
+}
+/* Tags de la liste : sur la même ligne que le titre (ils le qualifient), pas
+   empilés dessous — `<ul class="horde-tags">` suit le lien en bloc sinon.
+   Même piège, même fix que #tasks (nag/list.css). */
+#memos td .horde-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 0 0 0 var(--theme-spacing-2xs);
+  vertical-align: middle;
+}
+#memos td .horde-tags li {
+  padding: 0 var(--theme-spacing-xs);
+  font-size: var(--theme-font-size-xs);
+  line-height: 1.6;
+  color: var(--theme-text-secondary);
+  background-color: var(--theme-bg-white);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-selector);
+}
+
+/* ── Recherche rapide ── */
+#quicksearch {
+  display: inline;
+}
+#quicksearch input {
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-xs);
+  padding-left: var(--theme-spacing-lg);
+  background-image: none;
+}
+#quicksearch a {
+  display: inline-block;
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-2xs);
+}
+
+/* ── Fiche de note ──
+   Même pattern que nag/globals.css (.horde-header/.taskBody) : classes
+   génériques Horde, pas de fichier partagé pour .horde-header à ce jour
+   (voir feedback_workflow), donc dupliquées par module. */
+.horde-header {
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-secondary);
+  border-bottom: 1px solid var(--theme-border);
+}
+.horde-header tr {
+  vertical-align: top;
+}
+.horde-header td {
+  padding: 0 0 1px 0;
+}
+/* Le template alterne DEUX classes pour la même colonne de libellés :
+   `.horde-label` (Tags, Créé) et `.rightAlign` (Dernière modification) — une
+   irrégularité de `templates/view/view.html.php`, pas une distinction voulue.
+   On les traite donc à l'identique, sinon une ligne sur trois perd son style. */
+.horde-header td.horde-label,
+.horde-header td.rightAlign {
+  font-weight: var(--theme-font-weight-semi-bold);
+  padding-right: var(--theme-spacing-xs);
+  text-align: right;
+  white-space: nowrap;
+  color: var(--theme-text-secondary);
+}
+/* Les libellés sont déjà en <strong> dans le template : inutile de doubler la
+   graisse, le <td> la porte. */
+.horde-header td.horde-label strong,
+.horde-header td.rightAlign strong {
+  font-weight: inherit;
+}
+/* Note chiffrée : le corps est remplacé par un formulaire de déchiffrement.
+   Aligné en ligne, comme une barre d'action. */
+.notePassphrase {
+  padding: var(--theme-spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+}
+.notePassphrase form {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+}
+/* Corps de la note : texte libre, rendu en chasse fixe (même choix que
+   .taskBody dans nag) pour préserver son alignement (listes, colonnes). */
+.noteBody {
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-white);
+  font-family: var(--theme-font-family-mono);
+  white-space: normal;
+  overflow: auto;
+}
+
+/* ── Tags ──
+   Le template Mnemo réutilise tel quel le partial de Nag pour cette barre :
+   la boîte FONCTIONNELLE (icône + <ul>) porte la classe `.nag-tags-related`/
+   `.nag-tags-browsing` — copier/coller resté dans Horde core, pas notre
+   thème — imbriquée DANS un wrapper `.mnemo-tags-related`/
+   `.mnemo-tags-browsing` qui, lui, ne porte que l'espacement extérieur.
+   Cibler la classe interne pour le layout/l'icône, vérifié à l'écran
+   2026-08-25. */
+.mnemo-tags-related,
+.mnemo-tags-browsing {
+  padding: var(--theme-spacing-xs);
+}
+/* Le template rend le wrapper INCONDITIONNELLEMENT (`<div
+   class="mnemo-tags-related"><?php echo $this->browser ?></div>`) : sans tag à
+   afficher il reste dans le DOM et son padding creuse un espace fantôme.
+   `:empty` convient ici car le PHP est collé aux balises — pas d'espace ni de
+   retour à la ligne à l'intérieur, ce qui ferait échouer le sélecteur. */
+.mnemo-tags-related:empty,
+.mnemo-tags-browsing:empty {
+  display: none;
+}
+/* Le template intercale aussi un `<br />` entre l'en-tête et la barre de tags
+   (`</div>\n<br />\n<div class="mnemo-tags-related">`). Il ajoute une ligne
+   vide même quand la barre est masquée : on le neutralise, l'espacement vient
+   des paddings. */
+.header + br {
+  display: none;
+}
+.nag-tags-related,
+.nag-tags-browsing {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--theme-spacing-2xs);
+}
+.nag-tags-related .horde-tags,
+.nag-tags-browsing .horde-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  margin: 0;
+  padding: 0;
+}
+.nag-tags-related .horde-tags li,
+.nag-tags-browsing .horde-tags li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  padding: 0 var(--theme-spacing-xs);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-selector);
+  background-color: var(--theme-bg-white);
+  font-size: var(--theme-font-size-xs);
+  line-height: 1.7;
+}
+.nag-tags-related .horde-tags li a,
+.nag-tags-browsing .horde-tags li a {
+  color: var(--theme-text-primary);
+  text-decoration: none;
+}
+.nag-tags-related .horde-tags li:hover {
+  border-color: var(--theme-border-action-hover);
+}
+/* Filtre ACTIF : traité comme une sélection, pas comme une suggestion. */
+.nag-tags-browsing .horde-tags li {
+  background-color: var(--theme-bg-information-light);
+  border-color: var(--theme-border-information);
+  color: var(--theme-text-on-information);
+}
+
+/* ── Formulaire de note ──
+   `#mnemo-body` est le corps de la note. Le template lui pose `class="fixed"`
+   pour la chasse fixe — le DS UPJV définit par ailleurs `.fixed` comme
+   `position: fixed`, collision neutralisée dans reset-upjv-compat.css. */
+#mnemo-body {
+  width: 100%;
+  min-height: 320px;
+  resize: vertical;
+  font-family: var(--theme-font-family-mono);
+  line-height: 1.6;
+}
+/* Note protégée par mot de passe : le formulaire de saisie précède le corps.
+   Aligné en ligne, comme une barre d'action. */
+.notePassword {
+  padding: var(--theme-spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  flex-wrap: wrap;
+}
+.notePassword form {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  flex-wrap: wrap;
+}
+
+/* ── État vide ──
+   `<p class="text"><em>…</em></p>` : le template n'offre aucun crochet dédié,
+   DEUX messages d'état vide dans ce module : `p.text > em` (aucune note du
+   tout, rendu par le template) et `#notes_empty` (le filtre de recherche
+   rapide ne trouve rien — masqué/affiché par QuickFinder). Même traitement.
+   Ciblé sur `p.text` :
+   l'admin Horde utilise `div.text > em` pour d'autres messages. Même
+   traitement que la
+   boîte vide d'IMP (`span.vpEmpty`, imp/dynamic/mailbox.css) : icône centrée
+   au-dessus du message, texte atténué. */
+#notes_empty,
+p.text:has(em) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 20px;
+  color: var(--theme-text-disabled);
+  font-size: var(--theme-font-size-sm);
+  text-align: center;
+}
+p.text:has(em) em {
+  font-style: normal;
+}
+#notes_empty::before,
+p.text:has(em)::before {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 32px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/empty.svg");
+  mask-image: url("graphics/svg/empty.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* `#notes_empty` est rendu SANS `style="display:none"` par le template
+   (contrairement à `#tasks_empty` dans nag), et QuickFinder ne le masque qu'au
+   PREMIER filtrage : il serait donc visible en permanence au chargement.
+   Placé APRÈS le bloc `display: flex` ci-dessus, sinon celui-ci le rendrait
+   visible. `.show()` de Prototype pose un display inline, qui bat cette règle
+   et révèle le message quand une recherche ne donne rien. */
+#notes_empty {
+  display: none;
+}
+
+@media print {
+  .tabset,
+  .notices,
+  #quicksearchL,
+  #quicksearch {
+    display: none;
+  }
+}

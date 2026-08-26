@@ -16,11 +16,7 @@
 .QuickFinderNoMatch {
   display: none;
 }
-#tasks_empty {
-  padding: var(--theme-spacing-xs);
-  font-style: italic;
-  color: var(--theme-text-secondary);
-}
+
 /* Les lignes portent leur propre fond (états overdue/closed) : on laisse
    passer celui du tableau au lieu de le forcer. */
 #tasks tr.linedRow td {
@@ -29,6 +25,7 @@
 }
 #tasks-body tr {
   line-height: 20px;
+  overflow: hidden;
 }
 
 /* ── États d'une tâche ──
@@ -55,47 +52,82 @@
    Nag rend `<span class="pri-N">N</span>` (Nag::formatPriority). Les valeurs
    d'origine sont des couleurs brutes (#f00 → #00f) sur fond blanc bordé de
    noir. On en fait des pastilles sémantiques : 1 = urgent, 2 = élevé,
-   3 = normal, 4-5 = basses. La couleur est doublée par le CHIFFRE, qui reste
-   affiché — la distinction ne repose donc jamais sur la seule teinte. */
+   3 = normal, 4-5 = basses. Badge à fond doux SANS bordure (référence : les
+   badges de priorité des gestionnaires de tâches modernes).
+
+   Le CHIFFRE est conservé comme libellé, et non remplacé par un mot
+   (« Élevée », « Normale »…) : Horde ne fournit de texte que pour les deux
+   extrêmes (`1 (highest)` / `5 (lowest)`, Nag_Form_Task) — écrire les cinq
+   libellés en CSS mettrait du français EN DUR dans un fichier partagé avec
+   default-new, donc non traduit et non upstreamable. Le chiffre double la
+   couleur : la distinction ne repose jamais sur la seule teinte. */
 #tasks .pri-1,
 #tasks .pri-2,
 #tasks .pri-3,
 #tasks .pri-4,
 #tasks .pri-5 {
-  display: inline-block;
-  min-width: 18px;
-  padding: 0 var(--theme-spacing-2xs);
-  border: 1px solid transparent;
-  border-radius: var(--theme-radius-selector);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px var(--theme-spacing-xs);
+  border: 0;
+  border-radius: var(--theme-radius-field);
   font-size: var(--theme-font-size-xs);
-  font-weight: var(--theme-font-weight-semi-bold);
-  line-height: 1.6;
-  text-align: center;
+  font-weight: var(--theme-font-weight-medium);
+  line-height: 1.4;
 }
+/* Drapeau devant le chiffre : rend le badge lisible comme « priorité » et non
+   comme un nombre isolé. Il prend `currentColor`, donc la couleur du niveau. */
+#tasks .pri-1::before,
+#tasks .pri-2::before,
+#tasks .pri-3::before,
+#tasks .pri-4::before,
+#tasks .pri-5::before {
+  content: "";
+  display: block;
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-image: url("graphics/svg/flag.svg");
+  mask-image: url("graphics/svg/flag.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+/* Échelle continue du plus urgent au plus bas : rouge → orange → bleu →
+   turquoise → vert. Aucun niveau n'est gris : deux niveaux neutres (3 et 5)
+   étaient indiscernables l'un de l'autre. */
 .pri-1 {
   color: var(--theme-text-on-danger);
   background-color: var(--theme-bg-danger-light);
-  border-color: var(--theme-border-danger);
 }
 .pri-2 {
   color: var(--theme-text-on-warning);
   background-color: var(--theme-bg-warning-light);
-  border-color: var(--theme-border-warning);
 }
 .pri-3 {
-  color: var(--theme-text-secondary);
-  background-color: var(--theme-bg-tertiary);
-  border-color: var(--theme-border);
-}
-.pri-4,
-.pri-5 {
   color: var(--theme-text-on-information);
   background-color: var(--theme-bg-information-light);
-  border-color: var(--theme-border-information);
 }
-/* La priorité la plus basse s'efface un peu plus. */
+/* Pas de famille sémantique entre `information` et `success`. Une première
+   version interpolait les deux en 50/50 : le résultat tombait trop près du
+   vert de la 5, car bleu et vert sont déjà voisins en teinte — leur milieu
+   n'ouvre aucun espace.
+   On DÉCALE donc la teinte en `oklch()` : on part du vert de la 5 et on la
+   tourne vers le cyan (−45°), à luminosité et chroma constants. Le palier est
+   franc, et la couleur reste dérivée des tokens (elle suivra une palette
+   différente ou le mode sombre). */
+.pri-4 {
+  color: oklch(from var(--theme-text-on-success) l c calc(h - 45));
+  background-color: oklch(from var(--theme-bg-success-light) l c calc(h - 45));
+}
 .pri-5 {
-  opacity: 0.75;
+  color: var(--theme-text-on-success);
+  background-color: var(--theme-bg-success-light);
 }
 
 /* ── Recherche rapide ── */
@@ -157,6 +189,37 @@
   padding-bottom: var(--theme-spacing-sm);
   padding-left: var(--theme-spacing-2xs);
 }
+/* Conteneur vide : il garderait son padding ET son icône ::before (une
+   étiquette ou un entonnoir orphelins, sans aucun tag à côté). */
+.nag-tags-related:empty,
+.nag-tags-browsing:empty {
+  display: none;
+}
+/* Sans barre de tags, le tableau suit directement le tabset et s'y colle : le
+   `<br class="clear">` qui les sépare est en `display: none` (horde/globals.css)
+   et `$this->browser` peut être vide (Nag_View_List l.128).
+
+   Sélecteur d'ADJACENCE plutôt qu'une négation en `:has()` : si une barre de
+   tags est présente, elle s'intercale et le tableau n'est plus adjacent au
+   `<br>` — la marge ne s'applique donc que dans le cas voulu, sans avoir à
+   énumérer les cas contraires. */
+.tabset + br.clear + table#tasks {
+  margin-top: var(--theme-spacing-sm);
+}
+
+/* Quand les DEUX barres coexistent — les tags suggérés au-dessus, les filtres
+   actifs en dessous — un trait les sépare : ce sont deux registres différents
+   (« ajouter un filtre » / « filtres en cours »), et sans séparation ils se
+   lisent comme une seule liste.
+
+   Sélecteur d'ADJACENCE plutôt que `:has()` : `_getRelatedTags()` puis
+   `_getTagTrail()` sont concaténés dans cet ordre, sans rien entre eux
+   (Nag_View_List, ligne 128). Le `+` suffit donc, et il est mieux supporté.
+   Le trait est porté par la barre SUIVANTE : si `related` est vide et masqué,
+   `browsing` n'est plus adjacent et aucun trait n'apparaît. */
+.nag-tags-related + .nag-tags-browsing {
+  border-top: 1px solid var(--theme-border);
+}
 .nag-tags-related img,
 .nag-tags-browsing img {
   width: 16px;
@@ -174,6 +237,48 @@
 #RB_window {
   top: 50px !important;
   margin-top: 0 !important;
+}
+
+/* ── État vide ──
+   `<p class="text"><em>…</em></p>` : le template n'offre aucun crochet dédié,
+   DEUX messages d'état vide dans ce module : `p.text > em` (aucune tâche du
+   tout, rendu par le template) et `#tasks_empty` (le filtre de recherche
+   rapide ne trouve rien — masqué/affiché par QuickFinder). Même traitement.
+   Ciblé sur `p.text` :
+   l'admin Horde utilise `div.text > em` pour d'autres messages. Même
+   traitement que la
+   boîte vide d'IMP (`span.vpEmpty`, imp/dynamic/mailbox.css) : icône centrée
+   au-dessus du message, texte atténué. */
+#tasks_empty,
+p.text:has(em) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 20px;
+  color: var(--theme-text-disabled);
+  font-size: var(--theme-font-size-sm);
+  text-align: center;
+}
+p.text:has(em) em {
+  font-style: normal;
+}
+#tasks_empty::before,
+p.text:has(em)::before {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 32px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/empty.svg");
+  mask-image: url("graphics/svg/empty.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 @media print {

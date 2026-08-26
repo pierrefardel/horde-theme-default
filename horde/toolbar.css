@@ -89,31 +89,61 @@
   background-color: var(--theme-bg-warning-active);
 }
 
-.horde-buttonbar li:has(#checkmaillink) {
+/* Action CONFIRMATIVE : relever le courrier (IMP), terminer une tâche (Nag).
+   Même remarque que pour l'action destructive plus bas — pas de classe commune
+   côté Horde, chaque app nomme son lien à sa façon. */
+.horde-buttonbar li:has(#checkmaillink),
+.horde-buttonbar li:has(.nag-complete) {
   background-color: var(--theme-bg-success);
   border-color: var(--theme-border-success);
 }
-.horde-buttonbar li:has(#checkmaillink) a { color: var(--theme-text-btn-success) !important; }
-.horde-buttonbar li:has(#checkmaillink) a::before { background-color: var(--theme-text-btn-success) !important; }
-.horde-buttonbar li:has(#checkmaillink):hover {
+.horde-buttonbar li:has(#checkmaillink) a,
+.horde-buttonbar li:has(.nag-complete) a {
+  color: var(--theme-text-btn-success) !important;
+}
+.horde-buttonbar li:has(#checkmaillink) a::before,
+.horde-buttonbar li:has(.nag-complete) a::before {
+  background-color: var(--theme-text-btn-success) !important;
+}
+.horde-buttonbar li:has(#checkmaillink):hover,
+.horde-buttonbar li:has(.nag-complete):hover {
   background-color: var(--theme-bg-success-hover);
   border-color: var(--theme-border-success-hover);
 }
-.horde-buttonbar li:has(#checkmaillink):active {
+.horde-buttonbar li:has(#checkmaillink):active,
+.horde-buttonbar li:has(.nag-complete):active {
   background-color: var(--theme-bg-success-active);
 }
 
-.horde-buttonbar li:has(#button_delete) {
+/* Action DESTRUCTIVE : traitée en danger dans toutes les apps, pas seulement
+   IMP. Chaque module nomme son lien différemment (`#button_delete` dans IMP,
+   `.mnemo-delete` / `.nag-delete` ailleurs), d'où la liste — il n'existe pas
+   de classe commune côté Horde. */
+.horde-buttonbar li:has(#button_delete),
+.horde-buttonbar li:has(.mnemo-delete),
+.horde-buttonbar li:has(.nag-delete) {
   background-color: var(--theme-bg-danger);
   border-color: var(--theme-border-danger);
 }
-.horde-buttonbar li:has(#button_delete) a { color: var(--theme-text-btn-danger) !important; }
-.horde-buttonbar li:has(#button_delete) a::before { background-color: var(--theme-text-btn-danger) !important; }
-.horde-buttonbar li:has(#button_delete):hover {
+.horde-buttonbar li:has(#button_delete) a,
+.horde-buttonbar li:has(.mnemo-delete) a,
+.horde-buttonbar li:has(.nag-delete) a {
+  color: var(--theme-text-btn-danger) !important;
+}
+.horde-buttonbar li:has(#button_delete) a::before,
+.horde-buttonbar li:has(.mnemo-delete) a::before,
+.horde-buttonbar li:has(.nag-delete) a::before {
+  background-color: var(--theme-text-btn-danger) !important;
+}
+.horde-buttonbar li:has(#button_delete):hover,
+.horde-buttonbar li:has(.mnemo-delete):hover,
+.horde-buttonbar li:has(.nag-delete):hover {
   background-color: var(--theme-bg-danger-hover);
   border-color: var(--theme-border-danger-hover);
 }
-.horde-buttonbar li:has(#button_delete):active {
+.horde-buttonbar li:has(#button_delete):active,
+.horde-buttonbar li:has(.mnemo-delete):active,
+.horde-buttonbar li:has(.nag-delete):active {
   background-color: var(--theme-bg-danger-active);
 }
 

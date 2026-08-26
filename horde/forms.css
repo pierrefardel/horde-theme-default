@@ -9,18 +9,127 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) {
   gap: var(--theme-spacing-xs);
 }
 
-/* ── Formulaires ── */
+/* ── Formulaires ──
+   Horde_Form rend ses champs dans un <table> à deux colonnes, avec un
+   `width="15%"` EN DUR sur chaque <td> de libellé. Combiné à `width: 100%`
+   sur la table, ça donne une colonne de libellés PROPORTIONNELLE : sur un
+   écran large elle s'étire, les libellés partent loin à droite et les champs
+   ne commencent qu'au milieu de la page.
+
+   On borne donc la table et on fixe la colonne de libellés en `ch` (unité
+   indexée sur la police, donc stable quelle que soit la taille de texte
+   choisie dans les préférences). `width: auto !important` bat l'attribut
+   HTML — un attribut `width` a la même force qu'une déclaration d'auteur. */
 .horde-form table {
-  width: 100%; padding: 2px;
-  border-collapse: collapse; border-spacing: 0;
+  width: 100%;
+  padding: 2px;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/* `<br class="spacer">` entre le sélecteur d'application et le formulaire de
+   préférences : un espacement d'avant les marges CSS, qui s'ajoute ici à celles
+   des deux <form> et creuse un trou.
+   Neutralisé DANS CE CONTEXTE seulement — `br.spacer` (reset.css) sert aussi
+   dans les écrans ActiveSync et d'administration, où il sépare des blocs qui
+   n'ont, eux, aucune marge. */
+#appswitch + br.spacer {
+  display: none;
+}
+
+/* Le conteneur du formulaire n'avait AUCUN padding : les champs et les boutons
+   touchaient le bord du panneau. Le `.header` (bandeau de titre) porte son
+   propre fond pleine largeur, il est donc exclu de ce retrait. */
+.horde-form:has(td.horde-form-label) > *:not(.header) {
+  padding-left: var(--theme-spacing-md);
+  padding-right: var(--theme-spacing-md);
+}
+.horde-form:has(td.horde-form-label) > *:not(.header):last-child {
+  padding-bottom: var(--theme-spacing-md);
+}
+
+/* Formulaires à deux colonnes : on SORT du modèle tabulaire.
+   Horde_Form rend un <table> parce que c'était l'usage il y a vingt ans, mais
+   ce ne sont pas des données tabulaires — c'est un formulaire. Le tableau
+   impose une colonne de libellés proportionnelle (`width="15%"` en dur) dont
+   la largeur dépend de celle de l'écran, d'où des champs qui commencent au
+   milieu de la page.
+
+   On empile donc chaque paire libellé/champ : le libellé AU-DESSUS de son
+   champ, aligné à gauche. Contrairement à une liste de données (cf. nag, où
+   le flex a été abandonné pour garder l'alignement des colonnes et le tri),
+   un formulaire n'a rien à aligner d'une ligne à l'autre.
+
+   SCOPE : uniquement les tables qui ont une colonne `.horde-form-label`. Les
+   écrans d'administration et d'import de données réutilisent `.horde-form`
+   avec de vraies tables larges — les convertir casserait leur mise en page. */
+.horde-form table:has(td.horde-form-label),
+.horde-form table:has(td.horde-form-label) tbody {
+  display: block;
+  max-width: 68ch;
+}
+.horde-form table:has(td.horde-form-label) {
+  padding: var(--theme-spacing-sm) 0 0 0;
+}
+.horde-form table:has(td.horde-form-label) tr {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-2xs);
+  margin-bottom: var(--theme-spacing-sm);
+}
+.horde-form table:has(td.horde-form-label) td {
+  display: block;
+  padding-bottom: 0;
+}
+/* Champs pleine largeur.
+   Les 23 règles scopées `td.control` ne suffisent pas : selon le formulaire,
+   Horde_Form rend le <td> du champ AVEC ou SANS cette classe (la recherche
+   Mnemo, par exemple, le laisse nu). On cible donc aussi la cellule qui suit
+   un libellé, qui est le champ par construction. */
+.horde-form table:has(td.horde-form-label) td.horde-form-label + td input:not([type]),
+.horde-form table:has(td.horde-form-label) td.horde-form-label + td input[type="text"],
+.horde-form table:has(td.horde-form-label) td.horde-form-label + td input[type="email"],
+.horde-form table:has(td.horde-form-label) td.horde-form-label + td input[type="password"],
+.horde-form table:has(td.horde-form-label) td.horde-form-label + td input[type="url"],
+.horde-form table:has(td.horde-form-label) td.horde-form-label + td input[type="tel"],
+.horde-form table:has(td.horde-form-label) td.horde-form-label + td input[type="number"],
+.horde-form table:has(td.horde-form-label) td.horde-form-label + td select,
+.horde-form table:has(td.horde-form-label) td.horde-form-label + td textarea {
+  width: 100%;
+}
+/* Groupe de boutons radio / cases à cocher : le template les sépare par des
+   <br>, ce qui suffit à les empiler — on ne rétablit qu'un espacement lisible
+   et l'alignement du libellé avec sa case. */
+.horde-form table:has(td.horde-form-label) td label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  margin-bottom: var(--theme-spacing-2xs);
+  cursor: pointer;
 }
 .horde-form tr { vertical-align: top; }
 .horde-form td { padding-bottom: 5px; }
 .horde-form-buttons {
   padding: 10px;
 }
-.horde-form .horde-form-buttons { padding-left: 15%; }
-.horde-form td.horde-form-label { padding: 5px 9px 0 0; text-align: right; }
+/* Les boutons s'alignent à gauche sur les champs. Le retrait horizontal vient
+   de la règle de conteneur plus haut : on ne le remet pas à zéro ici (c'était
+   un reste de la version « libellés en colonne de gauche »), sinon le bouton
+   se recolle au bord. Seul l'espacement vertical est ajusté. */
+.horde-form:has(td.horde-form-label) .horde-form-buttons {
+  padding-top: var(--theme-spacing-xs);
+  padding-bottom: var(--theme-spacing-md);
+  max-width: 68ch;
+}
+/* Libellé au-dessus de son champ : plus de colonne de gauche, donc plus de
+   largeur proportionnelle. `width: auto !important` bat le `width="15%"` de
+   l'attribut HTML (même force qu'une déclaration d'auteur). */
+.horde-form td.horde-form-label {
+  width: auto !important;
+  padding: 0;
+  text-align: left;
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+}
 .horde-form-error { color: var(--theme-text-danger); }
 .horde-form-field-description { color: var(--theme-text-primary); font-size: 70%; }
 
@@ -179,6 +288,8 @@ input.horde-default, a.horde-default {
 input.horde-default:hover, a.horde-default:hover {
   background-color: var(--theme-bg-action-hover);
   border-color: var(--theme-border-action-hover);
+  color: var(--theme-text-on-action);
+  text-decoration: none;
 }
 input.horde-default:active, a.horde-default:active {
   background-color: var(--theme-bg-action-active);
@@ -195,6 +306,8 @@ input.horde-create, a.horde-create {
 input.horde-create:hover, a.horde-create:hover {
   background-color: var(--theme-bg-success-hover);
   border-color: var(--theme-border-success-hover);
+  color: var(--theme-text-on-success);
+  text-decoration: none;
 }
 
 /* horde-delete → btn-danger */
@@ -204,9 +317,20 @@ input.horde-delete, a.horde-delete {
   border-color: var(--theme-border-danger);
   color: var(--theme-text-btn-danger);
 }
+/* La COULEUR DU TEXTE est reposée au survol : sans elle, un `a:hover` défini
+   plus loin dans la cascade (CDN du DS, reset Horde) reprend la main et le
+   libellé repasse en foncé sur le fond rouge. Même principe que
+   `#horde-logout a:hover`, qui garde son fond danger sur toute la durée de
+   l'interaction. `:active` est ajouté pour la même raison. */
 input.horde-delete:hover, a.horde-delete:hover {
   background-color: var(--theme-bg-danger-hover);
   border-color: var(--theme-border-danger-hover);
+  color: var(--theme-text-btn-danger);
+  text-decoration: none;
+}
+input.horde-delete:active, a.horde-delete:active {
+  background-color: var(--theme-bg-danger-active);
+  color: var(--theme-text-btn-danger);
 }
 
 /* horde-cancel → btn-secondary */
@@ -251,7 +375,12 @@ input[disabled], input[disabled]:hover, textarea[disabled], option[disabled] {
   cursor: pointer;
 }
 
-/* ── Checkbox — style DS UPJV ── */
+/* ── Checkbox — style DS UPJV ──
+   inline-grid (pas grid) : beaucoup de templates Horde legacy mettent le
+   <label for="..."> en FRÈRE de l'input, pas en parent (contrairement au cas
+   couvert par label:has(...) ci-dessus). Un display bloc pousserait alors le
+   label sur la ligne suivante — inline-grid garde le centrage interne de la
+   coche tout en laissant l'input dans le flux du texte voisin. */
 input[type="checkbox"]:not(.msCheck):not(.switch-field__input) {
   appearance: none;
   -webkit-appearance: none;
@@ -264,7 +393,7 @@ input[type="checkbox"]:not(.msCheck):not(.switch-field__input) {
   border-radius: var(--theme-radius-field);
   background-color: var(--theme-bg-white);
   cursor: pointer;
-  display: grid;
+  display: inline-grid;
   place-items: center;
   position: relative;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -341,7 +470,7 @@ input[type="radio"]:not(.msCheck) {
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
-  display: grid;
+  display: inline-grid;
   place-items: center;
   position: relative;
   vertical-align: middle;

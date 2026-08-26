@@ -49,6 +49,43 @@
   );
 }
 
+/* ── Anti-flash du mode sombre/clair ──
+   Horde place TOUS les scripts en fin de <body> (`deferScripts = true`) : la
+   page est donc entièrement peinte avant que display-prefs.js n'ait posé
+   `theme-light` / `theme-dark` sur <html>. Un utilisateur en mode clair sur un
+   OS en sombre voyait un flash sombre franc (et réciproquement), puisque le
+   thème suit `prefers-color-scheme` en attendant.
+
+   On masque donc le CONTENU tant que le mode n'est pas arbitré. Le fond, lui,
+   reste peint : seul le contenu attend, ce qui évite un écran blanc.
+
+   FILET DE SÉCURITÉ — l'animation révèle le contenu au bout de 400 ms quoi
+   qu'il arrive : si display-prefs.js ne se charge pas (erreur JS, fichier
+   absent, thème sans ce script), la page ne doit JAMAIS rester masquée.
+   `theme-ready` la révèle immédiatement dès qu'il arrive, ce qui est le cas
+   normal — le délai n'est qu'un garde-fou. */
+@keyframes hordeThemeReveal {
+  to {
+    visibility: visible;
+  }
+}
+html:not(.theme-ready) body > * {
+  visibility: hidden;
+  animation: hordeThemeReveal 0s linear 0.4s forwards;
+}
+html.theme-ready body > * {
+  visibility: visible;
+  animation: none;
+}
+/* Le mouvement n'apporte rien ici, mais un utilisateur qui réduit les
+   animations ne doit surtout pas se retrouver avec un contenu masqué. */
+@media (prefers-reduced-motion: reduce) {
+  html:not(.theme-ready) body > * {
+    visibility: visible;
+    animation: none;
+  }
+}
+
 /* ── View Transitions — uniquement #horde-body, header/sub restent fixes ── */
 @view-transition {
   navigation: auto;
@@ -109,6 +146,7 @@ a.icon      { display: block; width: 100%; height: 100%; }
     display: flex;
     align-items: center;
     gap: var(--theme-spacing-xs);
+    border-bottom: 1px solid var(--theme-border-subtle);
 }
 .header a:hover, a.header:hover { color: var(--theme-text-primary); }
 .header img { vertical-align: bottom; }

@@ -28,6 +28,12 @@
     var h = document.documentElement;
     h.classList.toggle('theme-dark', mode === 'dark');
     h.classList.toggle('theme-light', mode === 'light');
+    /* Signale que le mode est ARBITRÉ. Le CSS masque le contenu tant que cette
+       classe est absente : Horde place tous les scripts en fin de <body>
+       (deferScripts), donc la page est peinte AVANT qu'on ait pu poser
+       theme-light — un utilisateur en clair sur un OS en sombre voyait sinon
+       un flash sombre franc. Voir horde/globals.css. */
+    h.classList.add('theme-ready');
   }
   function setTheme(mode) {
     try {

@@ -158,7 +158,7 @@
   width: 100%;
 }
 /* Champ couleur en « badge » : pastille de la couleur + valeur hex, dans un
-   conteneur clair. --cal-color est posé sur le label par footer.js (JS du
+   conteneur clair. --cal-color est posé sur le label par theme-forms.js (JS du
    thème — aucun patch de Kronolith, donc rien à upstreamer ni à rejouer après
    une mise à jour du cœur). La pastille est le ::after du label ; l'input perd
    son fond coloré inline et n'affiche plus que le hex. */

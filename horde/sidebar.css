@@ -182,7 +182,7 @@
   pointer-events: auto;
 }
 
-/* ── Bouton « Ajouter… », dernier élément de la liste (créé par footer.js) ──
+/* ── Bouton « Ajouter… », dernier élément de la liste (créé par theme-sidebar.js) ──
    Action explicite, à la fin des entrées, là où l'œil arrive après les avoir
    parcourues. Placé DANS .horde-resources : il hérite du gap du grid parent
    (donc pas de margin ici) et se replie avec la section. Discret au repos
@@ -251,7 +251,7 @@
    légende) via --cal-color.
    SCOPE : toute ligne QUI PORTE --cal-color, quelle que soit l'app. Kronolith
    la pose lui-même (notre PR upstream #73) ; pour les autres (nag, mnemo…),
-   qui enferment la couleur dans un background-color inline, footer.js la
+   qui enferment la couleur dans un background-color inline, theme-sidebar.js la
    recopie dans la même variable (syncListColors). L'attribut garantit que
    color-mix a bien une couleur à consommer — sans lui il serait invalide. */
 #horde-sidebar .horde-resources > div[style*="--cal-color"] {
@@ -346,7 +346,7 @@
 /* Là où une ligne porte --cal-color, la pastille de couleur remplace la
    checkbox : on masque donc cette dernière (sinon les deux coexistent).
    SCOPE : l'attribut, pas l'app — Kronolith pose --cal-color lui-même, Nag et
-   Mnemo l'obtiennent via footer.js (syncListColors). Une app sans couleur de
+   Mnemo l'obtiennent via theme-sidebar.js (syncListColors). Une app sans couleur de
    liste garde sa checkbox. */
 [style*="--cal-color"] .horde-resource-on::before,
 [style*="--cal-color"] .horde-resource-off::before,
@@ -508,81 +508,3 @@
   cursor: col-resize;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   Footer de sidebar (injecté par footer.js)
-   Collé en bas, toujours visible même quand la liste d'items scrolle.
-   #horde-sidebar est déjà en flex column.
-   ════════════════════════════════════════════════════════════════ */
-#horde-sidebar-footer {
-  /* pousse le footer en bas + le maintient visible au scroll */
-  margin-top: auto;
-  position: sticky;
-  bottom: var(--theme-spacing-xs);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: var(--theme-spacing-sm);
-  padding: var(--theme-spacing-xs);
-  background-color: var(--theme-bg-white);
-  box-shadow: var(--theme-shadow-sm);
-  border-radius: var(--theme-radius-box);
-}
-#horde-sidebar-footer[hidden] {
-  display: none;
-}
-
-/* ── Bouton bascule de thème (3 états) — style autonome ──
-   Nécessaire pour default-new (pas de CDN DS). Sur upjv, le CDN définit aussi
-   .toggle-theme mais avec les mêmes valeurs (--theme-* → --colors-*).
-   Logique 3 états reprise du composant toggle-theme du DS UPJV. */
-#horde-theme-toggle.toggle-theme {
-  display: grid;
-  place-items: center;
-  position: relative;
-  overflow: hidden;
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: var(--theme-radius-field);
-  background-color: var(--theme-bg-action);
-  color: var(--theme-text-on-action);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-#horde-theme-toggle.toggle-theme:hover {
-  background-color: var(--theme-bg-action-hover);
-}
-#horde-theme-toggle.toggle-theme svg {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  opacity: 0;
-  transform: scale(0.5);
-  transition:
-    opacity 0.25s ease,
-    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-/* Auto (aucune classe sur html) : moniteur visible */
-#horde-theme-toggle.toggle-theme .icon-auto {
-  opacity: 1;
-  transform: scale(1);
-}
-/* Light : soleil visible */
-html.theme-light #horde-theme-toggle.toggle-theme .icon-auto {
-  opacity: 0;
-  transform: scale(0.5);
-}
-html.theme-light #horde-theme-toggle.toggle-theme .icon-sun {
-  opacity: 1;
-  transform: scale(1);
-}
-/* Dark : lune visible */
-html.theme-dark #horde-theme-toggle.toggle-theme .icon-auto {
-  opacity: 0;
-  transform: scale(0.5);
-}
-html.theme-dark #horde-theme-toggle.toggle-theme .icon-moon {
-  opacity: 1;
-  transform: scale(1);
-}

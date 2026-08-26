@@ -120,6 +120,7 @@
   font-weight: var(--theme-font-weight-bold);
   color: var(--theme-text-headings);
   white-space: nowrap;
+  text-transform: capitalize;
 }
 
 /* Filtres de vue — style DS UPJV filter component */

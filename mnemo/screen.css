@@ -1,0 +1,15 @@
+/**
+ * Mnemo UPJV — point d'entrée
+ * =============================
+ * Pur orchestrateur @import, dans l'ordre de cascade.
+ *
+ * Mnemo est l'application « Notes ». Pas de champ couleur dans son formulaire
+ * de liste (Mnemo_Form_CreateNotepad/EditNotepad n'ont que Nom/Description) :
+ * pas de forms.css, tout est déjà couvert par horde/forms.css.
+ *
+ * La vue responsive (`.horde-responsive`, en fin du screen.css d'origine)
+ * n'est PAS reprise : le mobile est traité après le desktop.
+ */
+
+@import "globals.css";
+@import "icons.css";

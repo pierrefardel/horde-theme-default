@@ -178,7 +178,7 @@ table.monthgrid td {
    toutes dans la hauteur et `overflow: hidden` tronquerait les derniers jours.
    NB : pendant un déplacement d'événement, Scriptaculous ne recalcule pas la
    position du fantôme quand la vue défile — d'où un décalage si l'on scrolle en
-   maintenant le clic (voir footer.js, qui compense). */
+   maintenant le clic (voir theme-tasks.js). */
 #kronolithViewMonthContainer {
   flex: 1 1 0;
   min-height: 0;
