@@ -23,14 +23,81 @@
 
 /* ── Pager ── */
 .turbaPager {
-  text-align: center;
-  padding: 3px;
+  padding: var(--spacing-xs);
   background: var(--theme-bg-white);
   border-bottom: 1px solid var(--theme-border);
 }
 
+.turbaPager .leftFloat{
+float:none;
+}
+
 /* ── Formulaire carnet virtuel ── */
-#vbook-form { margin: 1em 0 0 0; }
+/* ── Formulaire de recherche (search.php) ──
+   Le template aligne quatre paires « <strong><label> + champ » à la suite,
+   SANS conteneur : ce sont des frères directs du <form>. Un simple
+   `flex-direction: column` mettrait donc chaque élément sur sa propre ligne,
+   séparant le libellé de son champ.
+
+   On utilise une GRILLE à deux colonnes — libellés à gauche, champs à droite —
+   qui reconstitue les paires par simple placement, sans balisage
+   supplémentaire. Les `<strong>` tombent en colonne 1, tout le reste en
+   colonne 2, dans l'ordre du DOM.
+
+   `align-items: center` sur les libellés : ils sont plus courts que la hauteur
+   d'un champ, sans quoi ils se collent en haut de leur cellule. */
+.text form[name="directory_search"] {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: var(--theme-spacing-xs);
+    max-width: 60ch;
+}
+.text form[name="directory_search"] > strong {
+  grid-column: 1;
+  justify-self: start;
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-secondary);
+}
+.text form[name="directory_search"] > select,
+.text form[name="directory_search"] > input[type="text"] {
+  grid-column: 2;
+  width: 100%;
+}
+
+/* Le bouton de recherche occupe la colonne des champs, sous le dernier — il
+   conclut la saisie plutôt que de s'y intercaler. */
+.text form[name="directory_search"] > input[type="submit"] {
+  grid-column: 2;
+  justify-self: start;
+}
+
+/* Bloc « carnet virtuel » : sur toute la largeur, séparé par un filet — c'est
+   une option distincte de la recherche elle-même, pas un critère de plus. */
+#vbook-form {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  margin: var(--theme-spacing-sm) 0 0;
+  padding-top: var(--theme-spacing-md);
+  border-top: 1px solid var(--theme-border);
+}
+#vbook-form > strong {
+  font-weight: var(--theme-font-weight-medium);
+}
+/* Le champ « Nom » ne sert qu'une fois la case cochée : on le laisse visible
+   (le JS de Horde coche la case dès qu'on y tape) mais en retrait. */
+#vbook-form label[for="vbook_name"] {
+  margin-left: var(--theme-spacing-sm);
+  color: var(--theme-text-secondary);
+}
+
+/* Le `<br>` final du template n'a plus de rôle dans une grille. */
+.text form[name="directory_search"] > br {
+  display: none;
+}
 
 /* ── Édition membres de groupe ── */
 div.editGroupMembers {
@@ -39,7 +106,7 @@ div.editGroupMembers {
 }
 div.editGroupMembers span.iconImg { margin-right: 4px; }
 
-/* ── Photo de contact (formulaire) ── */
+/* ── Photo de contact ── */
 .horde-form img.turba-contact-photo {
   max-width: 250px;
   max-height: 250px;
@@ -103,4 +170,293 @@ div.editGroupMembers span.iconImg { margin-right: 4px; }
   .tabset, #page h1.header span.smallheader {
     display: none !important;
   }
+}
+
+/* ── Fiche contact (vue lecture) ──
+   `Turba_View_Contact_section_N` rend ses champs dans un <table> dont les <td>
+   de libellés portent `width="15%" align="right"` EN DUR, sans aucune classe :
+   les règles de `horde/forms.css` (qui exigent `td.horde-form-label`) ne s'y
+   appliquent donc pas, et la colonne s'étire avec l'écran — libellés rejetés
+   au milieu, valeurs très loin à droite.
+
+   On cible par la STRUCTURE, faute de crochet : les <td> à `width="15%"` dans
+   une section de fiche. La table est bornée et la colonne fixée en `ch`,
+   unité indexée sur la police donc stable quel que soit le preset de taille de
+   texte.
+
+   Le préfixe est `Turba_View_Contact`, PAS `Turba_View_` : ce dernier attrape
+   aussi `Turba_View_EditContact`, qui est une `.horde-form` — le padding s'y
+   cumulerait avec celui de horde/forms.css et les règles ci-dessous entreraient
+   en concurrence avec celles visant `td.horde-form-label` (le formulaire, lui,
+   classe ses libellés). */
+div[id^="Turba_View_Contact"] {
+  padding: var(--theme-spacing-sm);
+}
+/* Section repliée : Horde la laisse dans le flux, son padding créerait un
+   blanc sous l'onglet actif. */
+div[id^="Turba_View_Contact"][id$="_inactive"] {
+  padding: 0;
+}
+div[id^="Turba_View_Contact"] table {
+  width: 100%;
+  max-width: 90ch;
+  table-layout: fixed;
+}
+div[id^="Turba_View_Contact"] td[width="15%"] {
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-sm)
+           var(--theme-spacing-2xs) 0;
+  color: var(--theme-text-secondary);
+  vertical-align: top;
+}
+/* Le libellé est déjà en <strong> : inutile de doubler la graisse, le <td>
+   porte déjà sa hiérarchie par la couleur. */
+div[id^="Turba_View_Contact"] td[width="15%"] strong {
+  font-weight: var(--theme-font-weight-medium);
+}
+div[id^="Turba_View_Contact"] td[width="15%"] + td {
+  padding: var(--theme-spacing-2xs) 0;
+  color: var(--theme-text-primary);
+  word-break: break-word;
+}
+/* Champ vide : la LIGNE ENTIÈRE est masquée. Une fiche de contact a
+   typiquement plus de champs vides que remplis (voir l'onglet « Autre ») —
+   les afficher noie les quelques valeurs réelles dans une colonne de vide.
+   `:has()` permet de remonter du <td> vide à sa ligne. */
+div[id^="Turba_View_Contact"] tr:has(td[width="15%"] + td:empty) {
+  display: none;
+}
+
+/* ── Barre d'actions de la liste de contacts (browse.php) ──
+   Le template (turba/templates/browse/actions.inc) émet jusqu'à neuf <li> à la
+   suite, sans regroupement, mêlant deux registres :
+
+     A. actions sur la SÉLECTION : Supprimer, Modifier, Exporter
+     B. actions de TRANSFERT, chacune liée à une liste déroulante CIBLE :
+        · `select id="c…"` (« vers un autre carnet ») ← Déplacer ET Copier
+          (tous deux appellent `CopyMove(…, document.f<id>.c<id>)`)
+        · `select id="s…"` (« vers une liste de contacts ») ← Ajouter seul
+          (`Add(document.f<id>.s<id>)`)
+
+   Rendus en file horizontale, ces appariements sont INVISIBLES : rien ne dit
+   quelle liste alimente quel bouton. On passe donc en DEUX LIGNES, chaque
+   cible collée aux actions qui la consomment.
+
+   Tous les boutons sont CONDITIONNELS ($hasDelete, $hasEdit, $hasExport,
+   $addToList) : sur un carnet partagé en lecture seule — le cas de « Personnels
+   de l'UPJV » en production — la ligne 1 disparaît entièrement, et Déplacer
+   avec elle (déplacer suppose de retirer à la source). La mise en page tient
+   dans tous les cas : les séparateurs sont portés par les éléments eux-mêmes,
+   jamais par des règles de position absolue.
+
+   Réordonné en CSS (`order`) SANS toucher au DOM : les `onclick` inline
+   référencent les champs par un id généré (`md5(mt_rand())`), déplacer un nœud
+   casserait ces références.
+
+   Rendu :
+     [Modifier] [Exporter]                            [Supprimer]
+     ───────────────────────────────────────────────────────────
+     [vers un autre carnet ▾] Déplacer Copier │ [vers une liste ▾] Ajouter */
+/* Le template enveloppe la liste dans un `<form style="display:inline">` (style
+   INLINE, d'où le `!important` pour le battre). En tant qu'élément flex de la
+   barre, ce form ne s'étire pas : la barre s'arrête au milieu de la largeur et
+   `margin-left: auto` sur Supprimer n'a aucun espace à distribuer. On le rend
+   donc bloc et pleine largeur. */
+.horde-buttonbar form:has(select[id^="c"]),
+.horde-buttonbar form:has(select[id^="s"]),
+.horde-buttonbar form:has(.turba-delete) {
+  display: block !important;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+.horde-buttonbar:has(.turba-delete) ul,
+.horde-buttonbar:has(select[id^="c"]) ul,
+.horde-buttonbar:has(select[id^="s"]) ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  width: 100%;
+}
+
+/* ── Ligne 1 : actions sur la sélection ── */
+.horde-buttonbar li:has(.turba-edit) { order: 1; }
+.horde-buttonbar li:has(.horde-data) { order: 2; }
+
+/* Supprimer ferme la ligne 1, poussé à l'extrémité droite. */
+.horde-buttonbar li:has(.turba-delete) {
+  order: 3;
+  margin-left: auto;
+}
+
+/* RUPTURE DE LIGNE : un élément fantôme de largeur totale force le passage à
+   la ligne suivante en flex. Il n'est créé QUE si un groupe de transfert
+   existe (`:has`), sinon la barre garde son unique ligne.
+   Posé en ::after sur le <ul>, avec `order` entre les deux registres. */
+.horde-buttonbar:has(select[id^="c"]) ul::after,
+.horde-buttonbar:has(select[id^="s"]) ul::after {
+  content: "";
+  order: 4;
+  flex-basis: 100%;
+  height: 0;
+  margin-top: var(--theme-spacing-2xs);
+  border-top: 1px solid var(--theme-border);
+}
+
+/* ── Ligne 2 : transferts, chaque cible AVANT ses actions ──
+   Ciblage par l'`onclick`, JAMAIS par le `title` : ces libellés passent par
+   `_()` et sont traduits selon la locale (même piège que la barre d'image,
+   voir horde/icons.css). L'appel de fonction, lui, est du code invariant.
+
+   Les id des <select> sont générés (hash), seule leur INITIALE est stable —
+   « c » pour carnet, « s » pour liste de contacts (actions.inc, l.19 et 28). */
+.horde-buttonbar li:has(select[id^="c"]) { order: 5; }
+.horde-buttonbar li:has([onclick*="CopyMove('move'"]) { order: 6; }
+.horde-buttonbar li:has([onclick*="CopyMove('copy'"]) { order: 7; }
+
+.horde-buttonbar li:has(select[id^="s"]) { order: 8; }
+.horde-buttonbar li:has([onclick^="Add("]) { order: 9; }
+
+/* Filet entre les deux groupes de transfert. Porté par la SECONDE cible : si
+   le premier groupe est absent, elle n'a plus de voisin à sa gauche et le
+   filet serait orphelin — d'où la condition `:has()` sur le <ul>. */
+.horde-buttonbar:has(select[id^="c"]) li:has(select[id^="s"]) {
+  border-left: 1px solid var(--theme-border);
+  padding-left: var(--theme-spacing-sm);
+  margin-left: var(--theme-spacing-xs);
+}
+
+/* Les listes cibles : cadre neutre, largeur bornée (les noms de carnets sont
+   parfois longs — « Carnet d'adresses de Pierre Fardel »). */
+.horde-buttonbar select {
+  max-width: 26ch;
+  vertical-align: middle;
+}
+/* Le <li> qui porte une liste n'est pas un bouton : pas de fond ni de cadre. */
+.horde-buttonbar li:has(select) {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+/* Boutons de transfert (`.widget`) : subordonnés à la cible qui les précède,
+   ils restent en retrait — pas de fond, seulement la couleur d'action. */
+.horde-buttonbar li:has(.widget) {
+  background-color: transparent;
+  border-color: transparent;
+}
+.horde-buttonbar .widget {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  color: var(--theme-text-action);
+}
+.horde-buttonbar li:has(.widget):hover {
+  background-color: var(--theme-bg-secondary);
+  border-color: var(--theme-border);
+}
+
+/* ── État inactif des boutons d'action (posé par theme-forms.js) ──
+   `browse.js` valide après coup et prévient par `window.alert()` : contact non
+   sélectionné, ou carnet cible non choisi. L'état est connu à l'avance, on le
+   MONTRE plutôt que de laisser l'utilisateur buter sur une modale.
+
+   `pointer-events: none` sur le lien empêche le clic ; le JS double la garde
+   en capture, car `pointer-events` ne bloque ni le clavier ni le focus. */
+.horde-buttonbar li.theme-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.horde-buttonbar li.theme-disabled a {
+  pointer-events: none;
+}
+/* Pas de réaction au survol sur un bouton inactif : le hover suggérerait une
+   action possible.
+
+   On RÉAFFIRME le fond de repos plutôt que d'utiliser `inherit` — qui ferait
+   hériter du fond du PARENT, donc une couleur, et non « pas de changement ».
+   Deux règles à battre : le hover générique de la barre (toolbar.css l.53) et
+   celui du bouton danger, qui a sa propre déclaration. */
+.horde-buttonbar li.theme-disabled:hover,
+.horde-buttonbar li.theme-disabled:active {
+  background-color: var(--theme-bg-btn-secondary);
+  border-color: var(--theme-border);
+}
+/* Supprimer garde son rouge, simplement atténué par l'opacité du conteneur —
+   un bouton danger qui virerait au gris ne se lirait plus comme destructif. */
+.horde-buttonbar li.theme-disabled:has(.turba-delete),
+.horde-buttonbar li.theme-disabled:has(.turba-delete):hover,
+.horde-buttonbar li.theme-disabled:has(.turba-delete):active {
+  background-color: var(--theme-bg-danger);
+  border-color: var(--theme-border-danger);
+}
+/* Les boutons de transfert n'ont pas de fond au repos : leur état inactif ne
+   doit pas en faire apparaître un. */
+.horde-buttonbar li.theme-disabled:has(.widget),
+.horde-buttonbar li.theme-disabled:has(.widget):hover,
+.horde-buttonbar li.theme-disabled:has(.widget):active {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+/* ── État vide : aucun doublon trouvé (search.php, mode duplicate) ──
+   Le template rend un `<h3>Aucun doublon trouvé.</h3>` NU, sans classe ni id.
+   Même traitement que les états vides de Nag et Mnemo (`p.text > em`) : icône
+   centrée au-dessus, texte atténué, plutôt qu'un titre de section perdu.
+
+   Ciblé par la STRUCTURE, faute de crochet. ATTENTION — deux `<h3>` coexistent
+   dans cette page (search/duplicate/list.html.php) :
+     · l'état vide, seul, suivi de RIEN ;
+     · un titre par groupe trouvé (« Doublons de Nom »), chacun suivi d'un
+       `<table class="horde-table">`.
+   Un sélecteur de position seule les attraperait tous les deux. On distingue
+   donc par ce qui SUIT : l'état vide est le seul <h3> sans tableau derrière
+   lui — d'où la négation sur le frère adjacent.
+
+   MÊME TRAITEMENT pour « Aucun contact ne correspond » (browse.php sur une
+   liste de contacts), rendu en `<p><em>` NU — sans la classe `.text` sur
+   laquelle s'appuient Nag et Mnemo.
+
+   ATTENTION là aussi : `<em>` sert AUSSI à rendre « Nom vide » pour un contact
+   sans nom (browse/row.inc l.10, contact.php l.137). Un sélecteur large
+   traiterait ces contacts comme des états vides. D'où `> em:only-child` — le
+   message d'état vide est un <p> dont l'<em> est l'UNIQUE contenu, alors que
+   « Nom vide » est enveloppé dans un <a> ou un <h1>.
+
+   Le SVG est celui de Mnemo (Lucide `circle-slash`), copié dans le module : un
+   chemin inter-modules devrait nommer le thème en dur (../../mnemo/upjv/…),
+   ce qui casserait sur default-new qui reçoit le même fichier. */
+.header + br + h3:not(:has(+ table)),
+.header + p:has(> em:only-child) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--theme-spacing-sm);
+  padding: 40px 20px;
+  margin: 0;
+  color: var(--theme-text-disabled);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-regular);
+  text-align: center;
+}
+.header + br + h3:not(:has(+ table))::before,
+.header + p:has(> em:only-child)::before {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 32px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("graphics/svg/empty.svg");
+  mask-image: url("graphics/svg/empty.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* L'italique du template ne sert plus : le bloc porte déjà sa mise en forme
+   d'état vide. */
+.header + p:has(> em:only-child) em {
+  font-style: normal;
 }

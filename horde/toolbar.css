@@ -117,33 +117,44 @@
 
 /* Action DESTRUCTIVE : traitée en danger dans toutes les apps, pas seulement
    IMP. Chaque module nomme son lien différemment (`#button_delete` dans IMP,
-   `.mnemo-delete` / `.nag-delete` ailleurs), d'où la liste — il n'existe pas
-   de classe commune côté Horde. */
+   `.mnemo-delete` / `.nag-delete` ailleurs, `#tabDeleteContact` dans Turba —
+   qui identifie le <li> et non le lien), d'où la liste : il n'existe pas de
+   classe commune côté Horde. */
 .horde-buttonbar li:has(#button_delete),
 .horde-buttonbar li:has(.mnemo-delete),
-.horde-buttonbar li:has(.nag-delete) {
+.horde-buttonbar li:has(.turba-delete),
+.horde-buttonbar li:has(.nag-delete),
+.horde-buttonbar li#tabDeleteContact {
   background-color: var(--theme-bg-danger);
   border-color: var(--theme-border-danger);
 }
 .horde-buttonbar li:has(#button_delete) a,
 .horde-buttonbar li:has(.mnemo-delete) a,
-.horde-buttonbar li:has(.nag-delete) a {
+.horde-buttonbar li:has(.turba-delete) a,
+.horde-buttonbar li:has(.nag-delete) a,
+.horde-buttonbar li#tabDeleteContact a {
   color: var(--theme-text-btn-danger) !important;
 }
 .horde-buttonbar li:has(#button_delete) a::before,
 .horde-buttonbar li:has(.mnemo-delete) a::before,
-.horde-buttonbar li:has(.nag-delete) a::before {
+.horde-buttonbar li:has(.turba-delete) a::before,
+.horde-buttonbar li:has(.nag-delete) a::before,
+.horde-buttonbar li#tabDeleteContact a::before {
   background-color: var(--theme-text-btn-danger) !important;
 }
 .horde-buttonbar li:has(#button_delete):hover,
 .horde-buttonbar li:has(.mnemo-delete):hover,
-.horde-buttonbar li:has(.nag-delete):hover {
+.horde-buttonbar li:has(.turba-delete):hover,
+.horde-buttonbar li:has(.nag-delete):hover,
+.horde-buttonbar li#tabDeleteContact:hover {
   background-color: var(--theme-bg-danger-hover);
   border-color: var(--theme-border-danger-hover);
 }
 .horde-buttonbar li:has(#button_delete):active,
 .horde-buttonbar li:has(.mnemo-delete):active,
-.horde-buttonbar li:has(.nag-delete):active {
+.horde-buttonbar li:has(.turba-delete):active,
+.horde-buttonbar li:has(.nag-delete):active,
+.horde-buttonbar li#tabDeleteContact:active {
   background-color: var(--theme-bg-danger-active);
 }
 

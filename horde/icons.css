@@ -240,3 +240,217 @@ a.helplink:hover::before {
   -webkit-mask-position: center;
   mask-position: center;
 }
+
+/* ── Horde_Form : barre de manipulation d'image ──
+   Le champ `image` de Horde_Form (photo de contact Turba, et tout autre champ
+   image) rend une rangée de `<a><img …png></a>` : réinitialiser, pivoter,
+   retourner, miroir, niveaux de gris, ratio. Ces PNG vivent dans le thème
+   horde (`graphics/image/`) et sont partagés par toutes les applications —
+   d'où leur place ici et non dans turba/.
+
+   CIBLAGE PAR LE `src`, PAS PAR LE `title` : les libellés passent tous par
+   `Horde_Core_Translation::t()` (Horde/Core/Form/daterenderer, ~l.247-295), ils
+   sont donc traduits selon la locale. Le nom de fichier, lui, est écrit en dur
+   dans le PHP — c'est le seul crochet invariant par langue.
+
+   L'<img> est MASQUÉE et l'icône posée en ::before sur le <a> : poser le mask
+   sur l'<img> elle-même laisse le pixmap visible dessous (voir les tags de Nag
+   et l'icône de récurrence de Kronolith). */
+.horde-form a:has(> img[src*="/image/"]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-white);
+}
+.horde-form a:has(> img[src*="/image/"]):hover {
+  border-color: var(--theme-border-action-hover);
+  background-color: var(--theme-bg-secondary);
+}
+.horde-form a:has(> img[src*="/image/"]) > img {
+  display: none;
+}
+.horde-form a:has(> img[src*="/image/"])::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* Réinitialiser l'image : c'est une ANNULATION, pas un rechargement — d'où
+   `undo-2` et non une flèche circulaire, qui se lirait comme « rafraîchir ». */
+.horde-form a:has(> img[src$="image/refresh.png"])::before {
+  -webkit-mask-image: url("graphics/svg/undo-2.svg");
+  mask-image: url("graphics/svg/undo-2.svg");
+}
+.horde-form a:has(> img[src$="rotate-270.png"])::before {
+  -webkit-mask-image: url("graphics/svg/rotate-ccw.svg");
+  mask-image: url("graphics/svg/rotate-ccw.svg");
+}
+.horde-form a:has(> img[src$="rotate-90.png"])::before {
+  -webkit-mask-image: url("graphics/svg/rotate-cw.svg");
+  mask-image: url("graphics/svg/rotate-cw.svg");
+}
+.horde-form a:has(> img[src$="rotate-180.png"])::before {
+  -webkit-mask-image: url("graphics/svg/refresh-cw.svg");
+  mask-image: url("graphics/svg/refresh-cw.svg");
+}
+/* « Flip » retourne l'image haut/bas : l'icône montre donc un axe HORIZONTAL
+   de symétrie (flip-vertical chez Lucide, qui nomme d'après l'axe du miroir).
+   « Mirror » inverse gauche/droite, d'où l'axe vertical. */
+.horde-form a:has(> img[src$="flip.png"])::before {
+  -webkit-mask-image: url("graphics/svg/flip-vertical.svg");
+  mask-image: url("graphics/svg/flip-vertical.svg");
+}
+.horde-form a:has(> img[src$="mirror.png"])::before {
+  -webkit-mask-image: url("graphics/svg/flip-horizontal.svg");
+  mask-image: url("graphics/svg/flip-horizontal.svg");
+}
+.horde-form a:has(> img[src$="grayscale.png"])::before {
+  -webkit-mask-image: url("graphics/svg/contrast.svg");
+  mask-image: url("graphics/svg/contrast.svg");
+}
+.horde-form a:has(> img[src$="crop.png"])::before {
+  -webkit-mask-image: url("graphics/svg/crop.svg");
+  mask-image: url("graphics/svg/crop.svg");
+}
+
+/* « Fix ratio » — BUG AMONT : le PHP appelle `Horde::img('ratio.png')` sans le
+   préfixe `image/` que portent tous les autres appels du même bloc
+   (Horde/Core/Form/daterenderer, ~l.323). Le fichier n'est pas résolu et
+   l'attribut ne reçoit PAS de chemin d'image : selon le contexte il sort vide
+   ou, comme observé sur dev-03, réduit à l'URL de la page courante — dans les
+   deux cas le navigateur affiche une image cassée.
+
+   On ne peut donc pas le cibler par son nom de fichier. On le prend par la
+   NÉGATIVE : dans cette barre, c'est le seul <a> dont l'<img> n'a pas de `src`
+   terminant par « .png ». `:has()` porte la négation sur l'image, jamais sur le
+   lien, pour ne pas attraper les <a> d'une autre nature. */
+.horde-form a:has(> img[alt]:not([src$=".png"])) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-white);
+}
+.horde-form a:has(> img[alt]:not([src$=".png"])):hover {
+  border-color: var(--theme-border-action-hover);
+  background-color: var(--theme-bg-secondary);
+}
+.horde-form a:has(> img[alt]:not([src$=".png"])) > img {
+  display: none;
+}
+.horde-form a:has(> img[alt]:not([src$=".png"]))::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("graphics/svg/ratio.svg");
+  mask-image: url("graphics/svg/ratio.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* ── Horde_Form : sélecteur de date ──
+   `<a onclick="Horde_Calendar.open(…)"><img …/calendar.png></a>`, posé après
+   les trois <select> jour/mois/année. Le PNG est à la RACINE de graphics/,
+   pas dans image/ : il échappe aux règles ci-dessus. */
+.horde-form a:has(> img[src$="graphics/calendar.png"]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-left: var(--theme-spacing-2xs);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-white);
+  vertical-align: middle;
+}
+.horde-form a:has(> img[src$="graphics/calendar.png"]):hover {
+  border-color: var(--theme-border-action-hover);
+  background-color: var(--theme-bg-secondary);
+}
+.horde-form a:has(> img[src$="graphics/calendar.png"]) > img {
+  display: none;
+}
+.horde-form a:has(> img[src$="graphics/calendar.png"])::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("graphics/svg/calendar.svg");
+  mask-image: url("graphics/svg/calendar.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* ── Horde_Form : icône calendrier posée en <img> NUE (Nag) ──
+   Nag rend `<img id="dueimg" src="…calendar.png">` sans lien parent, là où
+   Turba et Kronolith enveloppent la même icône dans un <a> (traité plus haut).
+
+   Un mask posé directement sur l'<img> ne fonctionne pas : élément REMPLACÉ,
+   son pixmap reste peint et le PNG d'origine transparaît. `theme-forms.js`
+   enveloppe donc l'image dans un `<span data-cal-icon>` et lui transfère l'id ;
+   on retrouve alors exactement le cas d'un parent porteur de ::before.
+
+   Même rendu que les autres icônes d'action : bouton bordé de 28px, hover sur
+   la bordure et le fond. */
+[data-cal-icon] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  box-sizing: border-box;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-field);
+  background-color: var(--theme-bg-white);
+}
+[data-cal-icon]:hover {
+  border-color: var(--theme-border-action-hover);
+  background-color: var(--theme-bg-secondary);
+}
+[data-cal-icon] > img {
+  display: none;
+}
+[data-cal-icon]::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-image: url("graphics/svg/calendar.svg");
+  mask-image: url("graphics/svg/calendar.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}

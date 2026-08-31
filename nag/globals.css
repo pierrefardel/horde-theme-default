@@ -175,12 +175,15 @@
   overflow: auto;
 }
 
-/* ── Sélecteurs de date du formulaire ── */
+/* ── Sélecteurs de date du formulaire ──
+   L'icône elle-même (mask SVG) est posée dans horde/icons.css : ces trois
+   `<img>` viennent du renderer de date de Horde_Form, partagé avec Kronolith
+   et Mnemo. On ne garde ici que l'espacement propre à la mise en page de Nag,
+   le champ de saisie précédant immédiatement l'icône. */
 #dueimg,
 #startimg,
 #recur_endimg {
-  cursor: pointer;
-  padding-left: var(--theme-spacing-2xs);
+  margin-left: var(--theme-spacing-2xs);
 }
 
 /* ── Tags ── */

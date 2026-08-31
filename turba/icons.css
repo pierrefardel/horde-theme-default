@@ -22,7 +22,7 @@ span.iconImg.vcardImg {
   display: inline-block;
   width: 16px;
   height: 16px;
-  background-color: var(--theme-icon-secondary);
+  background-color: var(--theme-icon-primary);
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
@@ -49,7 +49,11 @@ span.iconImg.vcardImg  { mask-image: url("graphics/svg/contact-round.svg");  -we
   height: 16px;
   margin-right: 4px;
   vertical-align: middle;
-  background-color: var(--theme-icon-secondary);
+  /* `currentColor` et non un token figé : dans la buttonbar, l'icône doit
+     suivre la couleur du bouton — sans quoi celle de Supprimer resterait
+     sombre sur le fond rouge. Ailleurs, elle prend la couleur du texte du
+     lien, soit --theme-text-primary. */
+  background-color: currentColor;
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;

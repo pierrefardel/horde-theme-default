@@ -66,3 +66,143 @@ table#addressbook-list th.sortdown::before {
   width: 16px;
   height: 16px;
 }
+
+/* ── Tableau de contacts (browse.php) ──
+   Le template rend une `table.linedRow` dont deux classes portent à confusion :
+
+   · `.selected` sur le <th> de la colonne TRIÉE — c'est une classe générique
+     de Horde (horde/globals.css) qui pose un aplat de sélection. Or rien n'est
+     « sélectionné » ici : c'est l'axe de tri courant. L'aplat bleu sur
+     l'en-tête est donc un contresens visuel.
+   · `.linedRowSelectedCol` sur le <td> du nom de CHAQUE ligne — même mot, même
+     malentendu : la colonne triée est teintée sur toute la hauteur du tableau,
+     ce qui produit un bandeau permanent qu'on lit à tort comme une sélection.
+
+   On NEUTRALISE ces deux fonds dans le seul contexte du tableau de contacts —
+   les classes génériques restent intactes pour le reste de Horde. Le tri est
+   déjà signalé par la flèche du lien d'en-tête, qui suffit. */
+#contacts table.linedRow th.selected,
+#contacts table.linedRow td.linedRowSelectedCol {
+  background: transparent;
+}
+
+/* En-tête : traité comme un vrai en-tête de tableau, pas comme une ligne. */
+/* Le fond doit battre `table.linedRow td` de horde/forms.css, qui pose un
+   `background` RACCOURCI sur toutes les cellules — d'où le sélecteur renforcé
+   par `table.linedRow` plutôt qu'un simple `thead th`. */
+#contacts table.linedRow thead tr th,
+#contacts table.linedRow thead tr th.turba-browse-icon,
+#contacts table.linedRow thead tr th.selected {
+  padding: var(--theme-spacing-xs) var(--theme-spacing-2xs);
+  background-color: var(--theme-bg-secondary);
+  border-bottom: 1px solid var(--theme-border);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-semi-bold);
+  color: var(--theme-text-primary);
+  text-align: left;
+  vertical-align: middle;
+}
+/* Le lien de tri hérite de l'en-tête : ni couleur d'action, ni soulignement —
+   c'est un contrôle de colonne, pas un lien de navigation. */
+#contacts table.linedRow thead th a.widget {
+  color: inherit;
+  font-weight: inherit;
+}
+#contacts table.linedRow thead th a.widget:hover {
+  color: var(--theme-text-action);
+}
+
+/* Lignes : hauteur de clic confortable et survol lisible. Le nom occupant
+   toute la largeur restante, c'est lui qui porte la cible principale. */
+#contacts table.linedRow tbody td {
+  padding: var(--theme-spacing-2xs) var(--theme-spacing-2xs);
+  vertical-align: middle;
+}
+#contacts table.linedRow tbody tr:hover td,
+#contacts table.linedRow tbody tr:hover td.linedRowSelectedCol {
+  background-color: var(--theme-bg-primary);
+}
+
+/* Ligne dont la case est cochée : c'est LA vraie sélection, celle sur laquelle
+   agissent les boutons de la barre. Elle mérite le fond que les classes
+   ci-dessus s'attribuaient à tort.
+   `:has()` remonte de la case à sa ligne. */
+#contacts table.linedRow tbody tr:has(input[type="checkbox"]:checked) td,
+#contacts table.linedRow tbody tr:has(input[type="checkbox"]:checked) td.linedRowSelectedCol {
+  background-color: var(--theme-bg-selected);
+}
+
+/* Colonnes d'icônes : largeur au contenu, centrées. Le template leur donne
+   `width="1%"`, ce qui suffit à les comprimer — on ne fait qu'aligner. */
+#contacts table.linedRow td.turba-browse-icon,
+#contacts table.linedRow th.turba-browse-icon {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* Le nom : cible principale de la ligne, en texte courant plutôt qu'en lien
+   coloré — la ligne entière se lit comme cliquable au survol. */
+#contacts table.linedRow tbody td.linedRowSelectedCol a {
+  color: var(--theme-text-primary);
+  text-decoration: none;
+}
+#contacts table.linedRow tbody tr:hover td.linedRowSelectedCol a {
+  color: var(--theme-text-action);
+}
+
+/* Message « aucun contact ne correspond » (QuickFinder) : centré et atténué,
+   comme les autres états vides du thème. */
+#QuickFinderEmpty td {
+  padding: var(--theme-spacing-lg);
+  color: var(--theme-text-disabled);
+  text-align: center;
+  font-style: normal;
+}
+
+/* ── Indicateur de tri de l'en-tête ──
+   `getColumnSortImage()` rend `az.png` (croissant), `za.png` (décroissant) ou
+   `az_secondary.png` (tri secondaire) dans un `<a class="widget">`. Ces PNG
+   sont le SEUL signal du sens de tri : on ne peut pas les masquer sans les
+   remplacer, sinon l'information disparaît.
+
+   L'<img> est donc cachée et l'icône reposée en ::before sur son lien — un
+   élément REMPLACÉ garde son pixmap sous un mask, voir feedback_workflow. Le
+   sens est distingué par le nom de fichier, invariant par langue (le `title`,
+   lui, passe par `_()`). */
+#contacts table.linedRow thead a.widget:has(img[src*="az"]),
+#contacts table.linedRow thead a.widget:has(img[src*="za"]) {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+#contacts table.linedRow thead a.widget > img {
+  display: none;
+}
+#contacts table.linedRow thead a.widget:has(img)::before {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+/* Croissant (A→Z) : `az.png`, et `az_secondary.png` pour un tri de second
+   rang — même sens, donc même icône, simplement atténuée. */
+#contacts table.linedRow thead a.widget:has(img[src*="az"])::before {
+  -webkit-mask-image: url("graphics/svg/sortup.svg");
+  mask-image: url("graphics/svg/sortup.svg");
+}
+#contacts table.linedRow thead a.widget:has(img[src*="az_secondary"])::before {
+  opacity: 0.5;
+}
+/* Décroissant (Z→A). */
+#contacts table.linedRow thead a.widget:has(img[src*="za"])::before {
+  -webkit-mask-image: url("graphics/svg/sortdown.svg");
+  mask-image: url("graphics/svg/sortdown.svg");
+}

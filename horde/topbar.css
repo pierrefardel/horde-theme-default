@@ -64,9 +64,21 @@
   color: var(--theme-text-on-action);
 }
 
+/* PLEINE HAUTEUR de la barre, et non la hauteur du lien : c'est ce point qui
+   sert d'ancrage au sous-menu (`top: 100%`). `#horde-navigation` est en
+   `align-items: center`, donc sans cette règle chaque navipoint se réduit à
+   son contenu — et comme l'item ACTIF et les inactifs n'ont pas exactement la
+   même hauteur de rendu, leurs sous-menus s'ouvraient à des altitudes
+   différentes.
+   `align-self: stretch` les étire tous à la hauteur de la barre : le
+   sous-menu part du bas de #horde-head, identique pour tous les items, et
+   reste collé quel que soit le preset de taille de texte. */
 .horde-navipoint {
   float: none;
   position: relative;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
 }
 
 .horde-settings {
@@ -119,6 +131,10 @@ a.horde-mainnavi:hover {
   color: var(--theme-text-action);
   text-decoration: none;
 }
+/* MÊME padding que le lien inactif (6px 10px) : le sous-menu s'ouvre à
+   `top: 100%` du <li>, donc toute différence de hauteur entre l'item actif et
+   les autres décale son point d'ancrage. Avec 4px 8px, l'item actif était 4px
+   plus court et son sous-menu remontait d'autant, se détachant du parent. */
 a.horde-mainnavi-active:link,
 a.horde-mainnavi-active:visited,
 a.horde-mainnavi-active:active,
@@ -126,7 +142,7 @@ a.horde-mainnavi-active:hover {
   background-color: var(--theme-bg-action-active);
   color: var(--theme-text-on-action);
   border-radius: var(--theme-radius-field);
-  padding: 4px 8px;
+  padding: 6px 10px;
   text-decoration: none;
   box-shadow: var(--theme-shadow-sm);
 }
@@ -156,10 +172,26 @@ a.horde-mainnavi-active:active {
   margin: 0;
   z-index: 10;
 }
+/* Le sous-menu s'ouvre au SURVOL du <li> parent : il doit donc rester dans sa
+   zone de survol, sans quoi la souris traverse un trou en descendant et le
+   menu se referme avant qu'on ait pu cliquer.
+
+   `top: 44px` était une valeur FIXE alors que le <li> a une hauteur `auto`
+   dépendant de la taille de texte choisie (préférences d'affichage : 12, 13 ou
+   15px). En taille compacte le <li> ne fait que ~34px → 10px de trou, d'où un
+   bug intermittent selon le réglage de l'utilisateur.
+
+   `top: 100%` du <li> ne suffisait pas non plus : l'item ACTIF et les items
+   inactifs n'ont pas exactement la même hauteur de rendu, donc leurs
+   sous-menus ne s'ancraient pas à la même altitude. On ancre donc sur
+   `.horde-navipoint`, dont la hauteur est celle de la barre et ne dépend NI
+   du contenu NI de l'état actif : tous les sous-menus s'alignent alors, et
+   restent collés quel que soit le preset de taille de texte.
+   (`.horde-navipoint` est déjà en `position: relative` plus haut.) */
 .horde-dropdown li ul {
   display: none;
   position: absolute;
-  top: 44px;
+  top: 100%;
   left: 0;
   list-style: none;
   padding: 4px 0;
@@ -175,19 +207,37 @@ a.horde-mainnavi-active:active {
 .horde-dropdown li.over ul {
   display: block;
 }
+/* Zone tampon invisible au-dessus du sous-menu : elle couvre le passage entre
+   le libellé et le premier item, pour qu'un mouvement de souris légèrement
+   oblique ne sorte pas de la zone de survol et ne referme pas le menu.
+   `top: 100%` supprime déjà le trou vertical ; ceci absorbe l'imprécision. */
+.horde-dropdown li > ul::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -6px;
+  height: 6px;
+}
 .horde-dropdown li:hover ul ul,
 .horde-dropdown li.over ul ul {
   display: none;
 }
+/* Sous-sous-menu : même correction. Il s'ouvre sur le CÔTÉ, donc il doit
+   partir du haut de son parent (`top: 0`) et non d'un décalage fixe qui
+   laissait, lui aussi, une zone morte. */
 .horde-dropdown ul li ul {
-  margin-top: -25px;
+  margin-top: 0;
   margin-left: 100%;
-  top: 24px;
+  top: 0;
 }
 .horde-dropdown ul li:hover ul,
 .horde-dropdown ul li.over ul {
   display: block;
 }
+/* Seuls les <li> de SOUS-menu servent de référent (pour le sous-sous-menu
+   latéral). Les <li> de premier niveau, eux, ne doivent PAS l'être : leur
+   sous-menu s'ancre sur .horde-navipoint (voir plus haut). */
 .horde-dropdown ul li {
   position: relative;
   border-bottom: none;

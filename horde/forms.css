@@ -37,13 +37,20 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) {
 }
 
 /* Le conteneur du formulaire n'avait AUCUN padding : les champs et les boutons
-   touchaient le bord du panneau. Le `.header` (bandeau de titre) porte son
-   propre fond pleine largeur, il est donc exclu de ce retrait. */
-.horde-form:has(td.horde-form-label) > *:not(.header) {
+   touchaient le bord du panneau.
+
+   Deux familles d'enfants sont EXCLUES de ce retrait, car elles ne font pas
+   partie du corps du formulaire :
+   - `.header`, bandeau de titre à fond pleine largeur ;
+   - `.tabset` et le `<br class="clear">` qui le suit — les onglets s'ancrent
+     sur le bord du panneau comme partout ailleurs (Turba, Nag, Mnemo). Les
+     décaler d'un padding destiné aux champs casse leur alignement avec la
+     barre d'outils au-dessus. */
+.horde-form:has(td.horde-form-label) > *:not(.header, .tabset, .tabset + br) {
   padding-left: var(--theme-spacing-md);
   padding-right: var(--theme-spacing-md);
 }
-.horde-form:has(td.horde-form-label) > *:not(.header):last-child {
+.horde-form:has(td.horde-form-label) > *:not(.header, .tabset, .tabset + br):last-child {
   padding-bottom: var(--theme-spacing-md);
 }
 
@@ -657,3 +664,72 @@ table.horde-table thead .horde-split-right.sortdown {
 .horde-form .form-buttons-inner input[type="button"] { color: var(--theme-text-on-action); }
 
 .horde-form .odd { background-color: var(--theme-bg-secondary); }
+
+/* ── Champ image (Horde_Form) ──
+   Le renderer concatène TOUT à la suite dans une seule cellule, sans conteneur
+   ni classe : champ de fichier, boutons Envoyer/Retirer, la barre d'icônes de
+   manipulation, les champs `w:`/`h:`, la case « conserver l'original » et
+   l'aperçu — séparés par de simples `<br>` et par du texte nu.
+
+   On passe la cellule en flex pour aligner la rangée, puis on force les
+   ruptures aux bons endroits. Trois lignes voulues :
+     1. fichier + Envoyer + Retirer
+     2. la barre d'icônes + w:/h: + conserver l'original
+     3. l'aperçu
+
+   `align-items: center` (et non `baseline`) : la rangée mêle des boutons de
+   28px et du texte nu, qu'une ligne de base décalerait les uns par rapport aux
+   autres. */
+.horde-form td:has(> a img[src*="/image/"]) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+}
+/* Les deux `<br>` du renderer sont les SEULES ruptures voulues : en flex ils ne
+   produisent plus rien, on leur rend leur rôle par une base pleine largeur.
+   Sans cela tout s'aligne sur une seule ligne interminable. */
+.horde-form td:has(> a img[src*="/image/"]) > br {
+  flex-basis: 100%;
+  height: 0;
+  margin: 0;
+}
+/* `w:` et `h:` sont des NŒUDS DE TEXTE nus, pas des éléments : ils deviennent
+   chacun un élément flex anonyme, séparé de l'input qui les suit. Les coller à
+   leur champ demanderait un conteneur que le renderer ne produit pas.
+   On resserre donc la gouttière autour des champs de dimension pour que
+   l'étiquette adhère visuellement au sien, sans toucher au reste de la rangée.
+   Les inputs sont bornés (`size="4"`) : sans largeur fixe, le flex les étire. */
+.horde-form td:has(> a img[src*="/image/"]) input[type="text"] {
+  width: 5ch;
+  flex: 0 0 auto;
+  margin-left: calc(var(--theme-spacing-2xs) * -1);
+  margin-right: var(--theme-spacing-xs);
+}
+/* La case « conserver l'original » et son libellé ferment la rangée. */
+.horde-form td:has(> a img[src*="/image/"]) input[type="checkbox"] {
+  flex: 0 0 auto;
+  margin-left: var(--theme-spacing-xs);
+}
+/* L'aperçu occupe sa propre ligne, sous la barre. */
+.horde-form td:has(> a img[src*="/image/"]) > img:last-child {
+  flex-basis: 100%;
+  margin-top: var(--theme-spacing-xs);
+}
+/* Le sélecteur de fichier et les deux boutons de la première ligne. */
+.horde-form td:has(> a img[src*="/image/"]) input[type="file"],
+.horde-form td:has(> a img[src*="/image/"]) input[type="submit"] {
+  flex: 0 0 auto;
+}
+
+/* ── Sélecteurs de date (Horde_Form) ──
+   Trois <select> (MM / JJ / AAAA) émis à la suite, sans espace ni conteneur,
+   suivis de l'icône calendrier. On aère par une marge sur les <select>
+   plutôt qu'en passant la cellule en flex : cette cellule contient aussi, sur
+   d'autres champs, du texte libre que le flex disloquerait. */
+.horde-form select[id$="_month"],
+.horde-form select[id$="_day"],
+.horde-form select[id$="_year"] {
+  margin-right: var(--theme-spacing-2xs);
+  vertical-align: middle;
+}
