@@ -779,13 +779,6 @@ ul.horde-tags li img {
 .theme-dialog__toggle:hover {
   background-color: var(--theme-bg-primary);
 }
-/* Filet au-dessus SEULEMENT si des listes précèdent : sans elles, cette option
-   est la première et le trait serait orphelin. */
-.theme-dialog__choices:not([hidden]) + .theme-dialog__toggle {
-  margin-top: var(--theme-spacing-sm);
-  padding-top: var(--theme-spacing-md);
-  border-top: 1px solid var(--theme-border);
-}
 /* Colonne et non ligne : le champ de nom et la liste des carnets sont deux
    saisies successives (« quel nom ? » puis « où ? »), pas deux options
    parallèles. Côte à côte, chacune était trop étroite et l'ordre de lecture
@@ -795,11 +788,6 @@ ul.horde-tags li img {
   flex-direction: column;
   gap: var(--theme-spacing-xs);
   margin-top: var(--theme-spacing-sm);
-}
-/* En retrait sous son option, pour se lire comme sa suite et non comme un
-   bloc indépendant. */
-.theme-dialog__create {
-  margin-left: var(--theme-spacing-lg);
 }
 .theme-dialog__create > * {
   width: 100%;
