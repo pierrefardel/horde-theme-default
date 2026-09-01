@@ -31,7 +31,12 @@ span.iconImg.vcardImg {
   -webkit-mask-position: center;
 }
 span.iconImg.editImg   { mask-image: url("graphics/svg/square-pen.svg");     -webkit-mask-image: url("graphics/svg/square-pen.svg"); }
-span.iconImg.groupImg  { mask-image: url("graphics/svg/users.svg");          -webkit-mask-image: url("graphics/svg/users.svg"); }
+/* `groupImg` marque une LISTE DE CONTACTS, pas un groupe de personnes ni un
+   carnet d'adresses (browse/row.inc : `title="Contact List"`, posé quand
+   `$ob->isGroup()`). Les carnets, eux, sont dans la sidebar.
+   `notebook-tabs` — un répertoire à onglets — dit « conteneur d'entrées » là
+   où `users` suggérait à tort un groupe de personnes. */
+span.iconImg.groupImg  { mask-image: url("graphics/svg/notebook-tabs.svg");   -webkit-mask-image: url("graphics/svg/notebook-tabs.svg"); }
 span.iconImg.searchImg { mask-image: url("graphics/svg/search.svg");         -webkit-mask-image: url("graphics/svg/search.svg"); }
 span.iconImg.vcardImg  { mask-image: url("graphics/svg/contact-round.svg");  -webkit-mask-image: url("graphics/svg/contact-round.svg"); }
 
@@ -42,6 +47,10 @@ span.iconImg.vcardImg  { mask-image: url("graphics/svg/contact-round.svg");  -we
 #tabDeleteContact a::before,
 .turba-edit::before,
 #tabEditContact a::before,
+/* `horde-data` est une classe du CŒUR Horde (Importer/Exporter). Ici c'est le
+   bouton « Exporter » de la barre d'actions ; horde/icons.css ne la traite que
+   pour la sous-navigation. */
+.horde-buttonbar .horde-data::before,
 .turba-search::before {
   content: '';
   display: inline-block;
@@ -68,6 +77,10 @@ span.iconImg.vcardImg  { mask-image: url("graphics/svg/contact-round.svg");  -we
 .turba-edit::before,
 #tabEditContact a::before    { mask-image: url("graphics/svg/square-pen.svg"); -webkit-mask-image: url("graphics/svg/square-pen.svg"); }
 .turba-search::before        { mask-image: url("graphics/svg/search.svg");     -webkit-mask-image: url("graphics/svg/search.svg"); }
+.horde-buttonbar .horde-data::before { mask-image: url("graphics/svg/download.svg"); -webkit-mask-image: url("graphics/svg/download.svg"); }
+
+/* Le PNG d'origine sur le bouton Exporter. */
+.horde-buttonbar .horde-data { background-image: none; }
 
 /* ── Recherche rapide : loupe en background (input, pas de ::before possible) ── */
 #quicksearch input {

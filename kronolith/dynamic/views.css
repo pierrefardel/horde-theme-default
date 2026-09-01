@@ -110,3 +110,7 @@
 #kronolithViewMonth .kronolith-first-col {
   cursor: pointer;
 }
+
+#kronolithViewWorkweekHead, #kronolithViewWeekHead, #kronolithViewMonthHead, #kronolithViewDay .kronolith-view{
+  background-color: var(--theme-bg-primary);
+}

@@ -226,110 +226,11 @@ div[id^="Turba_View_Contact"] tr:has(td[width="15%"] + td:empty) {
   display: none;
 }
 
-/* ── Barre d'actions de la liste de contacts (browse.php) ──
-   Le template (turba/templates/browse/actions.inc) émet jusqu'à neuf <li> à la
-   suite, sans regroupement, mêlant deux registres :
-
-     A. actions sur la SÉLECTION : Supprimer, Modifier, Exporter
-     B. actions de TRANSFERT, chacune liée à une liste déroulante CIBLE :
-        · `select id="c…"` (« vers un autre carnet ») ← Déplacer ET Copier
-          (tous deux appellent `CopyMove(…, document.f<id>.c<id>)`)
-        · `select id="s…"` (« vers une liste de contacts ») ← Ajouter seul
-          (`Add(document.f<id>.s<id>)`)
-
-   Rendus en file horizontale, ces appariements sont INVISIBLES : rien ne dit
-   quelle liste alimente quel bouton. On passe donc en DEUX LIGNES, chaque
-   cible collée aux actions qui la consomment.
-
-   Tous les boutons sont CONDITIONNELS ($hasDelete, $hasEdit, $hasExport,
-   $addToList) : sur un carnet partagé en lecture seule — le cas de « Personnels
-   de l'UPJV » en production — la ligne 1 disparaît entièrement, et Déplacer
-   avec elle (déplacer suppose de retirer à la source). La mise en page tient
-   dans tous les cas : les séparateurs sont portés par les éléments eux-mêmes,
-   jamais par des règles de position absolue.
-
-   Réordonné en CSS (`order`) SANS toucher au DOM : les `onclick` inline
-   référencent les champs par un id généré (`md5(mt_rand())`), déplacer un nœud
-   casserait ces références.
-
-   Rendu :
-     [Modifier] [Exporter]                            [Supprimer]
-     ───────────────────────────────────────────────────────────
-     [vers un autre carnet ▾] Déplacer Copier │ [vers une liste ▾] Ajouter */
-/* Le template enveloppe la liste dans un `<form style="display:inline">` (style
-   INLINE, d'où le `!important` pour le battre). En tant qu'élément flex de la
-   barre, ce form ne s'étire pas : la barre s'arrête au milieu de la largeur et
-   `margin-left: auto` sur Supprimer n'a aucun espace à distribuer. On le rend
-   donc bloc et pleine largeur. */
-.horde-buttonbar form:has(select[id^="c"]),
-.horde-buttonbar form:has(select[id^="s"]),
-.horde-buttonbar form:has(.turba-delete) {
-  display: block !important;
-  flex: 1 1 100%;
-  min-width: 0;
-}
-.horde-buttonbar:has(.turba-delete) ul,
-.horde-buttonbar:has(select[id^="c"]) ul,
-.horde-buttonbar:has(select[id^="s"]) ul {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--theme-spacing-2xs);
-  width: 100%;
-}
-
-/* ── Ligne 1 : actions sur la sélection ── */
-.horde-buttonbar li:has(.turba-edit) { order: 1; }
-.horde-buttonbar li:has(.horde-data) { order: 2; }
-
-/* Supprimer ferme la ligne 1, poussé à l'extrémité droite. */
-.horde-buttonbar li:has(.turba-delete) {
-  order: 3;
-  margin-left: auto;
-}
-
-/* RUPTURE DE LIGNE : un élément fantôme de largeur totale force le passage à
-   la ligne suivante en flex. Il n'est créé QUE si un groupe de transfert
-   existe (`:has`), sinon la barre garde son unique ligne.
-   Posé en ::after sur le <ul>, avec `order` entre les deux registres. */
-.horde-buttonbar:has(select[id^="c"]) ul::after,
-.horde-buttonbar:has(select[id^="s"]) ul::after {
-  content: "";
-  order: 4;
-  flex-basis: 100%;
-  height: 0;
-  margin-top: var(--theme-spacing-2xs);
-  border-top: 1px solid var(--theme-border);
-}
-
-/* ── Ligne 2 : transferts, chaque cible AVANT ses actions ──
-   Ciblage par l'`onclick`, JAMAIS par le `title` : ces libellés passent par
-   `_()` et sont traduits selon la locale (même piège que la barre d'image,
-   voir horde/icons.css). L'appel de fonction, lui, est du code invariant.
-
-   Les id des <select> sont générés (hash), seule leur INITIALE est stable —
-   « c » pour carnet, « s » pour liste de contacts (actions.inc, l.19 et 28). */
-.horde-buttonbar li:has(select[id^="c"]) { order: 5; }
-.horde-buttonbar li:has([onclick*="CopyMove('move'"]) { order: 6; }
-.horde-buttonbar li:has([onclick*="CopyMove('copy'"]) { order: 7; }
-
-.horde-buttonbar li:has(select[id^="s"]) { order: 8; }
-.horde-buttonbar li:has([onclick^="Add("]) { order: 9; }
-
-/* Filet entre les deux groupes de transfert. Porté par la SECONDE cible : si
-   le premier groupe est absent, elle n'a plus de voisin à sa gauche et le
-   filet serait orphelin — d'où la condition `:has()` sur le <ul>. */
-.horde-buttonbar:has(select[id^="c"]) li:has(select[id^="s"]) {
-  border-left: 1px solid var(--theme-border);
-  padding-left: var(--theme-spacing-sm);
-  margin-left: var(--theme-spacing-xs);
-}
-
 /* Les listes cibles : cadre neutre, largeur bornée (les noms de carnets sont
    parfois longs — « Carnet d'adresses de Pierre Fardel »). */
 .horde-buttonbar select {
-  max-width: 26ch;
   vertical-align: middle;
+  border-width: 0px;
 }
 /* Le <li> qui porte une liste n'est pas un bouton : pas de fond ni de cadre. */
 .horde-buttonbar li:has(select) {
@@ -338,18 +239,23 @@ div[id^="Turba_View_Contact"] tr:has(td[width="15%"] + td:empty) {
 }
 
 /* Boutons de transfert (`.widget`) : subordonnés à la cible qui les précède,
-   ils restent en retrait — pas de fond, seulement la couleur d'action. */
-.horde-buttonbar li:has(.widget) {
+   ils restent en retrait — pas de fond, seulement la couleur d'action.
+
+   EXCLUSION du bouton d'ouverture du dialogue : le template lui donne aussi la
+   classe `.widget`, mais depuis le dialogue c'est une action DIRECTE sur la
+   sélection, au même rang que Modifier ou Exporter. Il garde donc le fond
+   secondaire que `toolbar.css` pose sur tous les <li> de la barre. */
+.horde-buttonbar li:has(.widget):not(:has([data-theme-dialog])) {
   background-color: transparent;
   border-color: transparent;
 }
-.horde-buttonbar .widget {
+.horde-buttonbar .widget:not([data-theme-dialog]) {
   display: inline-flex;
   align-items: center;
   gap: var(--theme-spacing-2xs);
   color: var(--theme-text-action);
 }
-.horde-buttonbar li:has(.widget):hover {
+.horde-buttonbar li:has(.widget):not(:has([data-theme-dialog])):hover {
   background-color: var(--theme-bg-secondary);
   border-color: var(--theme-border);
 }
@@ -361,9 +267,20 @@ div[id^="Turba_View_Contact"] tr:has(td[width="15%"] + td:empty) {
 
    `pointer-events: none` sur le lien empêche le clic ; le JS double la garde
    en capture, car `pointer-events` ne bloque ni le clavier ni le focus. */
+/* Pas d'`opacity` mais les TOKENS dédiés, comme le fait le DS pour ses boutons
+   désactivés : une opacité globale délave tout uniformément (fond, bordure,
+   texte, icône) et oblige à rattraper chaque cas au coup par coup — c'est ce
+   qui rendait le bouton danger illisible et le fond secondaire invisible. */
 .horde-buttonbar li.theme-disabled {
-  opacity: 0.4;
+  background-color: var(--theme-bg-disabled);
+  border-color: var(--theme-border-disabled);
   cursor: not-allowed;
+}
+.horde-buttonbar li.theme-disabled a {
+  color: var(--theme-text-disabled);
+}
+.horde-buttonbar li.theme-disabled a::before {
+  background-color: var(--theme-text-disabled) !important;
 }
 .horde-buttonbar li.theme-disabled a {
   pointer-events: none;
@@ -377,24 +294,53 @@ div[id^="Turba_View_Contact"] tr:has(td[width="15%"] + td:empty) {
    celui du bouton danger, qui a sa propre déclaration. */
 .horde-buttonbar li.theme-disabled:hover,
 .horde-buttonbar li.theme-disabled:active {
-  background-color: var(--theme-bg-btn-secondary);
-  border-color: var(--theme-border);
+  background-color: var(--theme-bg-disabled);
+  border-color: var(--theme-border-disabled);
 }
-/* Supprimer garde son rouge, simplement atténué par l'opacité du conteneur —
-   un bouton danger qui virerait au gris ne se lirait plus comme destructif. */
+/* Supprimer GARDE son rouge une fois inactif, simplement adouci : un bouton
+   destructif doit rester identifiable comme tel, même quand il n'est pas
+   actionnable — sans quoi il se confond avec les actions ordinaires.
+   Le rouge est mélangé à la surface désactivée plutôt qu'appliqué en plein :
+   assez présent pour se lire comme un danger, assez éteint pour dire qu'il
+   n'est pas disponible. */
 .horde-buttonbar li.theme-disabled:has(.turba-delete),
 .horde-buttonbar li.theme-disabled:has(.turba-delete):hover,
 .horde-buttonbar li.theme-disabled:has(.turba-delete):active {
-  background-color: var(--theme-bg-danger);
-  border-color: var(--theme-border-danger);
+  background-color: color-mix(
+    in oklab,
+    var(--theme-bg-danger) 45%,
+    var(--theme-bg-disabled)
+  );
+  border-color: color-mix(
+    in oklab,
+    var(--theme-border-danger) 45%,
+    var(--theme-border-disabled)
+  );
+}
+.horde-buttonbar li.theme-disabled:has(.turba-delete) a,
+.horde-buttonbar li.theme-disabled:has(.turba-delete) a::before {
+  color: var(--theme-text-btn-danger);
+  background-color: initial;
+}
+.horde-buttonbar li.theme-disabled:has(.turba-delete) a::before {
+  background-color: var(--theme-text-btn-danger) !important;
 }
 /* Les boutons de transfert n'ont pas de fond au repos : leur état inactif ne
-   doit pas en faire apparaître un. */
-.horde-buttonbar li.theme-disabled:has(.widget),
-.horde-buttonbar li.theme-disabled:has(.widget):hover,
-.horde-buttonbar li.theme-disabled:has(.widget):active {
+   doit pas en faire apparaître un.
+
+   EXCLUSION du bouton d'ouverture du dialogue : le template lui donne aussi
+   `.widget`, mais c'est un bouton plein — il garde son fond `btn-secondary`
+   même inactif, comme Modifier et Exporter. */
+.horde-buttonbar li.theme-disabled:has(.widget):not(:has([data-theme-dialog])),
+.horde-buttonbar li.theme-disabled:has(.widget):not(:has([data-theme-dialog])):hover,
+.horde-buttonbar li.theme-disabled:has(.widget):not(:has([data-theme-dialog])):active {
   background-color: transparent;
   border-color: transparent;
+  /* Ici l'OPACITÉ est le seul signal possible : ces boutons n'ont ni fond ni
+     bordure au repos, les tokens `disabled` n'auraient donc rien à teinter.
+     Ailleurs on les évite (voir plus haut) parce qu'ils délavent tout
+     uniformément — mais sur un lien nu, c'est exactement l'effet voulu. */
+  opacity: 0.5;
 }
 
 /* ── État vide : aucun doublon trouvé (search.php, mode duplicate) ──
@@ -460,3 +406,44 @@ div[id^="Turba_View_Contact"] tr:has(td[width="15%"] + td:empty) {
 .header + p:has(> em:only-child) em {
   font-style: normal;
 }
+
+/* ── Ordre des actions dans la barre (browse.php) ──
+   Le template émet les boutons dans l'ordre Supprimer, Modifier, Exporter,
+   puis les transferts. On réordonne par `order` SANS toucher au DOM : les
+   `onclick` inline référencent les champs du formulaire par un id généré
+   (`md5(mt_rand())`), déplacer un nœud casserait ces références.
+
+   Tout tient sur UNE ligne. L'ordre suit la fréquence d'usage, la destruction
+   en dernier :
+     Modifier · Exporter · Ajouter à une liste · Supprimer … Déplacer Copier [carnet] */
+.horde-buttonbar:has(.turba-delete) ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--theme-spacing-2xs);
+  width: 100%;
+}
+/* Le template enveloppe la liste dans un `<form style="display:inline">` : en
+   tant qu'élément flex, il ne s'étire pas et la barre s'arrête au milieu de la
+   largeur. Style INLINE, d'où le `!important` pour le battre. */
+.horde-buttonbar form:has(.turba-delete) {
+  display: block !important;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+.horde-buttonbar li:has(.turba-edit)        { order: 1; }
+.horde-buttonbar li:has(.horde-data)        { order: 2; }
+.horde-buttonbar li:has([data-theme-dialog]){ order: 3; }
+.horde-buttonbar li:has(.turba-delete)      { order: 4; }
+
+/* Groupe de transfert vers un autre carnet, collé à droite.
+   Ciblage par l'`onclick` et JAMAIS par le `title` : ces libellés passent par
+   `_()` et sont traduits selon la locale. L'appel de fonction, lui, est du
+   code invariant. */
+.horde-buttonbar li:has([onclick*="CopyMove('move'"]) {
+  order: 5;
+  margin-left: auto;
+}
+.horde-buttonbar li:has([onclick*="CopyMove('copy'"]) { order: 6; }
+.horde-buttonbar li:has(select[id^="c"])              { order: 7; }

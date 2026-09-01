@@ -720,3 +720,94 @@ ul.horde-tags li img {
   padding: 5px;
   border-radius: var(--theme-radius-box);
 }
+
+/* ── MAQUETTE — dialogue « ajouter à une liste » (Turba) ──
+   Prototype pour valider l'UX avant PR upstream, voir theme-forms.js.
+   Placé dans components.css et non dans un module : si le patch amont est
+   accepté, ce dialogue deviendra un composant partagé. */
+.theme-dialog {
+  min-width: 320px;
+  max-width: 420px;
+  padding: var(--theme-spacing-lg);
+  background-color: var(--theme-bg-white);
+  border-radius: var(--theme-radius-box);
+}
+.theme-dialog h2 {
+  margin: 0 0 var(--theme-spacing-md);
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-semi-bold);
+  color: var(--theme-text-primary);
+}
+.theme-dialog__choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-2xs);
+  max-height: 40vh;
+  overflow-y: auto;
+}
+.theme-dialog__choices label {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  padding: var(--theme-spacing-xs);
+  border-radius: var(--theme-radius-field);
+  cursor: pointer;
+}
+.theme-dialog__choices label:hover {
+  background-color: var(--theme-bg-primary);
+}
+/* Aucune liste : message d'état, même registre que les autres états vides. */
+.theme-dialog__empty {
+  margin: 0;
+  padding: var(--theme-spacing-md) 0;
+  color: var(--theme-text-disabled);
+  text-align: center;
+}
+/* « Créer une nouvelle liste » est une OPTION du groupe radio, pas un bouton :
+   choisir une liste existante ou en créer une sont deux branches exclusives du
+   même choix. Elle se présente donc comme les autres options, séparée par un
+   filet parce qu'elle change de registre. */
+.theme-dialog__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  margin-top: var(--theme-spacing-xs);
+  padding: var(--theme-spacing-xs);
+  border-radius: var(--theme-radius-field);
+  cursor: pointer;
+}
+.theme-dialog__toggle:hover {
+  background-color: var(--theme-bg-primary);
+}
+/* Filet au-dessus SEULEMENT si des listes précèdent : sans elles, cette option
+   est la première et le trait serait orphelin. */
+.theme-dialog__choices:not([hidden]) + .theme-dialog__toggle {
+  margin-top: var(--theme-spacing-sm);
+  padding-top: var(--theme-spacing-md);
+  border-top: 1px solid var(--theme-border);
+}
+/* Colonne et non ligne : le champ de nom et la liste des carnets sont deux
+   saisies successives (« quel nom ? » puis « où ? »), pas deux options
+   parallèles. Côte à côte, chacune était trop étroite et l'ordre de lecture
+   devenait ambigu. */
+.theme-dialog__create {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-xs);
+  margin-top: var(--theme-spacing-sm);
+}
+/* En retrait sous son option, pour se lire comme sa suite et non comme un
+   bloc indépendant. */
+.theme-dialog__create {
+  margin-left: var(--theme-spacing-lg);
+}
+.theme-dialog__create > * {
+  width: 100%;
+  min-width: 0;
+}
+.theme-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--theme-spacing-xs);
+  margin-top: var(--theme-spacing-lg);
+}

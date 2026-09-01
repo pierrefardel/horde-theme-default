@@ -7,9 +7,8 @@
 .kronolith-minical {
   border-radius: var(--theme-radius-box);
   overflow: hidden;
-  box-shadow: var(--theme-shadow-md);
-  padding: 4px;
-  background: var(--theme-bg-white);
+  box-shadow: var(--theme-shadow-sm);
+  background: var(--theme-border);
   border: 1px solid var(--theme-border);
 }
 
@@ -81,7 +80,7 @@
 /* ── Navigation ── */
 tr.kronolith-minical-nav,
 tr.kronolith-minical-nav th {
-  background-color: var(--theme-bg-secondary);
+  background-color: var(--theme-bg-white);
   text-transform: capitalize;
 }
 #kronolith-minical-prev,

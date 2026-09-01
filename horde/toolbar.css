@@ -46,6 +46,7 @@
   background-image: none !important;
   background-color: var(--theme-bg-btn-secondary);
   border-radius: var(--theme-radius-field);
+  border: 1px solid var(--theme-border-btn-secondary);
   overflow: hidden;
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
@@ -213,14 +214,18 @@
   display: none;
 }
 
-/* ── Select dans la toolbar ── */
+/* ── Select dans la toolbar ──
+   On LAISSE HÉRITER du style global des `select` (horde/forms.css) : fond,
+   bordure, et surtout le chevron SVG qui signale qu'on peut dérouler. La
+   version d'origine posait `background-color: transparent` et
+   `border-width: 0`, héritée du thème Horde par défaut où ces listes étaient
+   volontairement nues — mais dans une barre où tout le reste est bordé, un
+   select sans cadre ni chevron ne se lit plus comme un contrôle.
+
+   On ne garde que ce qui relève du CONTEXTE de barre : l'alignement vertical
+   avec les boutons voisins. */
 .horde-buttonbar select {
-  background-color: transparent;
-  border-width: 0;
-  color: var(--theme-text-primary);
-  font-weight: bold;
   margin-top: 0;
-  cursor: pointer;
   height: auto;
 }
 .horde-buttonbar li option { padding: 0; }

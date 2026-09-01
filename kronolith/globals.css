@@ -123,39 +123,47 @@
   text-transform: capitalize;
 }
 
-/* Filtres de vue — style DS UPJV filter component */
-/* Le li porte le style toolbar (bordure) ; pour les filtres c'est le <a> qui le porte → neutralise le li */
-#kronolithHeader .horde-buttonbar li.horde-icon {
-  border: none;
-  background: transparent;
-  overflow: visible;
-}
-#kronolithHeader .horde-buttonbar li.horde-icon a {
+/* ── Filtres de vue (Jour / Semaine / Mois…) ──
+   Ces boutons N'ONT PLUS de traitement propre : ce sont des boutons
+   secondaires comme les autres — cliquables, non destructifs, subordonnés au
+   contenu. Rien dans leur fonction ne justifiait un fond blanc et une bordure
+   distincts du reste de l'application.
+
+   Cette divergence avait un coût : elle obligeait à neutraliser le <li> pour
+   laisser le <a> faire le bouton, d'où deux mécaniques concurrentes dans la
+   même barre — et le doublon de bordure sur Agenda, dont le <li> n'était pas
+   neutralisé (il n'a pas la classe `horde-icon`).
+
+   Le <li> redevient donc le bouton, comme dans toute la barre
+   (toolbar.css l.47-51). On ne garde ici que la mise en page du lien. */
+#kronolithHeader .horde-buttonbar li.horde-icon a,
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) a,
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavAgenda) a {
   display: inline-flex;
   align-items: center;
   gap: var(--theme-spacing-xs);
   padding: var(--theme-spacing-2xs) var(--theme-spacing-sm);
   font-size: var(--theme-font-size-sm);
-  background: var(--theme-bg-white);
-  border: 1px solid var(--theme-border);
-  border-radius: var(--theme-radius-field);
+  color: var(--theme-text-primary);
   cursor: pointer;
   white-space: nowrap;
-  transition: var(--theme-transition);
   text-decoration: none;
 }
-#kronolithHeader .horde-buttonbar li.horde-icon a:hover {
-  color: var(--theme-text-on-action);
-  background: var(--theme-bg-action);
+
+/* Filtre ACTIF : fond plein, nettement distinct du simple survol — le survol
+   reste celui de tous les boutons secondaires (toolbar.css), un pas sur
+   l'échelle de surfaces. Sans cette distinction, survoler un filtre le faisait
+   ressembler au filtre sélectionné. */
+#kronolithHeader .horde-buttonbar li.horde-icon.horde-active,
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks).horde-active,
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavAgenda).horde-active {
+  background-color: var(--theme-bg-action);
   border-color: var(--theme-bg-action);
 }
-#kronolithHeader .horde-buttonbar li.horde-icon a:hover::before {
-  background-color: var(--theme-text-on-action) !important;
-}
-#kronolithHeader .horde-buttonbar li.horde-icon.horde-active a {
+#kronolithHeader .horde-buttonbar li.horde-icon.horde-active a,
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks).horde-active a,
+#kronolithHeader .horde-buttonbar li:has(#kronolithNavAgenda).horde-active a {
   color: var(--theme-text-on-action);
-  background: var(--theme-bg-action);
-  border-color: var(--theme-bg-action);
   font-weight: var(--theme-font-weight-medium);
 }
 #kronolithHeader .horde-buttonbar li.horde-icon.horde-active a::before {
@@ -168,6 +176,10 @@
 #kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) {
   position: relative;
   margin-left: calc(var(--theme-spacing-md) * 2);
+  /* Le séparateur ci-dessous est un ::before posé HORS du <li> (left négatif).
+     `toolbar.css` l.50 met tous les <li> en `overflow: hidden` — qui le rogne.
+     On rétablit donc la visibilité pour ce seul élément. */
+  overflow: visible;
 }
 /* Séparateur vertical centré dans l'espace avant Tâches */
 #kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks)::before {
@@ -184,33 +196,7 @@
 #kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) a::before {
   display: none !important;
 }
-#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) a,
-#kronolithHeader .horde-buttonbar li:has(#kronolithNavAgenda) a {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--theme-spacing-xs);
-  padding: var(--theme-spacing-2xs) var(--theme-spacing-sm);
-  font-size: var(--theme-font-size-sm);
-  font-weight: var(--theme-font-weight-medium);
-  color: var(--theme-text-primary);
-  background: var(--theme-bg-btn-secondary);
-  border: 1px solid var(--theme-border-btn-secondary);
-  border-radius: var(--theme-radius-field);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: var(--theme-transition);
-  text-decoration: none;
-}
-#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks) a:hover,
-#kronolithHeader .horde-buttonbar li:has(#kronolithNavAgenda) a:hover {
-  background: var(--theme-bg-btn-secondary-hover);
-}
-#kronolithHeader .horde-buttonbar li:has(#kronolithNavTasks).horde-active a,
-#kronolithHeader .horde-buttonbar li:has(#kronolithNavAgenda).horde-active a {
-  color: var(--theme-text-on-action);
-  background: var(--theme-bg-action);
-  border-color: var(--theme-bg-action);
-}
+/* Tâches et Agenda : couverts par les règles de filtres ci-dessus. */
 
 /* Cacher les filtres temporels (Jour→Année) quand Tâches ou Agenda est actif —
    ils n'ont de sens que sur les vues calendaires. */

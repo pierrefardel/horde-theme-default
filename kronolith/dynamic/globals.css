@@ -116,8 +116,7 @@ html.theme-light {
   padding: 5px;
 }
 #kronolith-month-body .kronolithMonthDay:hover {
-  box-shadow: var(--theme-shadow-xs) inset;
-  background-color: var(--theme-bg-primary);
+  box-shadow: var(--theme-shadow-md) inset;
 }
 /* Pendant le DÉPLACEMENT d'un événement, le pointeur survole les cellules : sans
    ça, le curseur d'ajout reprendrait le dessus alors qu'on est en train de

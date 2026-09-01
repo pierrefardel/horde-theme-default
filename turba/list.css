@@ -94,7 +94,7 @@ table#addressbook-list th.sortdown::before {
 #contacts table.linedRow thead tr th.turba-browse-icon,
 #contacts table.linedRow thead tr th.selected {
   padding: var(--theme-spacing-xs) var(--theme-spacing-2xs);
-  background-color: var(--theme-bg-secondary);
+  background-color: var(--theme-bg-primary);
   border-bottom: 1px solid var(--theme-border);
   font-size: var(--theme-font-size-xs);
   font-weight: var(--theme-font-weight-semi-bold);
@@ -206,3 +206,84 @@ table#addressbook-list th.sortdown::before {
   -webkit-mask-image: url("graphics/svg/sortdown.svg");
   mask-image: url("graphics/svg/sortdown.svg");
 }
+
+/* ── Couleur des icônes du tableau de contacts ──
+   Trois icônes cohabitent dans les colonnes étroites, et elles ne sont PAS de
+   même nature — les peindre toutes en `icon-primary` les rendait
+   indistinguables :
+
+     · `editImg`  — ACTION : ouvre le formulaire d'édition
+     · `vcardImg` — ACTION : télécharge la vCard
+     · `groupImg` — INDICATEUR : cette ligne est une liste de contacts, pas un
+                    contact. Rien à cliquer.
+
+   On sépare donc les deux registres par la couleur : les actions prennent la
+   couleur d'action, l'indicateur reste neutre. La distinction ne repose pas
+   sur la seule teinte — les actions sont dans un lien (curseur, survol),
+   l'indicateur non.
+
+   L'en-tête garde `icon-primary` : là, ces mêmes icônes ne sont que des
+   libellés de colonne. */
+#contacts table.linedRow tbody td.turba-browse-icon a span.iconImg {
+  background-color: var(--theme-text-action);
+}
+/* Pas de token `text-action-hover` dans le DS : on assombrit la couleur
+   d'action en oklch, ce qui suit la palette (et le mode sombre) au lieu de
+   figer une seconde valeur. */
+#contacts table.linedRow tbody td.turba-browse-icon a:hover span.iconImg {
+  background-color: oklch(from var(--theme-text-action) calc(l - 0.1) c h);
+}
+/* Indicateur de liste : neutre, il ne se clique pas. */
+#contacts table.linedRow tbody td.turba-browse-icon > span.iconImg.groupImg {
+  background-color: var(--theme-icon-secondary);
+}
+
+/* Une LIGNE DE LISTE se distingue d'un contact : son nom passe en semi-bold —
+   elle contient d'autres entrées plutôt que d'être une fiche terminale.
+   `tr:has(.groupImg)` remonte de l'indicateur à sa ligne ; le template ne pose
+   cette icône que sur les groupes (browse/row.inc, `$ob->isGroup()`). */
+#contacts table.linedRow tbody tr:has(span.iconImg.groupImg) td.linedRowSelectedCol a,
+#contacts table.linedRow tbody tr:has(span.iconImg.groupImg) td:last-child a {
+  font-weight: var(--theme-font-weight-semi-bold);
+}
+
+/* ── Couleur des icônes du tableau de contacts ──
+   Trois icônes cohabitent dans les colonnes étroites, et elles ne sont PAS de
+   même nature — les peindre toutes en `icon-primary` les rendait
+   indistinguables :
+
+     · `editImg`  — ACTION : ouvre le formulaire d'édition
+     · `vcardImg` — ACTION : télécharge la vCard
+     · `groupImg` — INDICATEUR : cette ligne est une liste de contacts, pas un
+                    contact. Rien à cliquer.
+
+   On sépare donc les deux registres par la couleur : les actions prennent la
+   couleur d'action, l'indicateur reste neutre. La distinction ne repose pas
+   sur la seule teinte — les actions sont dans un lien (curseur, survol),
+   l'indicateur non.
+
+   L'en-tête garde `icon-primary` : là, ces mêmes icônes ne sont que des
+   libellés de colonne. */
+#contacts table.linedRow tbody td.turba-browse-icon a span.iconImg {
+  background-color: var(--theme-text-action);
+}
+/* Pas de token `text-action-hover` dans le DS : on assombrit la couleur
+   d'action en oklch, ce qui suit la palette (et le mode sombre) au lieu de
+   figer une seconde valeur. */
+#contacts table.linedRow tbody td.turba-browse-icon a:hover span.iconImg {
+  background-color: oklch(from var(--theme-text-action) calc(l - 0.1) c h);
+}
+/* Indicateur de liste : neutre, il ne se clique pas. */
+#contacts table.linedRow tbody td.turba-browse-icon > span.iconImg.groupImg {
+  background-color: var(--theme-icon-secondary);
+}
+
+/* Une LIGNE DE LISTE se distingue d'un contact : son nom passe en semi-bold —
+   elle contient d'autres entrées plutôt que d'être une fiche terminale.
+   `tr:has(.groupImg)` remonte de l'indicateur à sa ligne ; le template ne pose
+   cette icône que sur les groupes (browse/row.inc, `$ob->isGroup()`). */
+#contacts table.linedRow tbody tr:has(span.iconImg.groupImg) td.linedRowSelectedCol a,
+#contacts table.linedRow tbody tr:has(span.iconImg.groupImg) td:last-child a {
+  font-weight: var(--theme-font-weight-semi-bold);
+}
+

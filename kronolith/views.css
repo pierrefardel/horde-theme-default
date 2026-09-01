@@ -9,7 +9,7 @@ table.kronolith-view {
   width: 100%;
   height: 100%;
   table-layout: fixed;
-  background-color: var(--theme-bg-primary);
+  background-color: var(--theme-border);
   border-spacing: 1px;
 }
 table.kronolith-view.kronolith-sidebyside {
@@ -60,6 +60,18 @@ table.kronolith-view-head td div {
 .kronolith-first-col {
   text-align: center;
 }
+
+#kronolithViewMonthHead .kronolith-first-col {
+  width: 32px;
+}
+
+#kronolithViewMonthContainer table.kronolith-view td.kronolith-first-col,
+#kronolithViewMonthContainer table.kronolith-view th.kronolith-first-col {
+  width: 32px;
+  vertical-align: middle;
+  background-color: var(--theme-bg-primary);
+}
+
 table.kronolith-view td.kronolith-first-col,
 table.kronolith-view th.kronolith-first-col {
   width: 80px;
@@ -104,7 +116,7 @@ table.kronolith-view.kronolith-sidebyside
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: var(--theme-spacing-sm);
   overflow: unset !important;
-  padding: 0 var(--spacing-sm);
+  padding: var(--spacing-sm);
 }
 /* Le spinner de chargement ne doit pas occuper une cellule de la grille */
 .kronolithViewYear > #kronolithLoadingyear {
@@ -173,6 +185,7 @@ table.monthgrid td {
 #kronolithViewMonth > #kronolithViewMonthHead {
   flex: 0 0 auto;
   height: auto;
+  background-color: var(--theme-bg-primary);
 }
 /* Le scroll est nécessaire : sur un mois chargé, les semaines ne tiennent pas
    toutes dans la hauteur et `overflow: hidden` tronquerait les derniers jours.
@@ -190,7 +203,7 @@ table.monthgrid td {
 
 /* ── Autres mois ── */
 .kronolith-other-month {
-  background: var(--theme-bg-secondary);
+  background: var(--theme-bg-primary);
 }
 .kronolith-other-month .kronolith-day {
   border-color: transparent;
@@ -202,21 +215,55 @@ table.monthgrid td {
 .kronolithViewDay .kronolith-weekend {
   background-image: repeating-linear-gradient(
     -45deg,
-    var(--theme-bg-primary) 0,
-    var(--theme-bg-primary) 1px,
+    var(--theme-bg-secondary) 0,
+    var(--theme-bg-secondary) 1px,
     transparent 1px,
     transparent 15px
   );
 }
 
-/* ── Aujourd'hui ── */
+/* ── Aujourd'hui ──
+   La cellule entière est teintée pour se repérer d'un coup d'œil en vue mois,
+   sans concurrencer les événements qu'elle contient : un fond à 8 % de la
+   couleur d'action et un cadre de 2px.
+
+   Token `--theme-bg-highlight-brand` et non `--theme-bg-action` : ce dernier
+   signale ce qui est CLIQUABLE, or la cellule du jour n'est pas une action —
+   c'est un repère. Le token dédié porte cette distinction, et il est le seul
+   à mapper la primitive `--brand-primary` (voir horde/tokens.css).
+
+   `color-mix` plutôt qu'une variable d'opacité figée : la teinte DÉRIVE du
+   token, elle suivra donc un changement de charte ou le mode sombre sans
+   seconde déclaration à maintenir. */
+/* Le survol générique des cellules du mois vient du `globals.css` D'ORIGINE
+   de Kronolith :
+
+     #kronolith-month-body .kronolithMonthDay:hover {
+       box-shadow: var(--theme-shadow-xs) inset;
+       background-color: var(--theme-bg-primary);
+     }
+
+   À spécificité égale (un id + une classe + une pseudo-classe), elle passe
+   APRÈS la nôtre dans la cascade et écrase fond ET box-shadow — d'où la
+   bordure qui disparaît. On réaffirme donc les deux propriétés sur le même
+   sélecteur en état survolé.
+
+   Le jour courant garde son identité au survol : c'est une information
+   permanente, pas un état d'interaction. */
+#kronolith-month-body .kronolith-today,
+#kronolith-month-body .kronolithMonthDay.kronolith-today:hover {
+  background-color: color-mix(
+    in oklab,
+    var(--theme-bg-highlight-brand) 12%,
+    transparent
+  );
+  box-shadow: inset 0 0 0 1.5px var(--theme-border-highlight-brand);
+}
 
 .kronolith-today .kronolith-day,
 .kronolith-today .kronolith-day a {
-    color: var(--theme-text-on-action);
+    color: var(--theme-bg-highlight-brand);
     font-weight: var(--theme-font-weight-bold);
-    background-color: var(--theme-bg-action);
-    margin-bottom:var(--theme-spacing-2xs);
 }
 
 /* ── Cellules jour ── */

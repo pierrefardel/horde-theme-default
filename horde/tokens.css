@@ -26,6 +26,16 @@
   --theme-bg-action:           var(--colors-surface-action);
   --theme-bg-action-hover:     var(--colors-surface-action--hover);
   --theme-bg-action-active:    var(--colors-surface-action--active);
+  /* Accent de marque — repère fort et NON INTERACTIF : le jour courant dans
+     l'agenda, et tout marquage du même ordre. Distinct de `bg-action`, qui
+     signale ce qui est cliquable ; ici rien ne l'est, c'est un repère.
+
+     Mappé sur l'ÉCHELLE `--primary-*` et non sur `--brand-primary` : cette
+     primitive est fixe, elle ne s'adapte pas au mode sombre où elle
+     deviendrait trop dense. `--primary-500` en vaut la valeur exacte en clair,
+     `--primary-400` l'éclaircit sur fond noir. */
+  --theme-bg-highlight-brand:     light-dark(var(--primary-500), var(--primary-400));
+  --theme-border-highlight-brand: light-dark(var(--primary-500), var(--primary-400));
   --theme-bg-success:          var(--colors-surface-success-2);
   --theme-bg-success-hover:    var(--colors-surface-success-2--hover);
   --theme-bg-success-active:   var(--colors-surface-success-2--active);
@@ -44,10 +54,22 @@
   --theme-bg-danger-light:     var(--colors-surface-danger);
   --theme-bg-disabled:         var(--colors-surface-disabled);
   --theme-bg-highlight:        var(--colors-surface-highlight);
-  --theme-bg-btn-secondary:        color-mix(in oklab, var(--colors-surface-action) 10%, var(--colors-surface-primary));
-  --theme-bg-btn-secondary-hover:  color-mix(in oklab, var(--colors-surface-action) 15%, var(--colors-surface-primary));
-  --theme-bg-btn-secondary-active: color-mix(in oklab, var(--colors-surface-action) 20%, var(--colors-surface-primary));
-  --theme-border-btn-secondary:    light-dark(var(--theme-bg-btn-secondary), var(--colors-border-primary));
+  /* Bouton secondaire : surfaces NEUTRES plutôt qu'une teinte d'action diluée.
+     Le `color-mix` d'origine (10/15/20 % de la couleur d'action) donnait un
+     bleu pâle qui concurrençait les vraies actions colorées de la barre.
+     On suit désormais l'échelle de surfaces — repos, survol, clic — ce qui
+     réserve la couleur aux éléments qui la méritent. */
+  --theme-bg-btn-secondary:        var(--colors-surface-primary);
+  --theme-bg-btn-secondary-hover:  var(--colors-surface-secondary);
+  --theme-bg-btn-secondary-active: var(--colors-surface-tertiary);
+  /* Bordure du bouton secondaire : la valeur du fond de SURVOL, soit un pas
+     d'écart sur la même échelle de surfaces. Le contour reste visible au repos
+     sans introduire de couleur, et le survol vient le combler — le bouton
+     s'aplanit au lieu de changer de nature.
+     Le `light-dark()` d'origine ne servait qu'à masquer la bordure en clair
+     (elle valait le fond) : ce n'est plus nécessaire, la même valeur convient
+     dans les deux modes. */
+  --theme-border-btn-secondary:    var(--theme-bg-btn-secondary-hover);
 
   /* ── Texte ── */
   --theme-text-primary:        var(--colors-text-body);
