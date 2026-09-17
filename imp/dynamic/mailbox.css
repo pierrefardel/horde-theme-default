@@ -186,7 +186,7 @@ div.msgSort {
 /* Largeurs colonnes — une seule source de vérité, consommée par header + lignes */
 #msglistHeaderHoriz,
 .msglist {
-  --col-status: 60px;
+  --col-status: 78px;
   --col-from: 180px;
   --col-date: 110px;
   --col-size: 60px;
@@ -550,12 +550,12 @@ div.vpRow.flagDeleted * {
 
 /* ── CHECKBOX msCheck — liste messages + menus contextuels (ctx_flag) ── */
 
-/* Checkbox masquée dans la liste — la sélection est indiquée par box-shadow sur vpRowSelected */
+/* Checkbox VISIBLE dans la liste. ATTENTION : dans les lignes, msCheck est
+   écrite EN DUR par msglist_horiz.html / msglist_vert.html et ne bascule
+   jamais — toggleCheck() (core.js l.362) ne sert qu'aux menus contextuels.
+   L'état coché vient donc de vpRowSelected sur la ligne parente, pas de la
+   classe de la case. msCheckOn n'existe QUE dans .context. */
 div.vpRow:not(.horde-table-header) div.msgStatus .iconImg.msCheck,
-div.vpRow:not(.horde-table-header) div.msgStatus .iconImg.msCheckOn {
-  display: none !important;
-}
-
 .context .iconImg.msCheck,
 .context .iconImg.msCheckOn {
   background-image: none !important;

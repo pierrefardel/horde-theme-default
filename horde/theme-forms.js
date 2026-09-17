@@ -624,11 +624,32 @@
     refresh();
   }
 
+  /* Le chevron de la barre de recherche ouvre ctx_qsearchopts, qui choisit la
+     PORTEE (Tout le message / Corps / De / Objet...). Sans libellé, rien ne dit
+     laquelle est active : IMP la maintient dans le title de l'input, on la
+     recopie sur le chevron pour l'infobulle. */
+  function syncSearchScopeTitle() {
+    var input = document.getElementById('horde-search-input'),
+        drop  = document.getElementById('horde-search-dropdown');
+    if (!input || !drop) return;
+    var t = input.getAttribute('title');
+    if (t && drop.getAttribute('title') !== t) drop.setAttribute('title', t);
+  }
+
   function init() {
     syncColorFields();
     fixCalendarPosition();
     wrapCalendarIcons();
     turbaActionState();
+    syncSearchScopeTitle();
+
+    /* Le title est réécrit par IMP APRES le choix d'une portée : on resynchronise
+       au clic sur le menu plutôt qu'une seule fois au chargement. */
+    document.addEventListener('click', function (e) {
+      if (e.target && e.target.id && e.target.id.indexOf('ctx_qsearchopts') === 0) {
+        window.setTimeout(syncSearchScopeTitle, 0);
+      }
+    }, true);
 
     /* Les dialogs sont injectés à la demande (chunkContent) : on guette leur
        apparition pour brancher un champ couleur créé après coup. */
@@ -638,6 +659,7 @@
         fixCalendarPosition();
         wrapCalendarIcons();
         turbaActionState();
+        syncSearchScopeTitle();
       }).observe(document.body || document.documentElement, {
         childList: true,
         subtree: true
