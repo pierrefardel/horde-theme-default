@@ -4,7 +4,6 @@
  * Arborescence des dossiers IMAP dans la sidebar Horde.
  */
 
-#foldersLoading { padding: 10px; }
 #horde-sidebar .horde-info { display: none; }
 
 .imp-sidebar-container:hover { background: none; }
@@ -15,6 +14,45 @@
 .imp-sidebar-container a,
 .imp-sidebar-mbox-loading {
   color: var(--theme-text-primary) !important;
+}
+
+/* Indicateurs de chargement de la sidebar — icône au-dessus du libellé.
+   DEUX éléments distincts, pilotés séparément par le JS d'IMP :
+     #foldersLoading            → chargement de l'ARBORESCENCE (base.js l.3734)
+     .imp-sidebar-mbox-loading  → chargement d'un DOSSIER (span interne de
+                                  #sidebar_mbox_loading, masqué en inline)
+   Tous deux portent leur texte en enfant direct : le ::before suffit. */
+#foldersLoading,
+.imp-sidebar-mbox-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  padding: var(--theme-spacing-sm) 0;
+  color: var(--theme-text-secondary) !important;
+  font-size: var(--theme-font-size-sm);
+}
+#foldersLoading::before,
+.imp-sidebar-mbox-loading::before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  background-color: var(--theme-icon-secondary);
+  -webkit-mask-image: url("../graphics/svg/loader.svg");
+  mask-image: url("../graphics/svg/loader.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+  /* imp-spin est défini dans icons.css, partagé avec le bouton de relève. */
+  transform-origin: center;
+  animation: imp-spin 1s linear infinite;
+}
+
+/* Respecte le réglage système « réduire les animations » */
+@media (prefers-reduced-motion: reduce) {
+  #foldersLoading::before,
+  .imp-sidebar-mbox-loading::before {
+    animation-duration: 3s;
+  }
 }
 
 #imp-normalmboxes {

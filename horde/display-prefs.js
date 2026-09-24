@@ -11,6 +11,7 @@
  * pour fonctionner aussi bien sur upjv (CDN DS) que default-new (sans CDN).
  *
  * Persistance localStorage : 'theme' et 'shape'.
+ * Défauts sans choix enregistré : thème clair, forme arrondie.
  * Conditionné au thème (chargé depuis themes/horde/<theme>/).
  */
 
@@ -20,9 +21,15 @@
   /* ════════════ THÈME ════════════ */
   var THEME_KEY = 'theme';
 
+  /* Défaut : CLAIR, imposé à l'ouverture tant que l'utilisateur n'a rien
+     choisi. « auto » (suivre l'OS) reste disponible dans le switch. */
+  var THEME_DEFAULT = 'light';
+
   function getTheme() {
-    try { return localStorage.getItem(THEME_KEY) || 'auto'; }
-    catch (e) { return 'auto'; }
+    try {
+      var t = localStorage.getItem(THEME_KEY);
+      return (t === 'light' || t === 'dark' || t === 'auto') ? t : THEME_DEFAULT;
+    } catch (e) { return THEME_DEFAULT; }
   }
   function applyTheme(mode) {
     var h = document.documentElement;
@@ -36,10 +43,11 @@
     h.classList.add('theme-ready');
   }
   function setTheme(mode) {
-    try {
-      if (mode === 'auto') localStorage.removeItem(THEME_KEY);
-      else localStorage.setItem(THEME_KEY, mode);
-    } catch (e) {}
+    /* On ENREGISTRE toujours le choix, « auto » compris. Avant, « auto »
+       supprimait la clé (absence = auto) ; avec un défaut à « light », un
+       utilisateur choisissant « auto » serait retombé en clair au
+       rechargement. */
+    try { localStorage.setItem(THEME_KEY, mode); } catch (e) {}
     applyTheme(mode);
   }
   function nextTheme(cur) {
@@ -54,11 +62,14 @@
   var SHAPE_CLASSES = { sharp: 'shape-sharp', soft: 'shape-soft', rounded: 'shape-rounded' };
   var SHAPE_LABELS = { sharp: 'Carré', soft: 'Adouci', rounded: 'Arrondi' };
 
+  /* Défaut : ARRONDI à l'ouverture, tant que l'utilisateur n'a rien choisi. */
+  var SHAPE_DEFAULT = 'rounded';
+
   function getShape() {
     try {
       var s = localStorage.getItem(SHAPE_KEY);
-      return (s === 'soft' || s === 'rounded' || s === 'sharp') ? s : 'sharp';
-    } catch (e) { return 'sharp'; }
+      return (s === 'soft' || s === 'rounded' || s === 'sharp') ? s : SHAPE_DEFAULT;
+    } catch (e) { return SHAPE_DEFAULT; }
   }
   function applyShape(id) {
     var h = document.documentElement;

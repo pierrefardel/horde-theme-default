@@ -241,6 +241,182 @@ a.helplink:hover::before {
   mask-position: center;
 }
 
+/* ── Sous-navigation d'ADMINISTRATION ──
+   Les PNG d'origine (widgets.css) sont neutralisés au profit de masks, pour
+   que la couleur suive le thème et le mode sombre.
+   L'icône va sur le ::before du .horde-subnavi-icon, JAMAIS sur l'élément —
+   le <a class="icon"> interne reste vide et ne doit rien porter. */
+.horde-subnavi-icon.horde-admin-config,
+.horde-subnavi-icon.horde-admin-user,
+.horde-subnavi-icon.horde-admin-group,
+.horde-subnavi-icon.horde-admin-perms,
+.horde-subnavi-icon.horde-admin-locked,
+.horde-subnavi-icon.horde-admin-alarm,
+.horde-subnavi-icon.horde-admin-php,
+.horde-subnavi-icon.horde-admin-sql,
+.horde-subnavi-icon.horde-admin-shell,
+.horde-subnavi-icon.horde-admin-cache,
+.horde-subnavi-icon.horde-admin-hashtable,
+.horde-subnavi-icon.horde-admin-sessions,
+.horde-subnavi-icon.horde-admin-oauth,
+.horde-subnavi-icon.horde-admin-api-registry,
+.horde-subnavi-icon.horde-admin-auth-status {
+  background-image: none;
+}
+
+.horde-subnavi-icon.horde-admin-config::before,
+.horde-subnavi-icon.horde-admin-user::before,
+.horde-subnavi-icon.horde-admin-group::before,
+.horde-subnavi-icon.horde-admin-perms::before,
+.horde-subnavi-icon.horde-admin-locked::before,
+.horde-subnavi-icon.horde-admin-alarm::before,
+.horde-subnavi-icon.horde-admin-php::before,
+.horde-subnavi-icon.horde-admin-sql::before,
+.horde-subnavi-icon.horde-admin-shell::before,
+.horde-subnavi-icon.horde-admin-cache::before,
+.horde-subnavi-icon.horde-admin-hashtable::before,
+.horde-subnavi-icon.horde-admin-sessions::before,
+.horde-subnavi-icon.horde-admin-oauth::before,
+.horde-subnavi-icon.horde-admin-api-registry::before,
+.horde-subnavi-icon.horde-admin-auth-status::before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-size: 16px;
+  mask-size: 16px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.horde-subnavi-icon.horde-admin-config::before {
+  -webkit-mask-image: url("graphics/svg/sliders-horizontal.svg");
+  mask-image: url("graphics/svg/sliders-horizontal.svg");
+}
+.horde-subnavi-icon.horde-admin-user::before {
+  -webkit-mask-image: url("graphics/svg/users.svg");
+  mask-image: url("graphics/svg/users.svg");
+}
+.horde-subnavi-icon.horde-admin-group::before {
+  -webkit-mask-image: url("graphics/svg/user-round-group.svg");
+  mask-image: url("graphics/svg/user-round-group.svg");
+}
+.horde-subnavi-icon.horde-admin-perms::before {
+  -webkit-mask-image: url("graphics/svg/shield.svg");
+  mask-image: url("graphics/svg/shield.svg");
+}
+.horde-subnavi-icon.horde-admin-locked::before {
+  -webkit-mask-image: url("graphics/svg/lock-keyhole.svg");
+  mask-image: url("graphics/svg/lock-keyhole.svg");
+}
+.horde-subnavi-icon.horde-admin-alarm::before {
+  -webkit-mask-image: url("graphics/svg/alarm-clock-check.svg");
+  mask-image: url("graphics/svg/alarm-clock-check.svg");
+}
+.horde-subnavi-icon.horde-admin-php::before {
+  -webkit-mask-image: url("graphics/svg/code.svg");
+  mask-image: url("graphics/svg/code.svg");
+}
+.horde-subnavi-icon.horde-admin-sql::before {
+  -webkit-mask-image: url("graphics/svg/database.svg");
+  mask-image: url("graphics/svg/database.svg");
+}
+.horde-subnavi-icon.horde-admin-shell::before {
+  -webkit-mask-image: url("graphics/svg/square-terminal.svg");
+  mask-image: url("graphics/svg/square-terminal.svg");
+}
+.horde-subnavi-icon.horde-admin-cache::before {
+  -webkit-mask-image: url("graphics/svg/zap.svg");
+  mask-image: url("graphics/svg/zap.svg");
+}
+.horde-subnavi-icon.horde-admin-hashtable::before {
+  -webkit-mask-image: url("graphics/svg/power-off.svg");
+  mask-image: url("graphics/svg/power-off.svg");
+}
+.horde-subnavi-icon.horde-admin-sessions::before {
+  -webkit-mask-image: url("graphics/svg/scroll-text.svg");
+  mask-image: url("graphics/svg/scroll-text.svg");
+}
+/* La clé, d'abord posée sur Permissions, revient à OAuth — les jetons sont
+   littéralement des clés d'accès, Permissions prend le bouclier. */
+.horde-subnavi-icon.horde-admin-oauth::before {
+  -webkit-mask-image: url("graphics/svg/key-round.svg");
+  mask-image: url("graphics/svg/key-round.svg");
+}
+.horde-subnavi-icon.horde-admin-api-registry::before {
+  -webkit-mask-image: url("graphics/svg/plug.svg");
+  mask-image: url("graphics/svg/plug.svg");
+}
+/* shield-check répond au shield de Permissions : même famille, la coche
+   marquant la vérification. */
+.horde-subnavi-icon.horde-admin-auth-status::before {
+  -webkit-mask-image: url("graphics/svg/shield-check.svg");
+  mask-image: url("graphics/svg/shield-check.svg");
+}
+
+/* ── En-têtes d'ADMINISTRATION (h1.header) ──
+   Le PHP écrit l'<img> EN DUR (ex. admin/perms/index.php l.42 :
+   Horde_Themes_Image::tag('perms.png')) : pas de classe à cibler, on passe
+   donc par le src, qui est invariant — contrairement au titre, traduit.
+   L'<img> est masquée et l'icône posée sur le ::before du h1 ; un élément
+   remplacé ne rend pas de pseudo-élément et un mask le découperait sans
+   effacer le PNG dessous.
+
+   ⚠️ IMPÉRATIF : restreindre à h1.header. `.header` est une classe du CŒUR,
+   posée aussi sur des <td> — notamment templates/shares/edit.inc (l.15, 34,
+   62), l'écran de partage des calendriers et carnets, qui affiche LES MÊMES
+   perms.png / user.png / group.png dans des cellules de tableau. Sans le h1,
+   ces règles y injectent une icône en position:absolute au milieu d'un
+   tableau. Ces trois PNG servent aussi dans Core/Perms/Ui.php et Ansel. */
+h1.header:has(> img[src$="graphics/perms.png"]),
+h1.header:has(> img[src$="graphics/group.png"]),
+h1.header:has(> img[src$="graphics/user.png"]) {
+  position: relative;
+}
+
+h1.header > img[src$="graphics/perms.png"],
+h1.header > img[src$="graphics/group.png"],
+h1.header > img[src$="graphics/user.png"] {
+  /* visibility et non display : l'élément garde sa place dans le flex, le
+     ::before vient s'y superposer à la même largeur. */
+  visibility: hidden;
+  width: 16px;
+  height: 16px;
+}
+
+h1.header:has(> img[src$="graphics/perms.png"])::before,
+h1.header:has(> img[src$="graphics/group.png"])::before,
+h1.header:has(> img[src$="graphics/user.png"])::before {
+  content: "";
+  position: absolute;
+  left: var(--theme-spacing-sm);
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-icon-primary);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+h1.header:has(> img[src$="graphics/perms.png"])::before {
+  -webkit-mask-image: url("graphics/svg/shield.svg");
+  mask-image: url("graphics/svg/shield.svg");
+}
+h1.header:has(> img[src$="graphics/group.png"])::before {
+  -webkit-mask-image: url("graphics/svg/user-round-group.svg");
+  mask-image: url("graphics/svg/user-round-group.svg");
+}
+h1.header:has(> img[src$="graphics/user.png"])::before {
+  -webkit-mask-image: url("graphics/svg/users.svg");
+  mask-image: url("graphics/svg/users.svg");
+}
+
 /* ── Horde_Form : barre de manipulation d'image ──
    Le champ `image` de Horde_Form (photo de contact Turba, et tout autre champ
    image) rend une rangée de `<a><img …png></a>` : réinitialiser, pivoter,

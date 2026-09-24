@@ -767,26 +767,51 @@ body.help_entry {
 #services_prefs .header img {
   vertical-align: middle;
 }
-.prefsOverview div {
-  float: left;
+/* Aperçu des préférences — grille responsive.
+   Le template pose une largeur INLINE sur chaque colonne
+   (round(100 / count($columns)) - 1, Core/Prefs/Ui.php l.622) : un nombre de
+   colonnes figé par la config, insensible à la largeur d'écran. En grille
+   cette largeur inline est ignorée, les pistes reprennent la main. */
+.prefsOverview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--theme-spacing-md);
+  padding: var(--theme-spacing-sm);
+}
+.prefsOverview > div {
+  float: none;
+  width: auto !important; /* bat le style inline du template */
+  min-width: 0;
+  padding: var(--theme-spacing-sm);
+  background-color: var(--theme-bg-primary);
+  border-radius: var(--theme-radius-box);
 }
 .prefsOverview div div {
-  padding-left: 10px;
-  width: 95%;
+  padding-left: 0;
+  width: auto;
 }
 .prefsOverview h2 {
-  font-size: 140%;
-  font-weight: bold;
-  margin-bottom: 8px;
+  font-size: var(--theme-font-size-lg);
+  font-weight: 600;
+  color: var(--theme-text-headings);
+  margin: 0 0 var(--theme-spacing-xs);
+  padding-bottom: var(--theme-spacing-2xs);
+  border-bottom: 1px solid var(--theme-border);
+}
+.prefsOverview dl {
+  margin: 0;
 }
 .prefsOverview dt a {
   display: block;
-  padding: 2px 2px 2px 0;
-  font-weight: bold;
+  padding: var(--theme-spacing-2xs) 0;
+  font-weight: 600;
+  width: fit-content;
 }
 .prefsOverview dd {
-  padding: 2px 2px 2px 0;
-  margin-bottom: 10px;
+  padding: 0;
+  margin: 0 0 var(--theme-spacing-sm);
+  color: var(--theme-text-secondary);
+  font-size: var(--theme-font-size-sm);
 }
 div.prefsContainer {
   padding: 1em;

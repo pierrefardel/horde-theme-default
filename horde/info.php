@@ -13,5 +13,6 @@ $theme_scripts = array(
     'theme-sidebar.js',
     'theme-tasks.js',
     'theme-forms.js',
+    'theme-mailbox.js',
     'display-prefs.js',
 );

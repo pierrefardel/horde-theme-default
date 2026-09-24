@@ -64,15 +64,20 @@ span.infoIcon, span.prefsIcon, span.logoutIcon, span.readonlyImg,
   background-color: var(--theme-icon-primary);
 }
 
-/* Spinner pendant le chargement (.imp-loading injectée/retirée par le JS
-   sur le <a id="checkmaillink">). L'icône est le ::before de ce <a>. */
-@keyframes imp-checkmail-spin {
+/* Rotation continue, partagée par tous les indicateurs de chargement :
+   le bouton « relever le courrier » ci-dessous et le chargement de dossier
+   dans la sidebar (.imp-sidebar-mbox-loading, sidebar.css). Durée indéfinie :
+   on ne connaît pas le temps de traitement. */
+@keyframes imp-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* Spinner pendant le chargement (.imp-loading injectée/retirée par le JS
+   sur le <a id="checkmaillink">). L'icône est le ::before de ce <a>. */
 .horde-buttonbar li a#checkmaillink.imp-loading::before {
   transform-origin: center;
-  animation: imp-checkmail-spin 1s linear infinite;
+  animation: imp-spin 1s linear infinite;
 }
 
 /* Neutralise le padding-left du default (réservé pour l'icône PNG) */

@@ -586,12 +586,21 @@ table.horde-table td { border-bottom: 1px solid var(--theme-border); }
 .horde-table-header th, table.horde-table td, table.horde-table th {
   height: 21px; padding: 0 5px;
 }
+/* Apparence commune aux deux formes d'en-tête de tableau. */
 .horde-table-header, table.horde-table thead tr, table.horde-table th {
   background-image: none !important;
   background-color: var(--theme-bg-primary);
   border-bottom: 1px solid var(--theme-border);
   height: var(--theme-spacing-lg);
   padding: 0 var(--theme-spacing-xs);
+}
+
+/* Le flex ne vaut QUE pour .horde-table-header, qui est un <div> (barre de
+   colonnes d'IMP, où il aligne les libellés et les poignées de redimension).
+   Sur un vrai <th>, display:flex détruit le modèle de tableau : les colonnes
+   ne se répartissent plus la largeur et chaque cellule se réduit à son
+   contenu (constaté sur admin/sessions.php). */
+.horde-table-header {
   display: flex;
   align-items: center;
   justify-content: space-between;

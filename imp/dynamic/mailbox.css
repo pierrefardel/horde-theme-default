@@ -94,6 +94,7 @@ div.msgSize {
 }
 #msgSplitPane > div:first-child {
   overflow: auto;
+  position: relative; /* contexte pour .theme-scrolltop */
   height: var(--imp-list-height) !important;
   width: var(--imp-list-width, 100%) !important;
   float: none !important;
@@ -963,8 +964,9 @@ div.vpRowVert div.msgSubject {
   font-weight: normal;
 }
 
-.imp-sidebar-container a,
-.imp-sidebar-mbox-loading {
+/* .imp-sidebar-container / .imp-sidebar-mbox-loading : voir sidebar.css
+   (la règle était dupliquée ici, elle écrasait la couleur du spinner). */
+.imp-sidebar-container a {
   color: var(--theme-text-primary) !important;
 }
 
@@ -1012,3 +1014,67 @@ div.vpRowVert div.msgSubject {
   height: unset !important;
   overflow-y: visible !important;
 }
+
+/* ── Bouton « remonter en haut » de la liste ──
+   Le raccourci Home existe (base.js l.2746) mais reste invisible, et il
+   SÉLECTIONNE le message n°1 — donc le marque lu si l'aperçu est ouvert.
+   Ce bouton appelle scrollTo() seul (theme-mailbox.js).
+   Ancré sur la ZONE DE LISTE (#msgSplitPane > div:first-child), dimensionnée
+   par --imp-list-height/width dans les DEUX modes : le bouton reste ainsi
+   dans la liste et ne flotte jamais au-dessus de l'aperçu. */
+.theme-scrolltop {
+  /* sticky et NON absolute : la zone de liste est en overflow:auto, un
+     élément absolute y défilerait avec le contenu. En sticky il se colle au
+     bas de la zone visible. Le margin-left auto le pousse à droite, le
+     margin-top négatif l'empêche d'ajouter de la hauteur au flux. */
+  position: sticky;
+  bottom: var(--theme-spacing-md);
+  margin-left: auto;
+  margin-right: var(--theme-spacing-md);
+  margin-top: -32px;
+  z-index: 4; /* au-dessus de .msglist (z-index: 1) et #previewPane (3) */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+
+  /* Bouton PRIMAIRE : il flotte au-dessus de la liste, une surface neutre s'y
+     fondrait. L'ombre le décolle du contenu qui défile dessous. */
+  background-color: var(--theme-bg-action);
+  border: 1px solid var(--theme-border-action);
+  border-radius: var(--theme-radius-field);
+  box-shadow: var(--theme-shadow-md);
+  cursor: pointer;
+
+  /* Masqué par défaut : theme-mailbox.js ajoute --visible au-delà de 15 lignes.
+     visibility (et non display) pour que la transition puisse jouer. */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease, visibility 0.15s ease, background-color 0.15s ease;
+}
+.theme-scrolltop--visible {
+  opacity: 1;
+  visibility: visible;
+}
+.theme-scrolltop:hover {
+  background-color: var(--theme-bg-action-hover);
+  border-color: var(--theme-border-action-hover);
+}
+.theme-scrolltop:active {
+  background-color: var(--theme-bg-action-active);
+  border-color: var(--theme-border-action-active);
+}
+.theme-scrolltop::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background-color: var(--theme-text-on-action);
+  -webkit-mask-image: url("../graphics/svg/arrow-big-up-dash.svg");
+  mask-image: url("../graphics/svg/arrow-big-up-dash.svg");
+  -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+}
+
