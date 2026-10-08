@@ -16,6 +16,9 @@
  *   icons.css   — toutes les icônes SVG mask-image
  */
 
+/* identity.css EN PREMIER : fondations propres à chaque thème (tokens,
+   reset). Fichier exclu de la synchro — voir son en-tête. */
+@import "identity.css";
 @import "base.css";
 @import "reset.css";
 @import "globals.css";

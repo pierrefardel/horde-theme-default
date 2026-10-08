@@ -1,0 +1,17 @@
+/**
+ * Identité du thème default-new — importée EN TÊTE de screen.css (partagé).
+ *
+ * Fichier PROPRE À CHAQUE THÈME, exclu de sync-all.sh : screen.css est commun
+ * à upjv et default-new, ce fichier est le seul endroit où chacun déclare ses
+ * propres fondations.
+ *
+ * Le thème charge ici LUI-MÊME ses fondations, sans dépendre d'un hook de
+ * site (hooks.php) : un thème communautaire doit fonctionner tel qu'installé.
+ * Cf. Ralf sur horde/Core#233 — « the happy path is really the normal
+ * theming infrastructure ».
+ *
+ * Ordre : primitives et sémantiques, puis reset, puis remapping --theme-*.
+ */
+@import "tokens-horde-default.css";
+@import "reset-horde-default.css";
+@import "tokens.css";
