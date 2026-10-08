@@ -500,6 +500,15 @@ h1.header:has(> img[src$="graphics/user.png"])::before {
   -webkit-mask-image: url("graphics/svg/crop.svg");
   mask-image: url("graphics/svg/crop.svg");
 }
+/* ratio.png : PRÉPARE le correctif amont (Horde::img sans préfixe image/,
+   reconnu par Ralf sur horde/Core#233). Une fois mergé, le src devient
+   …/image/ratio.png et la règle générique ci-dessus prend le bouton — sans
+   cette ligne il n'aurait pas d'icône. Le contournement plus bas (src sans
+   .png) couvre l'état ACTUEL ; le retirer après le merge. */
+.horde-form a:has(> img[src$="image/ratio.png"])::before {
+  -webkit-mask-image: url("graphics/svg/ratio.svg");
+  mask-image: url("graphics/svg/ratio.svg");
+}
 
 /* « Fix ratio » — BUG AMONT : le PHP appelle `Horde::img('ratio.png')` sans le
    préfixe `image/` que portent tous les autres appels du même bloc

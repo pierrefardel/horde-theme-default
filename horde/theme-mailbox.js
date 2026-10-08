@@ -90,6 +90,63 @@
     refresh();
   }
 
+  /* ── Défilement à la molette proportionnel ──────────────────────────
+     CONTOURNEMENT d'un bug amont (imp/js/viewport.js, mousewheelHandler) :
+     chaque événement wheel avance de 3 lignes quelle que soit son amplitude,
+     seul le SIGNE du delta est lu. Un trackpad émet des dizaines de petits
+     événements par geste → défilement beaucoup trop rapide.
+     Ici le delta est converti en lignes proportionnellement à la hauteur
+     d'une ligne, avec un accumulateur pour les petits deltas.
+     À RETIRER quand le correctif amont sera mergé (upstream/imp-wheel/). */
+
+  var ROW_FALLBACK = 33;
+  var wheelAcc = 0;
+
+  function rowHeight() {
+    var row = document.querySelector('#msgSplitPane .msglist .vpRow');
+    return (row && row.offsetHeight) || ROW_FALLBACK;
+  }
+
+  function onWheel(e) {
+    var vp = viewport();
+    if (!vp || !vp.scroller || e.ctrlKey) return;   /* ctrl+molette = zoom */
+
+    /* Défilement horizontal : on laisse faire le navigateur. */
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+
+    var h = rowHeight(),
+        px = e.deltaY;
+    if (e.deltaMode === 1) px *= h;                               /* lignes */
+    else if (e.deltaMode === 2) px *= h * vp.getPageSize();       /* pages  */
+
+    /* Changement de sens : on repart de zéro, sinon le reliquat du geste
+       précédent freine le début du nouveau. */
+    /* px non nul : un delta à zéro (fin d'inertie du trackpad) n'a pas de
+       sens et ne doit pas vider l'accumulateur (relevé par la revue de #121). */
+    if (px && wheelAcc && (wheelAcc > 0) !== (px > 0)) wheelAcc = 0;
+    wheelAcc += px;
+
+    var rows = wheelAcc > 0 ? Math.floor(wheelAcc / h) : Math.ceil(wheelAcc / h);
+    wheelAcc -= rows * h;
+
+    /* On consomme TOUJOURS l'événement : le gestionnaire d'IMP (sur .msglist,
+       donc après nous) ne doit pas s'ajouter, et le conteneur en
+       overflow:auto ne doit pas défiler nativement en parallèle. */
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (rows) vp.scroller.moveScroll(vp.scroller.currentOffset() + rows);
+  }
+
+  function bindWheel() {
+    var host = scroller();
+    if (!host || host.dataset.themeWheel) return;
+    host.dataset.themeWheel = '1';
+    /* capture : on passe AVANT l'écouteur posé par viewport.js sur .msglist.
+       passive:false : sinon preventDefault est ignoré. */
+    host.addEventListener('wheel', onWheel, { capture: true, passive: false });
+  }
+
   function init() {
     if (!document.getElementById('msgSplitPane')) return;
 
@@ -97,6 +154,7 @@
        l'exécution. On (re)construit donc aussi après chaque rendu, sans quoi
        un bouton posé trop tôt disparaîtrait au premier redessin. */
     build();
+    bindWheel();
 
     /* Les événements ViewPort sont émis sur opts.container, c'est-à-dire
        #msgSplitPane (base.js l.438) — PAS sur document. Prototype ne fait pas
@@ -114,6 +172,7 @@
        barre, clavier, changement de dossier. */
     container.observe('ViewPort:contentComplete', function () {
       build();
+      bindWheel();
       refresh();
     });
     container.observe('ViewPort:sliderSlide', refresh);
