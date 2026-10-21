@@ -5,7 +5,7 @@
  * Il orchestre les couches via @import dans l'ordre de cascade.
  *
  * Ordre de chargement :
- *   tokens.css  — injecté avant ce fichier via hooks.php (CDN + CSS vars)
+ *   identity.css — fondations propres au thème (tokens, reset), voir son en-tête
  *   base.css    — layout structurel global (grid, topbar fixe, sidebar grid)
  *   globals.css — reset UPJV, typographie, composants génériques
  *   forms.css   — formulaires, tables, tabs
