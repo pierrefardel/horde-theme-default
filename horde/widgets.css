@@ -650,27 +650,6 @@ body.help_entry {
 .horde-data {
   background-image: url("graphics/data.png");
 }
-.horde-admin-hashtable {
-  background-image: url("graphics/admin/hashtable.png");
-}
-.horde-admin-cache {
-  background-image: url("graphics/admin/cache.png");
-}
-.horde-admin-sessions {
-  background-image: url("graphics/admin/sessions.png");
-}
-.horde-admin-api-registry {
-  background-image: url("graphics/admin/api-registry.png");
-}
-.horde-admin-oauth {
-  background-image: url("graphics/admin/oauth.png");
-}
-.horde-admin-auth-status {
-  background-image: url("graphics/admin/auth-status.png");
-}
-.horde-admin-info {
-  background-image: url("graphics/status/info.png");
-}
 
 /* ── Splitbar horizontal ── */
 .horde-splitbar-horiz {
